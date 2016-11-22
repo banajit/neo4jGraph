@@ -1,0 +1,22 @@
+{
+  "slideConfig": {
+    "slideInterval": 1000
+  },
+  "slideUrls": [
+    {
+      "url": "graphBrowser"
+    },
+    {
+      "url": "http://localhost/test/index.html",
+      "siteWidth": 1024
+    },
+    {
+      "url": "http://www.zaloni.com"
+    }
+  ],
+  "neo4jConfig": {
+    "serverUrl": "http://localhost:7474",
+    "user": "neo4j",
+    "password": "admin"
+  }
+}
