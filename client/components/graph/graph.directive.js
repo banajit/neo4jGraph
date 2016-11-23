@@ -172,7 +172,8 @@ angular.module('neo4jApp')
             singleHover: true,
             enableEdgeHovering: true,
             edgeHoverColor: 'edge',
-            defaultEdgeHoverColor: '#000'
+            defaultEdgeHoverColor: '#000',
+            zoomOnLocation: false
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
