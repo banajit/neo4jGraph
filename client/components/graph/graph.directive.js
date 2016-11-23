@@ -3,7 +3,7 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('graph', function () {
+  .directive('graph', function ($timeout) {
     return {
       templateUrl: 'components/graph/graph.html',
       restrict: 'EA',
@@ -274,6 +274,11 @@ angular.module('neo4jApp')
           var activeState = sigma.plugins.activeState(sigmaInstance);
           var renderer = sigmaInstance.renderers[0];
           var dragListener = new sigma.plugins.dragNodes(sigmaInstance, renderer, activeState);
+          dragListener.bind('drop', function(event) {
+            $timeout(function () {
+                tooltips.close();
+            });
+          });
           sigmaInstance.refresh();
           return sigmaInstance;
         }
