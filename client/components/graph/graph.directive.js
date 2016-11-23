@@ -139,15 +139,17 @@ angular.module('neo4jApp')
               type: 'canvas',
             }
           });
+          var N = graph.nodes.length, i=0;
           graph.nodes.forEach(function(node) {
             node.id = node.id;
             node.label = node.neo4j_data.SystemName;
             node.size = 8;
-            node.x = Math.floor((Math.random() * 100) + 1);
-            node.y = Math.floor((Math.random() * 100) + 1);
+            node.x = Math.cos(2 * i * Math.PI / N);
+            node.y = Math.sin(2 * i * Math.PI / N);
             node.type = 'image';
             node.url = 'assets/images/img1.png';
             node.color = '#68BDF6';
+            i++;
           });
           graph.edges.forEach(function(edge, key) {
             edge.id = edge.id;
@@ -173,7 +175,8 @@ angular.module('neo4jApp')
             enableEdgeHovering: true,
             edgeHoverColor: 'edge',
             defaultEdgeHoverColor: '#000',
-            zoomOnLocation: false
+            zoomOnLocation: false,
+            sideMargin: 5
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
@@ -279,7 +282,19 @@ angular.module('neo4jApp')
                 tooltips.close();
             });
           });
-          sigmaInstance.refresh();
+
+
+
+          // Configure the ForceLink algorithm:
+          var fa = sigma.layouts.configForceLink(sigmaInstance, {
+            worker: true,
+            autoStop: true,
+            background: true,
+            scaleRatio: 10,
+            gravity: 2,
+            easing: 'cubicInOut'
+          });
+          sigma.layouts.startForceLink();
           return sigmaInstance;
         }
       }
