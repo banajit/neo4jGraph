@@ -10,7 +10,11 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
  * App-wide Styles
  */
 
-
+body.neo4j-app h2 {
+    font-size: 1.313em;
+    font-weight: 400;
+    margin: 0;
+}
 .caraousal {
   border: none !important;
   height: calc(100vh - 5px);
@@ -82,7 +86,45 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 #neo4jgraph {
   height: calc(100vh - 5px);
 }
-
+.entity {
+    width: 270px;
+    border: 1px solid #4b6a88;
+    border-radius: 0;
+    cursor: default;
+    position: relative;
+    box-sizing: content-box;
+    margin: 10px;
+}
+.entity .card-info h2.card-header {
+    text-overflow: ellipsis;
+    color: #c33;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 90%;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f6b11f;
+}
+.card-info {
+  padding:10px;
+}
+.card-info ul {
+    padding-left: 0;
+    font-size: 1em;
+    list-style-type: none;
+}
+.card-info ul li {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+.card-info ul li .li-title {
+    color: #4b6a88;
+    padding-right: 5px;
+}
+.card-info ul li .li-value {
+    font-weight: 700;
+}
 
 // Component styles are injected through grunt
 // injector

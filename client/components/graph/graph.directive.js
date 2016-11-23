@@ -161,6 +161,9 @@ angular.module('neo4jApp')
                 defaultEdgeHoverColor: '#000',
               });
               //bind the events
+             /* sigmaInstance.bind('clickNode', function (e) {
+                console.log(e);
+              });*/
               sigmaInstance.bind('hovers', function (e) {
                 var adjacentNodes = {},
                       adjacentEdges = {};
@@ -204,6 +207,47 @@ angular.module('neo4jApp')
                 }
                 sigmaInstance.refresh();
               });
+
+              //Show tooltip
+              var config_tooltip = {
+                node: [{
+                  show: 'clickNode',
+                  cssClass: 'sigma-tooltip',
+                  position: 'top',
+                  autoadjust: true,
+                  renderer: function(node) {
+                    var customTemplate = '<md-card class="entity"><div class="card-info">';
+                    customTemplate += '<h2 class="card-header">' + node.label + '</h2>';
+                    customTemplate += '<ul>';
+                    angular.forEach(node.neo4j_data, function(value, key){
+                      customTemplate += '<li><span class="li-title">' + key + '</span><span class="li-value">' + value + '</span></li>';
+                    });
+                    customTemplate += '</ul></div></md-card>';
+                    return Mustache.render(customTemplate, node);
+                  }
+                }],
+                edge: [{
+                  show: 'clickEdge',
+                  cssClass: 'sigma-tooltip',
+                  position: 'top',
+                  autoadjust: true,
+                  renderer: function(edge) {
+                    console.log(edge);
+                    var customTemplate = '<md-card class="entity"><div class="card-info">';
+                    customTemplate += '<h2 class="card-header">' + edge.label + '</h2>';
+                    customTemplate += '<ul>';
+                    angular.forEach(edge.neo4j_data, function(value, key){
+                      customTemplate += '<li><span class="li-title">' + key + '</span><span class="li-value">' + value + '</span></li>';
+                    });
+                    customTemplate += '</ul></div></md-card>';
+                    return Mustache.render(customTemplate, edge);
+                  }
+                }]
+              };
+
+              // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
+              var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
+
 
               //nonoverlaping node config
               var config = {
