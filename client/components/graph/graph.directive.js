@@ -247,7 +247,6 @@ angular.module('neo4jApp')
               position: 'top',
               autoadjust: true,
               renderer: function(edge) {
-                console.log(edge);
                 var customTemplate = '<md-card class="entity"><div class="card-info">';
                 customTemplate += '<h2 class="card-header">' + edge.label + '</h2>';
                 customTemplate += '<ul>';
@@ -299,7 +298,6 @@ angular.module('neo4jApp')
           fa.bind('start interpolate stop', function(e) {
             if (e.type === 'start') {
               $('<div class="modal-backdrop"><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>Layout in progress, please wait...</span></div>').appendTo(document.body);
-              el.className = '';
             }
             else if (e.type === 'interpolate') {
               $(".modal-backdrop").remove();
