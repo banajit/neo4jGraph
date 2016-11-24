@@ -292,7 +292,18 @@ angular.module('neo4jApp')
             background: true,
             scaleRatio: 10,
             gravity: 2,
+            barnesHutOptimize: false,
             easing: 'cubicInOut'
+          });
+          // Bind the events:
+          fa.bind('start interpolate stop', function(e) {
+            if (e.type === 'start') {
+              $('<div class="modal-backdrop"><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>Layout in progress, please wait...</span></div>').appendTo(document.body);
+              el.className = '';
+            }
+            else if (e.type === 'interpolate') {
+              $(".modal-backdrop").remove();
+            }
           });
           sigma.layouts.startForceLink();
           return sigmaInstance;

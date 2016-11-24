@@ -125,6 +125,15 @@ body.neo4j-app h2 {
 .card-info ul li .li-value {
     font-weight: 600;
 }
+.modal-backdrop {
+  opacity: 0.6;
+}
+.modal-backdrop .layout-progress {
+  text-align: center;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 25px;
+}
 
 // Component styles are injected through grunt
 // injector
