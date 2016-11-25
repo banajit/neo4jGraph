@@ -18,5 +18,12 @@
     "serverUrl": "http://localhost:7474",
     "user": "neo4j",
     "password": "admin"
+  },
+  "searchPropertyKeys": {
+    "LineOfBusiness": "Line Of Business",
+    "SystemName": "System Name",
+    "SytemOwner": "Sytem Owner",
+    "SystemPlatform": "System Platform",
+    "Hosting": "Hosting"
   }
 }

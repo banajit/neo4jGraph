@@ -88,30 +88,27 @@ angular.module('neo4jApp')
           };
           return renderer;
         })();
+        //TODO Needs to remove hardcoded urls
+        var graph1 = {
+          urls : [
+                'assets/images/img1.png',
+                'assets/images/img2.png',
+                'assets/images/img3.png',
+                'assets/images/img4.png'
+              ],
+          colors : [
+                '#617db4',
+                '#668f3c',
+                '#c6583e',
+                '#b956af'
+              ]
+        };
         //Listen for graph render event
         scope.$on('renderGraph', function (event, data) {
            renderSigmaInstance(data);
         });
 
         function renderSigmaInstance(graphMeta) {
-          var graph1 = {
-            nodes: [],
-            edges: [],
-            urls : [
-                  'assets/images/img1.png',
-                  'assets/images/img2.png',
-                  'assets/images/img3.png',
-                  'assets/images/img4.png'
-                ],
-            colors : [
-                  '#617db4',
-                  '#668f3c',
-                  '#c6583e',
-                  '#b956af'
-                ]
-          };
-
-
           // Run Cypher query:
           sigma.neo4j.cypher(
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
@@ -147,7 +144,7 @@ angular.module('neo4jApp')
             node.x = Math.cos(2 * i * Math.PI / N);
             node.y = Math.sin(2 * i * Math.PI / N);
             node.type = 'image';
-            node.url = 'assets/images/img1.png';
+            node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
             node.color = '#68BDF6';
             i++;
           });
@@ -163,7 +160,7 @@ angular.module('neo4jApp')
           });
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
-            minNodeSize: 3,
+            minNodeSize: 12,
             maxNodeSize: 12,
             minEdgeSize: 1,
             maxEdgeSize: 1,

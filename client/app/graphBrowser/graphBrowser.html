@@ -11,10 +11,38 @@
       </md-toolbar>
 
       <md-content layout-margin>
-        <p>
-          This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
-        </p>
+        <form name="searchForm">
+          <div layout-gt-sm="row" ng-repeat="(key, value) in searchMaster.propertiesKeys">
+            <md-autocomplete flex
+                             md-input-name="autocompleteField"
+                             md-no-cache="noCache"
+                             md-input-minlength="1"
+                             md-input-maxlength="18"
+                             md-selected-item="selectedItem[key]"
+                             md-search-text="searchText[key]"
+                             md-items="item in loadValuesByProperty(searchText[key], key)"
+                             md-item-text="item"
+                             md-floating-label="{{value}}">
+              <md-item-template>
+                <span md-highlight-text="searchText[key]">{{item}}</span>
+              </md-item-template>
+              <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+              </div>
+            </md-autocomplete>
+          </div>
+<!--
+          <md-input-container class="md-block" ng-repeat="(key, value) in searchMaster.propertiesKeys">
+            <label>{{value}}</label>
+            <input md-maxlength="30" name="key" ng-model="project.description">
+            <div ng-messages="searchForm[key].$error">
+            </div>
+          </md-input-container>
+-->
+          <div>
+            <md-button class="md-raised" type="submit">Search</md-button>
+          </div>
 
+        </form>
       </md-content>
 
     </md-sidenav>
