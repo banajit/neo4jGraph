@@ -171,12 +171,13 @@ angular.module('neo4jApp')
             //defaultLabelSize: 16,
             defaultEdgeLabelColor: '#014AB6',
             //defaultEdgeLabelSize: 16,
-            singleHover: true,
             enableEdgeHovering: true,
             edgeHoverColor: 'edge',
             defaultEdgeHoverColor: '#000',
             zoomOnLocation: false,
-            sideMargin: 5
+            sideMargin: 5,
+            enableEdgeHovering: true,
+            edgeHoverExtremities: true,
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
@@ -297,10 +298,11 @@ angular.module('neo4jApp')
           // Bind the events:
           fa.bind('start interpolate stop', function(e) {
             if (e.type === 'start') {
-              $('<div class="modal-backdrop"><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>Layout in progress, please wait...</span></div>').appendTo(document.body);
+              $('<div class="modal-backdrop"></div><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>Layout in progress, please wait...</span></div>').appendTo(document.body);
             }
             else if (e.type === 'interpolate') {
               $(".modal-backdrop").remove();
+              $(".layout-progress").remove();
             }
           });
           sigma.layouts.startForceLink();

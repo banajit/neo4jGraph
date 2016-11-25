@@ -128,13 +128,22 @@ body.neo4j-app h2 {
 .modal-backdrop {
   opacity: 0.6;
 }
-.modal-backdrop .layout-progress {
-  text-align: center;
+.layout-progress {
+  position: absolute;
+  top: 5px;
+  left: 35%;
   color: #FFF;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 16px;
+  z-index: 9999;
 }
-
+.neo4j-toggle-left {
+   position: absolute;
+   z-index: 9;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
 // Component styles are injected through grunt
 // injector
 // endinjector

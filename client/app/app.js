@@ -17,32 +17,15 @@ angular.module('neo4jApp', [
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/home');
-
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
-  .run(['$rootScope', '$state', function ($rootScope, $state) {
+  .run(['$rootScope', '$state', 'CONSTANTS', function ($rootScope, $state, CONSTANTS) {
+    //Load config file
+   /* CONSTANTS.getConfig().success(function (data) {
+      CONSTANTS.setStateVariable('neo4jConfig', data);
+    });*/
     // Redirect to login if route requires auth and the user is not logged in
-    $rootScope.$on('$stateChangeStart', function(event, next) {
-      /*Auth.isLoggedInAsync(function(loggedIn) {
-        //check for user authentication
-        if (!loggedIn && next.authenticate) {
-          event.preventDefault();
-          $state.go('login');
-        }
 
-        //navigate to home if user is already authenticated
-        if(loggedIn && (next.name === 'login' || next.name === 'landing')){
-          event.preventDefault();
-          $state.go('home');
-        }
-
-        if (next.authenticate && !loggedIn) {
-          event.preventDefault();
-          $state.go('login');
-        }
-      });*/
-    });
   }]);
-
 })(angular);

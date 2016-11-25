@@ -1,4 +1,38 @@
-<div class="nbc-graph">
-  <graph></graph>
-</div>
+<div ng-cloak>
+  <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
+      <md-toolbar class="md-theme-watch">
+        <div class="left-sidebar">
+          <div class="pull-left"><h1 class="md-toolbar-tools">Refine Results By</h1></div>
+          <div class="pull-right">
+            <div class="md-accent md-toolbar-tools cursor-pointer" ng-click="toggleLeft()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div>
+          </div>
+        </div>
+      </md-toolbar>
 
+      <md-content layout-margin>
+        <p>
+          This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
+        </p>
+
+      </md-content>
+
+    </md-sidenav>
+
+    <md-content flex>
+      <div class="neo4j-toggle-left">
+        <md-button ng-click="toggleLeft()" class="md-raised md-primary">
+          <i class="fa fa-search" aria-hidden="true"></i> Filter
+        </md-button>
+        <!--<md-button ng-click="toggleLeft()" class="md-raised md-primary">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add Nodes
+        </md-button>-->
+      </div>
+      <div class="nbc-graph">
+        <graph></graph>
+      </div>
+    </md-content>
+
+  </section>
+
+</div>

@@ -15,6 +15,7 @@
     //get config data
     var slideConfig = {};
     $scope.slickConfigLoaded  = true;
+
     CONSTANTS.getConfig().success(function (data) {
       CONSTANTS.setStateVariable('neo4jConfig', data.neo4jConfig);
       slideConfig = data.slideConfig;
