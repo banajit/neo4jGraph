@@ -47,11 +47,10 @@
          var config = CONSTANTS.getStateVariable('config');
          var serverConfig = config.neo4jConfig;
          var query = 'MATCH(s: SystemName) WHERE s.' + propertyKey + ' =~ "' + queryStrn + '.*" return s;';
-         console.log(query);
+         console.log('Property Value Search = ', query);
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
            angular.forEach(data.results[0].data, function(Rvalue, Rkey){
-             //var queryVal = {display:Rvalue.row[0][propertyKey], value:Rvalue.row[0][propertyKey]};
              results.push(Rvalue.row[0][propertyKey]);
            });
            var unique = results.filter(function(elem, index, self) {

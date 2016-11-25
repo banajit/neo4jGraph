@@ -22,7 +22,6 @@
          var deferred = $q.defer();
          sigma.neo4j.send(neo4j, endpoint, 'POST', data,
            function(data) {
-
               deferred.resolve(data);
            }, timeout);
          return deferred.promise;

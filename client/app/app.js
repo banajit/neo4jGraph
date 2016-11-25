@@ -20,7 +20,7 @@ angular.module('neo4jApp', [
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
-  .run(['$rootScope', '$state', 'CONSTANTS', function ($rootScope, $state, CONSTANTS) {
+  .run(['$rootScope', '$state', function ($rootScope, $state) {
     //Load config file
    /* CONSTANTS.getConfig().success(function (data) {
       CONSTANTS.setStateVariable('neo4jConfig', data);
