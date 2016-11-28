@@ -80,10 +80,8 @@
         var config = CONSTANTS.getStateVariable('config');
         var serverConfig = config.neo4jConfig;
         var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
-        $scope.$broadcast('renderGraph', graphMetaInfo);
-        $timeout(function () {
-           $scope.toggleLeft();
-        }, 10);
+        $scope.toggleLeft();
+        $scope.$broadcast('refreshGraph', graphMetaInfo);
       }
       //Reset graph
       $scope.resetGraph = function() {
@@ -91,7 +89,7 @@
         var config = CONSTANTS.getStateVariable('config');
         var serverConfig = config.neo4jConfig;
         var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
-        $scope.$broadcast('renderGraph', graphMetaInfo);
+        $scope.$broadcast('refreshGraph', graphMetaInfo);
         $timeout(function () {
            $scope.toggleLeft();
         }, 10);

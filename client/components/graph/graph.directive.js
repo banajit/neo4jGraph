@@ -103,20 +103,56 @@ angular.module('neo4jApp')
                 '#b956af'
               ]
         };
+        //Update Graph
+        scope.$on('refreshGraph', function (event, data) {
+          refreshSigmaInstance(data);
+        });
+
+        function refreshSigmaInstance(graphMeta) {
+          sigma.neo4j.cypher(
+              { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
+              graphMeta.neo4jQuery,
+              function(graph) {
+                  sigmaInstance.graph.clear();
+                  var N = graph.nodes.length, i=0;
+                  graph.nodes.forEach(function(node) {
+                    node.label = node.neo4j_data.SystemName;
+                    node.size = 8;
+                    node.x = Math.cos(2 * i * Math.PI / N);
+                    node.y = Math.sin(2 * i * Math.PI / N);
+                    node.type = 'image';
+                    node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+                    node.color = '#68BDF6';
+                    sigmaInstance.graph.addNode(node);
+                    i++;
+                  });
+                  graph.edges.forEach(function(edge, key) {
+                    edge.type = 'arrow';
+                    edge.count = key;
+                    edge.color = '#ccc';
+                    edge.hover_color = '#000';
+                    sigmaInstance.graph.addEdge(edge);
+                  });
+                  // Configure the ForceLink algorithm:
+                  var fa = sigma.layouts.configForceLink(sigmaInstance, {
+                    worker: true,
+                    autoStop: true,
+                    background: true,
+                    scaleRatio: 10,
+                    gravity: 2,
+                    barnesHutOptimize: false,
+                    easing: 'cubicInOut'
+                  });
+                  sigma.layouts.startForceLink();
+                  sigmaInstance.refresh();
+              }
+          );
+        }
+
         //Listen for graph render event
         scope.$on('renderGraph', function (event, data) {
           renderSigmaInstance(data);
         });
-        //Refresh graph
-        function refresh_graph() {
-            // to delete & refresh the graph
-            var g = document.querySelector('#neo4jgraph');
-            var p = g.parentNode;
-            p.removeChild(g);
-            var c = document.createElement('div');
-            c.setAttribute('id', 'neo4jgraph');
-            p.appendChild(c);
-        }
 
         function renderSigmaInstance(graphMeta) {
           // Run Cypher query:
@@ -134,7 +170,7 @@ angular.module('neo4jApp')
                   }
                 );
               });*/
-              refresh_graph(graph);
+              /*refresh_graph(graph);
               if(graph.nodes.length>0) {
                 sigmaInstance = createSigmaInstance(graph);
               }
@@ -143,13 +179,14 @@ angular.module('neo4jApp')
                   className: 'warning',
                   content: 'No nodes were found.'
                 });
-              }
+              }*/
+              sigmaInstance = createSigmaInstance(graph);
             }
           );
         }
         //create sigma instance
         function createSigmaInstance(graph) {
-          var sigmaInstance = new sigma({
+          sigmaInstance = new sigma({
             graph: graph,
             renderer: {
               container: document.getElementById('neo4jgraph'),
