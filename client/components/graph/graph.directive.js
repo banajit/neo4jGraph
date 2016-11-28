@@ -141,7 +141,7 @@ angular.module('neo4jApp')
               else {
                 ngToast.create({
                   className: 'warning',
-                  content: 'No nodes found'
+                  content: 'No nodes were found.'
                 });
               }
             }
