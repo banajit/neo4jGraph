@@ -127,12 +127,13 @@ angular.module('neo4jApp')
                     i++;
                   });
                   graph.edges.forEach(function(edge, key) {
-                    edge.type = 'arrow';
+                    edge.type = 'curvedArrow';
                     edge.count = key;
                     edge.color = '#ccc';
                     edge.hover_color = '#000';
                     sigmaInstance.graph.addEdge(edge);
                   });
+                  sigma.canvas.edges.autoCurve(sigmaInstance);
                   // Configure the ForceLink algorithm:
                   var fa = sigma.layouts.configForceLink(sigmaInstance, {
                     worker: true,
@@ -210,7 +211,7 @@ angular.module('neo4jApp')
             edge.label = edge.label;
             edge.source = edge.source;
             edge.target = edge.target;
-            edge.type = 'arrow';
+            edge.type = 'curvedArrow';
             edge.count = key;
             edge.color = '#ccc';
             edge.hover_color = '#000';
@@ -224,12 +225,11 @@ angular.module('neo4jApp')
             defaultLabelColor: '#000',
             //defaultLabelSize: 16,
             defaultEdgeLabelColor: '#014AB6',
-            //defaultEdgeLabelSize: 16,
             enableEdgeHovering: true,
             edgeHoverColor: 'edge',
             defaultEdgeHoverColor: '#000',
             zoomOnLocation: false,
-            sideMargin: 5,
+            sideMargin: 15,
             edgeHoverExtremities: true
           });
           //bind the events
