@@ -85,6 +85,20 @@
            $scope.toggleLeft();
         }, 10);
       }
+      //Reset graph
+      $scope.resetGraph = function() {
+        var query = 'MATCH (n:SystemName) MATCH (n)-[r]->(m) RETURN n,r,m';
+        var config = CONSTANTS.getStateVariable('config');
+        var serverConfig = config.neo4jConfig;
+        var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
+        $scope.$broadcast('renderGraph', graphMetaInfo);
+        $timeout(function () {
+           $scope.toggleLeft();
+        }, 10);
+        $scope.searchForm.$setPristine();
+        $scope.searchForm.$setUntouched();
+        $scope.selectedItem = {};
+      }
   }
 
   angular.module('neo4jApp')
