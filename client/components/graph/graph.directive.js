@@ -3,7 +3,7 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('graph', function ($timeout) {
+  .directive('graph', function ($timeout, ngToast) {
     return {
       templateUrl: 'components/graph/graph.html',
       restrict: 'EA',
@@ -105,8 +105,18 @@ angular.module('neo4jApp')
         };
         //Listen for graph render event
         scope.$on('renderGraph', function (event, data) {
-           renderSigmaInstance(data);
+          renderSigmaInstance(data);
         });
+        //Refresh graph
+        function refresh_graph() {
+            // to delete & refresh the graph
+            var g = document.querySelector('#neo4jgraph');
+            var p = g.parentNode;
+            p.removeChild(g);
+            var c = document.createElement('div');
+            c.setAttribute('id', 'neo4jgraph');
+            p.appendChild(c);
+        }
 
         function renderSigmaInstance(graphMeta) {
           // Run Cypher query:
@@ -114,7 +124,7 @@ angular.module('neo4jApp')
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
             function(graph) {
-              graph1.urls.forEach(function(url) {
+              /*graph1.urls.forEach(function(url) {
                 sigma.canvas.nodes.image.cache(
                   url,
                   function() {
@@ -123,7 +133,17 @@ angular.module('neo4jApp')
                        sigmaInstance = createSigmaInstance(graph);
                   }
                 );
-              });
+              });*/
+              refresh_graph(graph);
+              if(graph.nodes.length>0) {
+                sigmaInstance = createSigmaInstance(graph);
+              }
+              else {
+                ngToast.create({
+                  className: 'warning',
+                  content: 'No nodes found'
+                });
+              }
             }
           );
         }

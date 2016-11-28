@@ -12,7 +12,8 @@ angular.module('neo4jApp', [
   'ngAria',
   'ngMaterial',
   'ngMdIcons',
-  'slickCarousel'
+  'slickCarousel',
+  'ngToast'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

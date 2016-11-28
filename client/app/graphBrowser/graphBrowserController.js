@@ -60,6 +60,30 @@
          });
 
       }
+      // ******************************
+      // Filter graph on search form submit
+      // ******************************
+      $scope.selectedItem = {};
+      $scope.filterGraph = function() {
+        var conditions = [], whereCond = '';
+        angular.forEach($scope.selectedItem, function(value, key){
+          if(value !== null) {
+            var cond = 'n.' + key + ' = ' + '"' + value + '"';
+            conditions.push(cond);
+          }
+        });
+        if(conditions.length>0) {
+          whereCond = ' WHERE ' + conditions.join(' AND ');
+        }
+        var query = 'MATCH (n:SystemName) ' + whereCond + ' MATCH (n)-[r]->(m) RETURN n,r,m';
+        console.log('Search Query = ', query);
+        var config = CONSTANTS.getStateVariable('config');
+        var serverConfig = config.neo4jConfig;
+        var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
+        $scope.toggleLeft();
+        $scope.$broadcast('renderGraph', graphMetaInfo);
+
+      }
   }
 
   angular.module('neo4jApp')

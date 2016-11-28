@@ -14,7 +14,7 @@
         <form name="searchForm">
           <div layout-gt-sm="row" ng-repeat="(key, value) in searchMaster.propertiesKeys">
             <md-autocomplete flex
-                             md-input-name="autocompleteField"
+                             md-input-name="autocompleteField[key]"
                              md-no-cache="noCache"
                              md-input-minlength="1"
                              md-input-maxlength="18"
@@ -26,7 +26,10 @@
               <md-item-template>
                 <span md-highlight-text="searchText[key]">{{item}}</span>
               </md-item-template>
-              <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+              <md-not-found>
+                No items matching "{{searchText[key]}}" were found.
+              </md-not-found>
+              <div ng-messages="searchForm.autocompleteField[key].$error" ng-if="searchForm.autocompleteField[key].$touched">
               </div>
             </md-autocomplete>
           </div>
@@ -39,7 +42,7 @@
           </md-input-container>
 -->
           <div>
-            <md-button class="md-raised" type="submit">Search</md-button>
+            <md-button class="md-raised" type="submit" ng-click="filterGraph()">Search</md-button>
           </div>
 
         </form>
