@@ -232,7 +232,7 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/client/{,*/}*.js',
             '<%= yeoman.dist %>/client/{,*/}*.css',
             '<%= yeoman.dist %>/client/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/client/assets/fonts/*'
+         //   '<%= yeoman.dist %>/client/assets/fonts/*'
           ]
         }
       }
@@ -349,9 +349,9 @@ module.exports = function (grunt) {
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
-            'bower_components/font-awesome/**/*',
+            //'bower_components/font-awesome/**/*',
             'assets/images/{,*/}*.{webp}',
-            //'assets/fonts/**/*',
+            'fonts/**/*',
             'index.html'
           ]
         }, {
