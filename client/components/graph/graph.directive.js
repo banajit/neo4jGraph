@@ -261,12 +261,12 @@ angular.module('neo4jApp')
               sigmaInstance.graph.edges().forEach(function (edge) {
                   if (adjacentNodes[edge.source] !== undefined || adjacentNodes[edge.target] !== undefined) {
                     edge.color = '#000';
-                    edge.hidden = false;
+                    //edge.hidden = false;
                     neighborNodes[edge.source] = edge.source;
                     neighborNodes[edge.target] = edge.target;
                   }
                   else {
-                     edge.hidden = true;
+                     //edge.hidden = true;
                   }
               });
               /*sigmaInstance.graph.nodes().forEach(function (node) {
