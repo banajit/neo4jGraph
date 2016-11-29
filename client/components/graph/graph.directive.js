@@ -127,7 +127,6 @@ angular.module('neo4jApp')
                     i++;
                   });
                   graph.edges.forEach(function(edge, key) {
-                    edge.type = 'curvedArrow';
                     edge.count = key;
                     edge.color = '#ccc';
                     edge.hover_color = '#000';
@@ -211,7 +210,6 @@ angular.module('neo4jApp')
             edge.label = edge.label;
             edge.source = edge.source;
             edge.target = edge.target;
-            edge.type = 'curvedArrow';
             edge.count = key;
             edge.color = '#ccc';
             edge.hover_color = '#000';
@@ -220,17 +218,23 @@ angular.module('neo4jApp')
             autoCurveSortByDirection: true,
             minNodeSize: 12,
             maxNodeSize: 12,
-            minEdgeSize: 1,
-            maxEdgeSize: 1,
+            minEdgeSize: 1.5,
+            maxEdgeSize: 1.5,
             defaultLabelColor: '#000',
+            labelAlignment: 'bottom',
             //defaultLabelSize: 16,
             defaultEdgeLabelColor: '#014AB6',
             enableEdgeHovering: true,
-            edgeHoverColor: 'edge',
-            defaultEdgeHoverColor: '#000',
-            zoomOnLocation: false,
+            //defaultEdgeHoverColor: '#000',
+            zoomOnLocation: true,
             sideMargin: 15,
-            edgeHoverExtremities: true
+            edgeHoverExtremities: true,
+            edgeLabelSize: 'proportional',
+            edgeLabelThreshold: 1.7,
+            defaultEdgeType: "arrow",
+            edgeHoverLevel:2,
+            zoomMin: 0.001,
+            zoomMax: 300
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
@@ -262,7 +266,7 @@ angular.module('neo4jApp')
                     neighborNodes[edge.target] = edge.target;
                   }
                   else {
-                     //edge.hidden = true;
+                     edge.hidden = true;
                   }
               });
               /*sigmaInstance.graph.nodes().forEach(function (node) {
@@ -319,7 +323,7 @@ angular.module('neo4jApp')
 
           //nonoverlaping node config
           var config = {
-            nodeMargin: 10,
+            nodeMargin: 15,
             scaleNodes: 2
           };
           var listener = sigmaInstance.configNoverlap(config);
@@ -343,7 +347,7 @@ angular.module('neo4jApp')
             worker: true,
             autoStop: true,
             background: true,
-            scaleRatio: 10,
+            scaleRatio: 20,
             gravity: 2,
             barnesHutOptimize: false,
             easing: 'cubicInOut'
