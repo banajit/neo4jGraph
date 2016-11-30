@@ -113,38 +113,8 @@ angular.module('neo4jApp')
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
               function(graph) {
-                  sigmaInstance.graph.clear();
-                  var N = graph.nodes.length, i=0;
-                  graph.nodes.forEach(function(node) {
-                    node.label = node.neo4j_data.SystemName;
-                    node.size = 8;
-                    node.x = Math.cos(2 * i * Math.PI / N);
-                    node.y = Math.sin(2 * i * Math.PI / N);
-                    node.type = 'image';
-                    node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
-                    node.color = '#68BDF6';
-                    sigmaInstance.graph.addNode(node);
-                    i++;
-                  });
-                  graph.edges.forEach(function(edge, key) {
-                    edge.count = key;
-                    edge.color = '#ccc';
-                    edge.hover_color = '#000';
-                    sigmaInstance.graph.addEdge(edge);
-                  });
-                  sigma.canvas.edges.autoCurve(sigmaInstance);
-                  // Configure the ForceLink algorithm:
-                  var fa = sigma.layouts.configForceLink(sigmaInstance, {
-                    worker: true,
-                    autoStop: true,
-                    background: true,
-                    scaleRatio: 10,
-                    gravity: 2,
-                    barnesHutOptimize: false,
-                    easing: 'cubicInOut'
-                  });
-                  sigma.layouts.startForceLink();
-                  sigmaInstance.refresh();
+                sigmaInstance.graph.clear();
+                layoutNodesEdges(graph);
               }
           );
         }
@@ -154,13 +124,43 @@ angular.module('neo4jApp')
           renderSigmaInstance(data);
         });
 
+        //update node and edge array
+        function layoutNodesEdges(graph) {
+          var N = graph.nodes.length, i=0;
+          graph.nodes.forEach(function(node) {
+            node.label = node.neo4j_data.SystemName;
+            node.size = 8;
+            node.x = Math.random();
+            node.y = Math.random();
+            node.type = 'image';
+            node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+            node.color = '#68BDF6';
+            sigmaInstance.graph.addNode(node);
+            i++;
+          });
+          graph.edges.forEach(function(edge, key) {
+            //edge.count = key;
+            edge.color = '#ccc';
+            edge.hover_color = '#000';
+            sigmaInstance.graph.addEdge(edge);
+          });
+          sigma.canvas.edges.autoCurve(sigmaInstance);
+          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+            iterations: 500,
+            easing: 'quadraticInOut',
+            duration: 800,
+          });
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          //sigmaInstance.refresh();
+        }
+
         function renderSigmaInstance(graphMeta) {
           // Run Cypher query:
           sigma.neo4j.cypher(
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
             function(graph) {
-              /*graph1.urls.forEach(function(url) {
+              graph1.urls.forEach(function(url) {
                 sigma.canvas.nodes.image.cache(
                   url,
                   function() {
@@ -169,7 +169,7 @@ angular.module('neo4jApp')
                        sigmaInstance = createSigmaInstance(graph);
                   }
                 );
-              });*/
+              });
               /*refresh_graph(graph);
               if(graph.nodes.length>0) {
                 sigmaInstance = createSigmaInstance(graph);
@@ -180,57 +180,34 @@ angular.module('neo4jApp')
                   content: 'No nodes were found.'
                 });
               }*/
-              sigmaInstance = createSigmaInstance(graph);
             }
           );
         }
         //create sigma instance
         function createSigmaInstance(graph) {
           sigmaInstance = new sigma({
-            graph: graph,
+            //graph: graph,
             renderer: {
               container: document.getElementById('neo4jgraph'),
               type: 'canvas',
             }
           });
-          var N = graph.nodes.length, i=0;
-          graph.nodes.forEach(function(node) {
-            node.id = node.id;
-            node.label = node.neo4j_data.SystemName;
-            node.size = 8;
-            node.x = Math.cos(2 * i * Math.PI / N);
-            node.y = Math.sin(2 * i * Math.PI / N);
-            node.type = 'image';
-            node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
-            node.color = '#68BDF6';
-            i++;
-          });
-          graph.edges.forEach(function(edge, key) {
-            edge.id = edge.id;
-            edge.label = edge.label;
-            edge.source = edge.source;
-            edge.target = edge.target;
-            edge.count = key;
-            edge.color = '#ccc';
-            edge.hover_color = '#000';
-          });
+          layoutNodesEdges(graph);
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
             minNodeSize: 12,
             maxNodeSize: 12,
-            minEdgeSize: 1.5,
-            maxEdgeSize: 1.5,
+            minEdgeSize: 1.3,
+            maxEdgeSize: 1.3,
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
-            //defaultLabelSize: 16,
-            defaultEdgeLabelColor: '#014AB6',
+            defaultLabelSize: 10,
+            drawEdgeLabels: false,
             enableEdgeHovering: true,
             //defaultEdgeHoverColor: '#000',
             zoomOnLocation: true,
-            sideMargin: 15,
             edgeHoverExtremities: true,
             edgeLabelSize: 'proportional',
-            edgeLabelThreshold: 1.7,
             defaultEdgeType: "arrow",
             edgeHoverLevel:2,
             zoomMin: 0.001,
@@ -245,10 +222,10 @@ angular.module('neo4jApp')
               //on mouseout
               sigmaInstance.graph.edges().forEach(function (edge) {
                   edge.color = '#ccc';
-                  edge.hidden = false;
+                  //edge.hidden = false;
               });
               sigmaInstance.graph.nodes().forEach(function (node) {
-                  node.hidden = false;
+                  //node.hidden = false;
               });
             }
             else {
@@ -278,6 +255,7 @@ angular.module('neo4jApp')
                   }
               });*/
             }
+
             sigmaInstance.refresh();
           });
 
@@ -338,31 +316,14 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
+           /* var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+              iterations: 500,
+              easing: 'quadraticInOut',
+              duration: 800,
+              autoarea: true,
+            });
+            sigma.layouts.fruchtermanReingold.start(sigmaInstance);*/
           });
-
-
-
-          // Configure the ForceLink algorithm:
-          var fa = sigma.layouts.configForceLink(sigmaInstance, {
-            worker: true,
-            autoStop: true,
-            background: true,
-            scaleRatio: 20,
-            gravity: 2,
-            barnesHutOptimize: false,
-            easing: 'cubicInOut'
-          });
-          // Bind the events:
-          fa.bind('start interpolate stop', function(e) {
-            if (e.type === 'start') {
-              $('<div class="modal-backdrop"></div><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>Layout in progress, please wait...</span></div>').appendTo(document.body);
-            }
-            else if (e.type === 'interpolate') {
-              $(".modal-backdrop").remove();
-              $(".layout-progress").remove();
-            }
-          });
-          sigma.layouts.startForceLink();
           return sigmaInstance;
         }
       }

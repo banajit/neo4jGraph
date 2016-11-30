@@ -14,22 +14,22 @@
         <form name="searchForm">
           <div layout-gt-sm="row" ng-repeat="(key, value) in searchMaster.propertiesKeys">
             <md-autocomplete flex
-                             md-input-name="autocompleteField[key]"
+                             md-input-name="autocompleteField[value]"
                              md-no-cache="noCache"
                              md-input-minlength="1"
                              md-input-maxlength="18"
-                             md-selected-item="selectedItem[key]"
-                             md-search-text="searchText[key]"
-                             md-items="item in loadValuesByProperty(searchText[key], key)"
+                             md-selected-item="selectedItem[value]"
+                             md-search-text="searchText[value]"
+                             md-items="item in loadValuesByProperty(searchText[value], value)"
                              md-item-text="item"
                              md-floating-label="{{value}}">
               <md-item-template>
                 <span md-highlight-text="searchText[key]">{{item}}</span>
               </md-item-template>
               <md-not-found>
-                No items matching "{{searchText[key]}}" were found.
+                No items matching "{{searchText[value]}}" were found.
               </md-not-found>
-              <div ng-messages="searchForm.autocompleteField[key].$error" ng-if="searchForm.autocompleteField[key].$touched">
+              <div ng-messages="searchForm.autocompleteField[value].$error" ng-if="searchForm.autocompleteField[value].$touched">
               </div>
             </md-autocomplete>
           </div>

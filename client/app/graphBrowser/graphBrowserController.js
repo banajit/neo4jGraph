@@ -18,7 +18,7 @@
          CONSTANTS.setStateVariable('config', data);
          var serverConfig = data.neo4jConfig;
          var params = {};
-         /*var query = 'CALL db.propertyKeys();'
+         var query = 'CALL db.propertyKeys();'
          var neo4j = { url: serverConfig.serverUrl, user: serverConfig.user, password: serverConfig.password };
          var endpoint = '/db/data/transaction/commit', timeout = -1;
          var data = JSON.stringify({
@@ -32,12 +32,15 @@
          });
          sigma.neo4j.send(neo4j, endpoint, 'POST', data,
          function(data) {
-            console.log('cypher', data);
+            var tempKeys = [];
             angular.forEach(data.results[0].data, function(value, key){
-              console.log('cypher', value.row[0]);
+              //console.log('cypher', value.row[0]);
+              //$scope.searchMaster['propertiesKeys'] = data.searchPropertyKeys;
+              tempKeys.push(value.row[0]);
             });
-         }, timeout);*/
-         $scope.searchMaster['propertiesKeys'] = data.searchPropertyKeys;
+            $scope.searchMaster['propertiesKeys'] = tempKeys;
+         }, timeout);
+
       });
 
       // ******************************

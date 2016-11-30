@@ -9,7 +9,15 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 /**
  * App-wide Styles
  */
-
+body, html {
+    font-family: Open_Sans,Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.125 em;
+    height: 100%;
+    color: rgba(0,0,0,.87);
+    background-color: #fff;
+}
 body.neo4j-app h2 {
     font-size: 1.313em;
     font-weight: 400;
