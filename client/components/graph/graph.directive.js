@@ -109,6 +109,7 @@ angular.module('neo4jApp')
         });
 
         function refreshSigmaInstance(graphMeta) {
+          startLoader('Fetching data, please wait...');
           sigma.neo4j.cypher(
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
@@ -148,18 +149,39 @@ angular.module('neo4jApp')
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
             iterations: 500,
             easing: 'quadraticInOut',
-            duration: 800,
+            duration: 800
+          });
+          // Bind the events:
+          frListener.bind('start stop interpolate', function(e) {
+            console.log(e.type);
+            if (e.type == 'start') {
+               //startLoader('Layout in progress, please wait...');
+            }
+            else if(e.type == 'stop') {
+              stopLoader();
+            }
           });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           //sigmaInstance.refresh();
         }
 
+        function startLoader(message) {
+          $('<div class="modal-backdrop"></div><div class="layout-progress"><span><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></span><span>' + message + '</span></div>').appendTo(document.body);
+        }
+
+        function stopLoader() {
+          $(".modal-backdrop").remove();
+          $(".layout-progress").remove();
+        }
+
         function renderSigmaInstance(graphMeta) {
           // Run Cypher query:
+          startLoader('Fetching data, please wait...');
           sigma.neo4j.cypher(
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
             function(graph) {
+              //stopLoader();
               graph1.urls.forEach(function(url) {
                 sigma.canvas.nodes.image.cache(
                   url,
@@ -297,17 +319,14 @@ angular.module('neo4jApp')
 
           // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
           var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
-
-
-          //nonoverlaping node config
+          sigma.canvas.edges.autoCurve(sigmaInstance);
+           //nonoverlaping node config
           var config = {
             nodeMargin: 15,
             scaleNodes: 2
           };
           var listener = sigmaInstance.configNoverlap(config);
           sigmaInstance.startNoverlap();
-          sigma.canvas.edges.autoCurve(sigmaInstance);
-
           //make nodes draggable
           var activeState = sigma.plugins.activeState(sigmaInstance);
           var renderer = sigmaInstance.renderers[0];
@@ -316,11 +335,10 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
-           /* var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+            /*var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
               iterations: 500,
               easing: 'quadraticInOut',
               duration: 800,
-              autoarea: true,
             });
             sigma.layouts.fruchtermanReingold.start(sigmaInstance);*/
           });

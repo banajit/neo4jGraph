@@ -49,7 +49,7 @@
       $scope.loadValuesByProperty = function(queryStrn, propertyKey) {
          var config = CONSTANTS.getStateVariable('config');
          var serverConfig = config.neo4jConfig;
-         var query = 'MATCH(s: SystemName) WHERE s.' + propertyKey + ' =~ "' + queryStrn + '.*" return s;';
+         var query = 'MATCH(s) WHERE s.' + propertyKey + ' =~ "' + queryStrn + '.*" return s;';
          console.log('Property Value Search = ', query);
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
@@ -78,7 +78,8 @@
         if(conditions.length>0) {
           whereCond = ' WHERE ' + conditions.join(' AND ');
         }
-        var query = 'MATCH (n:SystemName) ' + whereCond + ' MATCH (n)-[r]->(m) RETURN n,r,m';
+        //var query = 'MATCH (n) ' + whereCond + ' MATCH ()-[r]->() RETURN n,r';
+        var query = 'MATCH (n)-[r]-(m) ' + whereCond + ' RETURN n,r,m';
         console.log('Search Query = ', query);
         var config = CONSTANTS.getStateVariable('config');
         var serverConfig = config.neo4jConfig;
@@ -88,7 +89,7 @@
       }
       //Reset graph
       $scope.resetGraph = function() {
-        var query = 'MATCH (n:SystemName) MATCH (n)-[r]->(m) RETURN n,r,m';
+        var query = 'MATCH (n) MATCH ()-[r]->() RETURN n,r';
         var config = CONSTANTS.getStateVariable('config');
         var serverConfig = config.neo4jConfig;
         var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
