@@ -181,7 +181,6 @@ angular.module('neo4jApp')
           });
           // Bind the events:
           frListener.bind('start stop interpolate', function(e) {
-            console.log(e.type);
             if (e.type == 'start') {
                //startLoader('Layout in progress, please wait...');
             }
@@ -252,7 +251,7 @@ angular.module('neo4jApp')
             maxEdgeSize: 1.3,
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
-            defaultLabelSize: 8,
+            defaultLabelSize: 9,
             drawEdgeLabels: false,
             enableEdgeHovering: true,
             edgeHoverSizeRatio: 2,

@@ -49,7 +49,18 @@
       $scope.loadValuesByProperty = function(queryStrn, propertyKey) {
          var config = CONSTANTS.getStateVariable('config');
          var serverConfig = config.neo4jConfig;
-         var query = 'MATCH(s) WHERE s.' + propertyKey + ' =~ "' + queryStrn + '.*" return s;';
+         var conditions = [], whereCond = '';
+         angular.forEach($scope.selectedItem, function(value, key){
+           if(value !== null) {
+             var cond = 'n.' + key + ' = ' + '"' + value + '"';
+             conditions.push(cond);
+           }
+         });
+         conditions.push('n.' + propertyKey + ' =~ "' + queryStrn + '.*"');
+         if(conditions.length>0) {
+           whereCond = ' WHERE ' + conditions.join(' AND ');
+         }
+         var query = 'MATCH(n) ' + whereCond + ' return n;';
          console.log('Property Value Search = ', query);
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
