@@ -17,7 +17,7 @@
   "neo4jConfig": {
     "serverUrl": "http://localhost:7474",
     "user": "neo4j",
-    "password": "admin"
+    "password": "neo4j@zaloni"
   },
   "searchPropertyKeys": {
     "LineOfBusiness": "Line Of Business",

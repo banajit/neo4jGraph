@@ -101,6 +101,11 @@
         $scope.searchForm.$setUntouched();
         $scope.selectedItem = {};
       }
+
+      //Refresh layout
+      $scope.refreshLayout = function() {
+        $scope.$broadcast('refreshLayout');
+      }
   }
 
   angular.module('neo4jApp')

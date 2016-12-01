@@ -125,12 +125,38 @@ angular.module('neo4jApp')
           renderSigmaInstance(data);
         });
 
+        //Listen for refresh layout
+        scope.$on('refreshLayout', function (event) {
+          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+            iterations: 500,
+            easing: 'quadraticInOut',
+            duration: 800,
+          });
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          sigmaInstance.refresh();
+        });
+
         //update node and edge array
         function layoutNodesEdges(graph) {
           var N = graph.nodes.length, i=0;
+          graph.edgeNodeRef = {};
+          angular.forEach(graph.nodes, function (value, key) {
+              var tempSource = [];
+              var tempTarget = [];
+              angular.forEach(graph.edges, function (edgeVal) {
+                  if (value.id === edgeVal.source) {
+                      tempTarget.push(edgeVal.target);
+                  }
+                  if (value.id === edgeVal.target) {
+                      tempSource.push(edgeVal.source);
+                  }
+              });
+              graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
+          });
           graph.nodes.forEach(function(node) {
             node.label = node.neo4j_data.SystemName;
-            node.size = 8;
+            var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
+            node.size = neighborNodes;
             node.x = Math.random();
             node.y = Math.random();
             node.type = 'image';
@@ -143,13 +169,15 @@ angular.module('neo4jApp')
             //edge.count = key;
             edge.color = '#ccc';
             edge.hover_color = '#000';
+            edge.type = 'arrow';
             sigmaInstance.graph.addEdge(edge);
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
             iterations: 500,
             easing: 'quadraticInOut',
-            duration: 800
+            duration: 800,
+            gravity: 10
           });
           // Bind the events:
           frListener.bind('start stop interpolate', function(e) {
@@ -182,16 +210,17 @@ angular.module('neo4jApp')
               graphMeta.neo4jQuery,
             function(graph) {
               //stopLoader();
-              graph1.urls.forEach(function(url) {
+              /*graph1.urls.forEach(function(url) {
                 sigma.canvas.nodes.image.cache(
                   url,
                   function() {
                     if (++loaded === graph1.urls.length)
                       // Instantiate sigma:
-                       sigmaInstance = createSigmaInstance(graph);
+                       *//*sigmaInstance = createSigmaInstance(graph);*//*
                   }
                 );
-              });
+              });*/
+              sigmaInstance = createSigmaInstance(graph);
               /*refresh_graph(graph);
               if(graph.nodes.length>0) {
                 sigmaInstance = createSigmaInstance(graph);
@@ -217,19 +246,19 @@ angular.module('neo4jApp')
           layoutNodesEdges(graph);
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
-            minNodeSize: 12,
-            maxNodeSize: 12,
+            minNodeSize: 9,
+            maxNodeSize: 20,
             minEdgeSize: 1.3,
             maxEdgeSize: 1.3,
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
-            defaultLabelSize: 10,
+            defaultLabelSize: 8,
             drawEdgeLabels: false,
             enableEdgeHovering: true,
-            //defaultEdgeHoverColor: '#000',
+            edgeHoverSizeRatio: 2,
             zoomOnLocation: true,
             edgeHoverExtremities: true,
-            edgeLabelSize: 'proportional',
+            //edgeLabelSize: 'proportional',
             defaultEdgeType: "arrow",
             edgeHoverLevel:2,
             zoomMin: 0.001,
@@ -268,14 +297,6 @@ angular.module('neo4jApp')
                      //edge.hidden = true;
                   }
               });
-              /*sigmaInstance.graph.nodes().forEach(function (node) {
-                  if (neighborNodes[node.id] !== undefined) {
-                    node.hidden = false;
-                  }
-                  else {
-                     node.hidden = true;
-                  }
-              });*/
             }
 
             sigmaInstance.refresh();
@@ -319,11 +340,10 @@ angular.module('neo4jApp')
 
           // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
           var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
-          sigma.canvas.edges.autoCurve(sigmaInstance);
            //nonoverlaping node config
           var config = {
-            nodeMargin: 15,
-            scaleNodes: 2
+            nodeMargin: 5,
+            scaleNodes: 5
           };
           var listener = sigmaInstance.configNoverlap(config);
           sigmaInstance.startNoverlap();
@@ -335,7 +355,8 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
-            /*var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+           /* sigma.layouts.fruchtermanReingold.stop();
+            var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
               iterations: 500,
               easing: 'quadraticInOut',
               duration: 800,
