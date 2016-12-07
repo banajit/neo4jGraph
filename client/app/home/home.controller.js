@@ -15,20 +15,18 @@
     //get config data
     var slideConfig = {};
     $scope.slickConfigLoaded  = true;
-
-    CONSTANTS.getConfig().success(function (data) {
-      CONSTANTS.setStateVariable('neo4jConfig', data.neo4jConfig);
-      slideConfig = data.slideConfig;
-      $scope.slides = data.slideUrls;
-        $scope.slickConfig = {
-          dots: true,
-          autoplay: true,
-          initialSlide: 0,
-          infinite: false,
-          autoplaySpeed: slideConfig.slideInterval,
-          method: {}
-        };
-    });
+    var data = CONSTANTS.getConfig();
+    CONSTANTS.setStateVariable('neo4jConfig', data.neo4jConfig);
+    slideConfig = data.slideConfig;
+    $scope.slides = data.slideUrls;
+      $scope.slickConfig = {
+        dots: true,
+        autoplay: true,
+        initialSlide: 0,
+        infinite: false,
+        autoplaySpeed: slideConfig.slideInterval,
+        method: {}
+      };
 
     //adjust width for less resolution frame
     $scope.getCaraousalWidth = function(width) {

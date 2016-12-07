@@ -189,7 +189,6 @@ angular.module('neo4jApp')
             }
           });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-          //sigmaInstance.refresh();
         }
 
         function startLoader(message) {
@@ -208,28 +207,16 @@ angular.module('neo4jApp')
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
             function(graph) {
-              //stopLoader();
-              /*graph1.urls.forEach(function(url) {
+              graph1.urls.forEach(function(url) {
                 sigma.canvas.nodes.image.cache(
                   url,
                   function() {
                     if (++loaded === graph1.urls.length)
                       // Instantiate sigma:
-                       *//*sigmaInstance = createSigmaInstance(graph);*//*
+                       sigmaInstance = createSigmaInstance(graph);
                   }
                 );
-              });*/
-              sigmaInstance = createSigmaInstance(graph);
-              /*refresh_graph(graph);
-              if(graph.nodes.length>0) {
-                sigmaInstance = createSigmaInstance(graph);
-              }
-              else {
-                ngToast.create({
-                  className: 'warning',
-                  content: 'No nodes were found.'
-                });
-              }*/
+              });
             }
           );
         }
@@ -245,10 +232,10 @@ angular.module('neo4jApp')
           layoutNodesEdges(graph);
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
-            minNodeSize: 9,
+            minNodeSize: 10,
             maxNodeSize: 20,
-            minEdgeSize: 1.3,
-            maxEdgeSize: 1.3,
+           /* minEdgeSize: 1.3,
+            maxEdgeSize: 1.3,*/
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
             defaultLabelSize: 9,
@@ -257,7 +244,7 @@ angular.module('neo4jApp')
             edgeHoverSizeRatio: 2,
             zoomOnLocation: true,
             edgeHoverExtremities: true,
-            //edgeLabelSize: 'proportional',
+            edgeLabelSize: 'proportional',
             defaultEdgeType: "arrow",
             edgeHoverLevel:2,
             zoomMin: 0.001,
@@ -297,7 +284,6 @@ angular.module('neo4jApp')
                   }
               });
             }
-
             sigmaInstance.refresh();
           });
 
@@ -354,13 +340,6 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
-           /* sigma.layouts.fruchtermanReingold.stop();
-            var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-              iterations: 500,
-              easing: 'quadraticInOut',
-              duration: 800,
-            });
-            sigma.layouts.fruchtermanReingold.start(sigmaInstance);*/
           });
           return sigmaInstance;
         }

@@ -1,0 +1,43 @@
+<md-toolbar>
+  <div class="left-sidebar">
+    <div class="pull-left"><h1 class="md-toolbar-tools">Refine Results By</h1></div>
+    <div class="pull-right">
+      <div class="md-accent md-toolbar-tools cursor-pointer" ng-click="toggleLeft()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div>
+    </div>
+  </div>
+</md-toolbar>
+
+<md-content layout-margin>
+  <form name="searchForm">
+    <accordion>
+      <accordion-group heading="{{key}}" ng-repeat="(key, value) in searchMaster">
+        <div layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value">
+          <md-autocomplete flex
+                           md-input-name="autocompleteField[keyProp]"
+                           md-no-cache="noCache"
+                           md-input-minlength="1"
+                           md-input-maxlength="18"
+                           md-selected-item="selectedItem[key][keyProp]"
+                           md-search-text="searchText[keyProp]"
+                           md-items="item in loadValuesByProperty(searchText[keyProp], keyProp, key)"
+                           md-item-text="item"
+                           md-floating-label="{{valueProp.displayName}}">
+            <md-item-template>
+              <span md-highlight-text="searchText[key]">{{item}}</span>
+            </md-item-template>
+            <md-not-found>
+              No items matching "{{searchText[keyProp]}}" were found.
+            </md-not-found>
+            <div ng-messages="searchForm.autocompleteField[value].$error" ng-if="searchForm.autocompleteField[value].$touched">
+            </div>
+          </md-autocomplete>
+        </div>
+      </accordion-group>
+    </accordion>
+    <div>
+      <md-button class="md-raised" type="submit" ng-click="filterGraph()">Search</md-button>
+      <md-button class="md-raised" type="submit" ng-click="resetGraph()">Reset</md-button>
+    </div>
+
+  </form>
+</md-content>

@@ -5,11 +5,14 @@
 
 (function (angular) {
 
-  function constants($http) {
+  function constants($http, CONFIG, SCHEMA) {
     var stateVariables = {};
     return {
       getConfig: function () {
-        return $http.get('config.json');
+        return CONFIG;
+      },
+      getSchema: function () {
+        return SCHEMA;
       },
       setStateVariable: function (name, value) {
           stateVariables[name] = value;

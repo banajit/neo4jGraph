@@ -1,54 +1,7 @@
 <div ng-cloak>
   <section layout="row" flex>
-    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
-      <md-toolbar class="md-theme-watch">
-        <div class="left-sidebar">
-          <div class="pull-left"><h1 class="md-toolbar-tools">Refine Results By</h1></div>
-          <div class="pull-right">
-            <div class="md-accent md-toolbar-tools cursor-pointer" ng-click="toggleLeft()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div>
-          </div>
-        </div>
-      </md-toolbar>
-
-      <md-content layout-margin>
-        <form name="searchForm">
-          <div layout-gt-sm="row" ng-repeat="(key, value) in searchMaster.propertiesKeys">
-            <md-autocomplete flex
-                             md-input-name="autocompleteField[value]"
-                             md-no-cache="noCache"
-                             md-input-minlength="1"
-                             md-input-maxlength="18"
-                             md-selected-item="selectedItem[value]"
-                             md-search-text="searchText[value]"
-                             md-items="item in loadValuesByProperty(searchText[value], value)"
-                             md-item-text="item"
-                             md-floating-label="{{value}}">
-              <md-item-template>
-                <span md-highlight-text="searchText[key]">{{item}}</span>
-              </md-item-template>
-              <md-not-found>
-                No items matching "{{searchText[value]}}" were found.
-              </md-not-found>
-              <div ng-messages="searchForm.autocompleteField[value].$error" ng-if="searchForm.autocompleteField[value].$touched">
-              </div>
-            </md-autocomplete>
-          </div>
-<!--
-          <md-input-container class="md-block" ng-repeat="(key, value) in searchMaster.propertiesKeys">
-            <label>{{value}}</label>
-            <input md-maxlength="30" name="key" ng-model="project.description">
-            <div ng-messages="searchForm[key].$error">
-            </div>
-          </md-input-container>
--->
-          <div>
-            <md-button class="md-raised" type="submit" ng-click="filterGraph()">Search</md-button>
-            <md-button class="md-raised" type="submit" ng-click="resetGraph()">Reset</md-button>
-          </div>
-
-        </form>
-      </md-content>
-
+    <md-sidenav class="md-sidenav-left" md-component-id="filter" md-whiteframe="4" md-enable-backdrop>
+      <div ng-controller="graphFilterCtrl"><ng-include src="'app/graphFilter/graphFilter.html'"></ng-include></div>
     </md-sidenav>
 
     <md-content flex>
@@ -56,16 +9,17 @@
         <md-button ng-click="toggleLeft()" class="md-raised md-primary">
           <i class="fa fa-search" aria-hidden="true"></i> Filter
         </md-button>
-        <!--<md-button ng-click="toggleLeft()" class="md-raised md-primary">
-          <i class="fa fa-plus" aria-hidden="true"></i> Add Nodes
-        </md-button>-->
       </div>
       <div class="nbc-graph">
-        <!--<div class="pull-right">
-          <md-button ng-click="refreshLayout()" class="md-raised">
-            Refresh
-          </md-button>
-        </div>-->
+        <div class="graph-slider">
+          <md-slider-container>
+            <md-slider flex min="1" max="5" ng-model="color.red" aria-label="red" id="red-slider">
+            </md-slider>
+            <!--<md-input-container>
+              <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+            </md-input-container>-->
+          </md-slider-container>
+        </div>
         <graph></graph>
       </div>
     </md-content>

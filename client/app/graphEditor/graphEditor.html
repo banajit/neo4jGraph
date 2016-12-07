@@ -1,0 +1,47 @@
+<div ng-cloak>
+  <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left" md-component-id="filter" md-whiteframe="4" md-enable-backdrop>
+      <div ng-controller="graphFilterCtrl"><ng-include src="'app/graphFilter/graphFilter.html'"></ng-include></div>
+    </md-sidenav>
+
+
+
+    <md-sidenav class="md-sidenav-left" md-component-id="editor" md-whiteframe="4" md-disable-backdrop>
+      <md-toolbar>
+        <div class="left-sidebar">
+          <div class="pull-left"><h1 class="md-toolbar-tools">Drag Node to Add</h1></div>
+          <div class="pull-right">
+            <div class="md-accent md-toolbar-tools cursor-pointer" ng-click="toggleEditor()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div>
+          </div>
+        </div>
+      </md-toolbar>
+
+      <ul layout-margin dnd-list="nodeLabels" dnd-drop="addNodeToGraph(event, index, item, external, type, 'notAllowed')" class="list-group neo4j-labels">
+        <li class="list-group-item" ng-repeat="item in nodeLabels track by $index"
+            dnd-draggable="item"
+            dnd-moved="nodeLabels.splice($index, 1)"
+            dnd-effect-allowed="copy"
+          >
+          <i class="fa fa-table" aria-hidden="true"></i> {{item}}
+        </li>
+      </ul>
+    </md-sidenav>
+
+
+    <md-content flex>
+      <div class="neo4j-toggle-left">
+        <md-button ng-click="toggleLeft()" class="md-raised md-primary">
+        <i class="fa fa-search" aria-hidden="true"></i> Filter
+      </md-button>
+      <md-button ng-click="toggleEditor()" class="md-raised md-primary">
+        <i class="fa fa-plus" aria-hidden="true"></i> Node
+      </md-button>
+      </div>
+      <div class="nbc-graph-edit" dnd-list dnd-drop="addNodeToGraph(event, index, item, external, type, 'allowed')">
+        <graph></graph>
+      </div>
+    </md-content>
+
+  </section>
+
+</div>

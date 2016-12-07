@@ -152,6 +152,39 @@ body.neo4j-app h2 {
 .cursor-pointer {
   cursor: pointer;
 }
+.graph-slider {
+  position: absolute;
+  right: 0;
+  z-index: 9999;
+}
+
+.neo4j-app ul[dnd-list],
+.neo4j-app ul[dnd-list] > li {
+	position: relative;
+}
+
+.neo4j-app ul[dnd-list] {
+    min-height: 42px;
+    padding-left: 0px;
+}
+
+
+ul.neo4j-labels li {
+   background-color: #4C4957;
+   border: 1px solid #4C4957;
+   border-radius: .25em;
+   color: #FFF;
+   font-weight: 700;
+   height: 30px;
+   margin-top: 10px;
+   padding: 7px 0px 0px 0px;
+   text-align: center;
+   cursor: move;
+   width: 42%;
+   float: left;
+   text-transform: capitalize;
+}
+
 // Component styles are injected through grunt
 // injector
 // endinjector
