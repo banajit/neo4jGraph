@@ -77,7 +77,6 @@
       // ******************************
       $scope.selectedItem = {};
       $scope.filterGraph = function() {
-        console.log($scope.selectedItem);
         var searchQueries = [];
         angular.forEach($scope.selectedItem, function(labelVal, labelKey){
           var conditions = [], whereCond = '';
@@ -97,12 +96,14 @@
         var searchQueryStr = searchQueries.join(' UNION ');
 
         console.log('Search Query = ', searchQueryStr);
+        if(searchQueryStr.length > 0) {
+          var config = CONSTANTS.getStateVariable('config');
+          var serverConfig = config.neo4jConfig;
+          var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:searchQueryStr};
+          $scope.toggleLeft('filter');
+          $scope.$emit('refreshGraph', graphMetaInfo);
+        }
 
-        var config = CONSTANTS.getStateVariable('config');
-        var serverConfig = config.neo4jConfig;
-        var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:searchQueryStr};
-        $scope.toggleLeft('filter');
-        $scope.$emit('refreshGraph', graphMetaInfo);
       }
       //Reset graph
       $scope.resetGraph = function() {
