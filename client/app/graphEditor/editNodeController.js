@@ -12,6 +12,22 @@
         $mdDialog.hide();
       }
       $scope.editMode = (Object.keys(propertyList).length>0)?true:false;
+
+      $scope.deleteNode = function() {
+        var query = 'MATCH (n:' + labelName + ') WHERE id(n)=' + node.id + ' DELETE n';
+         console.log('Delete Query', query);
+         neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+            if(data.errors.length == 0) {
+              ngToast.create({
+                className: 'success',
+                content: 'Node Deleted successfully.'
+              });
+              $rootScope.$broadcast('deleteNodeToGraph', node);
+              $mdDialog.hide();
+            }
+         });
+      }
+
       $scope.saveNode = function() {
         if($scope.editNodeForm.$valid) {
           if($scope.editMode) {
@@ -37,7 +53,6 @@
            var query = 'match (n:' + labelName + ') where id(n) = ' + node.id + ' set ' + properties + ' return n';
            console.log('Update Query', query);
            neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
-            console.log(data)
               if(data.errors.length == 0) {
                 ngToast.create({
                   className: 'success',

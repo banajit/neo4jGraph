@@ -1,6 +1,48 @@
 {
   "nodes" : {
-    "zaloniEmplyees" : {
+    "SystemName" : {
+      "SystemDescription" : {
+        "displayName" : "System Description",
+        "restriction" : ".*"
+      },
+      "name" : {
+        "displayName" : "name",
+        "restriction" : ".*"
+      },
+      "BusinessSegment" : {
+        "displayName" : "BusinessSegment",
+        "restriction" : ".*"
+      },
+      "CIO" : {
+        "displayName" : "Chief Intellogence Officer",
+        "restriction" : ".*"
+      },
+      "LineOfBusiness" : {
+        "displayName" : "Line Of Business",
+        "restriction" : ".*"
+      },
+      "SystemType" : {
+        "displayName" : "System Type",
+        "restriction" : ".*"
+      },
+      "SystemName" : {
+        "displayName" : "System Name",
+        "restriction" : ".*"
+      },
+      "SytemOwner" : {
+        "displayName" : "System Owner",
+        "restriction" : ".*"
+      },
+      "SystemPlatform" : {
+        "displayName" : "System Platform",
+        "restriction" : ".*"
+      },
+      "Hosting" : {
+        "displayName" : "Hosting",
+        "restriction" : ".*"
+      }
+    },
+    "ZaloniEmp" : {
       "name" : {
         "displayName" : "name",
         "restriction" : ".*"

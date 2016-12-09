@@ -144,22 +144,13 @@ angular.module('neo4jApp')
                 node.label = inputNode.name;
               }
           });
-                                sigmaInstance.refresh();
-          /*sigmaInstance.graph.dropNode(node.id)
-          node.x = Math.random();
-          node.y = Math.random();
-          node.label = node.name;
-          node.type = 'image';
-          node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
-          node.color = '#68BDF6';
-          sigmaInstance.graph.addNode(node);
-          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: 500,
-            easing: 'quadraticInOut',
-            duration: 800,
-          });
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-          sigmaInstance.refresh();*/
+          sigmaInstance.refresh();
+
+        });
+        scope.$on('deleteNodeToGraph', function (event, inputNode) {
+          sigmaInstance.graph.dropNode(inputNode.id);
+          sigmaInstance.refresh();
+
         });
         //listen for node add
         scope.$on('addNodeToGraph', function (event, node) {
@@ -286,7 +277,7 @@ angular.module('neo4jApp')
             drawEdgeLabels: false,
             enableEdgeHovering: true,
             edgeHoverSizeRatio: 2,
-            zoomOnLocation: true,
+            //zoomOnLocation: true,
             edgeHoverExtremities: true,
             edgeLabelSize: 'proportional',
             defaultEdgeType: "arrow",
