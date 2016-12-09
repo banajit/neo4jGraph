@@ -1,54 +1,8 @@
 {
   "nodes" : {
-    "SystemName" : {
-      "SystemDescription" : {
-        "displayName" : "System Description",
-        "restriction" : ".*"
-      },
-      "BusinessSegment" : {
-        "displayName" : "BusinessSegment",
-        "restriction" : ".*"
-      },
-      "CIO" : {
-        "displayName" : "Chief Intellogence Officer",
-        "restriction" : ".*"
-      },
-      "LineOfBusiness" : {
-        "displayName" : "Line Of Business",
-        "restriction" : ".*"
-      },
-      "SystemType" : {
-        "displayName" : "System Type",
-        "restriction" : ".*"
-      },
-      "SystemName" : {
-        "displayName" : "System Name",
-        "restriction" : ".*"
-      },
-      "SytemOwner" : {
-        "displayName" : "System Owner",
-        "restriction" : ".*"
-      },
-      "SystemPlatform" : {
-        "displayName" : "System Platform",
-        "restriction" : ".*"
-      },
-      "Hosting" : {
-        "displayName" : "Hosting",
-        "restriction" : ".*"
-      }
-    },
-    "cbbr" : {
-      "lob_cb_br_name" : {
-        "displayName" : "lob_cb_br_name",
-        "restriction" : ".*"
-      },
+    "zaloniEmplyees" : {
       "name" : {
         "displayName" : "name",
-        "restriction" : ".*"
-      },
-      "lob_brand_id" : {
-        "displayName" : "lob_brand_id",
         "restriction" : ".*"
       }
     }

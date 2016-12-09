@@ -58,7 +58,7 @@
          if(conditions.length>0) {
            whereCond = ' WHERE ' + conditions.join(' AND ');
          }
-         var query = 'MATCH(n) ' + whereCond + ' return n;';
+         var query = 'MATCH(n:' + labelType + ') ' + whereCond + ' return n;';
          console.log('Property Value Search = ', query);
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
@@ -88,7 +88,8 @@
           });
           if(conditions.length>0) {
             whereCond = ' WHERE ' + conditions.join(' AND ');
-            var query = 'MATCH (n:' + labelKey +')-[r]-() ' + whereCond + ' RETURN n,r';
+            //var query = 'MATCH (n:' + labelKey +')-[r]-() ' + whereCond + ' RETURN n,r';
+            var query = 'MATCH (n:' + labelKey +') with n optional MATCH (n)-[r]-() with n,r'+ whereCond + ' RETURN n,r';
             searchQueries.push(query);
           }
 
@@ -100,6 +101,7 @@
           var config = CONSTANTS.getStateVariable('config');
           var serverConfig = config.neo4jConfig;
           var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:searchQueryStr};
+          CONSTANTS.setStateVariable('searchState', graphMetaInfo);
           $scope.toggleLeft('filter');
           $scope.$emit('refreshGraph', graphMetaInfo);
         }
@@ -107,16 +109,21 @@
       }
       //Reset graph
       $scope.resetGraph = function() {
-        var query = 'MATCH (n)-[r]-() RETURN n,r';
-        var config = CONSTANTS.getStateVariable('config');
-        var serverConfig = config.neo4jConfig;
-        var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:query};
+        var data = CONSTANTS.getConfig();
+        var neo4jConfig = data.neo4jConfig;
+        var currentSchema = CONSTANTS.getSchema();
+        var queryList = [];
+        angular.forEach(currentSchema.nodes, function(value, key){
+          var query = 'match (n:' + key + ') with n optional MATCH (n)-[r]-() RETURN n,r';
+          queryList.push(query);
+        });
+        var queryStr = queryList.join(' UNION ');
+        console.log('Query = ', queryStr);
+        var graphMetaInfo = {serverConfig:neo4jConfig, neo4jQuery:queryStr};
         $scope.$emit('refreshGraph', graphMetaInfo);
         $timeout(function () {
            $scope.toggleLeft();
         }, 10);
- /*       $scope.searchForm.$setPristine();
-        $scope.searchForm.$setUntouched();*/
         $scope.selectedItem = {};
       }
 

@@ -1,4 +1,4 @@
-<div ng-cloak>
+<div id="nbc-graph-editor" ng-cloak>
   <section layout="row" flex>
     <md-sidenav class="md-sidenav-left" md-component-id="filter" md-whiteframe="4" md-enable-backdrop>
       <div ng-controller="graphFilterCtrl"><ng-include src="'app/graphFilter/graphFilter.html'"></ng-include></div>
@@ -16,13 +16,13 @@
         </div>
       </md-toolbar>
 
-      <ul layout-margin dnd-list="nodeLabels" dnd-drop="addNodeToGraph(event, index, item, external, type, 'notAllowed')" class="list-group neo4j-labels">
-        <li class="list-group-item" ng-repeat="item in nodeLabels track by $index"
-            dnd-draggable="item"
+      <ul layout-margin dnd-list="nodeLabels" dnd-drop="addNodeToGraph(event, index, key, external, type, 'notAllowed')" class="list-group neo4j-labels">
+        <li class="list-group-item" ng-repeat="(key, value) in nodeLabels track by $index"
+            dnd-draggable="key"
             dnd-moved="nodeLabels.splice($index, 1)"
             dnd-effect-allowed="copy"
           >
-          <i class="fa fa-table" aria-hidden="true"></i> {{item}}
+          <i class="fa fa-table" aria-hidden="true"></i> {{key}}
         </li>
       </ul>
     </md-sidenav>

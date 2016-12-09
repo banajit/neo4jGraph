@@ -9,6 +9,7 @@ angular.module('neo4jApp')
       restrict: 'EA',
       controller: 'graphCtrl',
       link: function (scope) {
+        console.log(scope.graphMode)
         var sigmaInstance, loaded = 0;
         sigma.utils.pkg('sigma.canvas.nodes');
         sigma.canvas.nodes.image = (function() {
@@ -135,6 +136,48 @@ angular.module('neo4jApp')
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           sigmaInstance.refresh();
         });
+        //listen for node update
+        scope.$on('updateNodeToGraph', function (event, inputNode) {
+          sigmaInstance.graph.nodes().forEach(function (node) {
+              if(inputNode.id == node.id) {
+                node.neo4j_data = inputNode.neo4j_data;
+                node.label = inputNode.name;
+              }
+          });
+                                sigmaInstance.refresh();
+          /*sigmaInstance.graph.dropNode(node.id)
+          node.x = Math.random();
+          node.y = Math.random();
+          node.label = node.name;
+          node.type = 'image';
+          node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+          node.color = '#68BDF6';
+          sigmaInstance.graph.addNode(node);
+          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+            iterations: 500,
+            easing: 'quadraticInOut',
+            duration: 800,
+          });
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          sigmaInstance.refresh();*/
+        });
+        //listen for node add
+        scope.$on('addNodeToGraph', function (event, node) {
+          node.x = Math.random();
+          node.y = Math.random();
+          node.label = node.name;
+          node.type = 'image';
+          node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+          node.color = '#68BDF6';
+          sigmaInstance.graph.addNode(node);
+          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+            iterations: 500,
+            easing: 'quadraticInOut',
+            duration: 800,
+          });
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          sigmaInstance.refresh();
+        });
 
         //update node and edge array
         function layoutNodesEdges(graph) {
@@ -154,7 +197,8 @@ angular.module('neo4jApp')
               graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
           });
           graph.nodes.forEach(function(node) {
-            node.label = node.neo4j_data.SystemName;
+            node.label = node.neo4j_data.name;
+            node.labelType = node.neo4j_labels[0];
             var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
             node.size = neighborNodes;
             node.x = Math.random();
@@ -248,7 +292,8 @@ angular.module('neo4jApp')
             defaultEdgeType: "arrow",
             edgeHoverLevel:2,
             zoomMin: 0.001,
-            zoomMax: 300
+            zoomMax: 300,
+            doubleClickEnabled: false
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
@@ -286,25 +331,48 @@ angular.module('neo4jApp')
             }
             sigmaInstance.refresh();
           });
+          sigmaInstance.bind('doubleClickNode', function (e) {
+            tooltips.close();
+            if(scope.graphMode == 'editor') {
+              scope.$broadcast('nodeUpdate', e.data.node);
+            }
+          });
+
 
           //Show tooltip
           var config_tooltip = {
-            node: [{
-              show: 'clickNode',
+            node: [/*{
+              show: 'rightClickNode',
               cssClass: 'sigma-tooltip',
               position: 'top',
               autoadjust: true,
-              renderer: function(node) {
-                var customTemplate = '<md-card class="entity"><div class="card-info">';
-                customTemplate += '<h2 class="card-header" title="' + node.label + '">' + node.label + '</h2>';
-                customTemplate += '<ul>';
-                angular.forEach(node.neo4j_data, function(value, key){
-                  customTemplate += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
-                });
-                customTemplate += '</ul></div></md-card>';
-                return Mustache.render(customTemplate, node);
-              }
-            }],
+                renderer: function(node) {
+                  if(scope.graphMode == 'editor') {
+                    var customTemplate = '<md-card class="entity"><div class="card-info">';
+                    customTemplate += '<h2 class="card-header" title="' + node.label + '">' + node.label + '</h2>';
+                    customTemplate += '<ul><li><a ng-href ng-click="updateNode()">Update Node</a></li><li>Delete Node</li>';
+                    customTemplate += '</ul></div></md-card>';
+                    return Mustache.render(customTemplate, node);
+                  }
+                }
+              },*/
+              {
+                show: 'rightClickNode',
+                cssClass: 'sigma-tooltip',
+                position: 'top',
+                autoadjust: true,
+                  renderer: function(node) {
+                    var customTemplate = '<md-card class="entity"><div class="card-info">';
+                    customTemplate += '<h2 class="card-header" title="' + node.label + '">' + node.label + '</h2>';
+                    customTemplate += '<ul>';
+                    angular.forEach(node.neo4j_data, function(value, key){
+                      customTemplate += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
+                    });
+                    customTemplate += '</ul></div></md-card>';
+                    return Mustache.render(customTemplate, node);
+                  }
+                }
+            ],
             edge: [{
               show: 'clickEdge',
               cssClass: 'sigma-tooltip',

@@ -1,20 +1,19 @@
 <md-dialog aria-label="Mango (Fruit)">
-  <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>{{labelName}}</h2>
-
       </div>
     </md-toolbar>
 
     <md-dialog-content>
       <div class="md-dialog-content">
-        <form name="editNodeForm">
+        <form name="editNodeForm" role="form" novalidate>
             <md-input-container ng-repeat="(key, value) in nodeInfo">
               <label>{{value.displayName}}</label>
-              <input name="key" required>
+              <input name="{{key}}" ng-model="propertyList[key]"
+                     ng-pattern="value.restriction">
               <div ng-messages="editNodeForm[key].$error">
-                <div ng-message="required">This is required!</div>
+                <div ng-message="pattern" class="my-message">Invalid Pattern!</div>
               </div>
             </md-input-container>
         </form>
@@ -22,12 +21,14 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <md-button ng-click="answer('not useful')">
+      <md-button ng-click="closeDialog()">
         CANCEL
       </md-button>
-      <md-button ng-click="answer('useful')">
-        SAVE
+      <md-button ng-show="editMode" ng-click="deleteNode()">
+        Delete
+      </md-button>
+      <md-button ng-click="saveNode()">
+        <span ng-show="editMode == true">Update</span><span ng-show="editMode == false">Save</span>
       </md-button>
     </md-dialog-actions>
-  </form>
 </md-dialog>

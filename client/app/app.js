@@ -11,6 +11,7 @@ var neo4jApp = angular.module('neo4jApp', [
   'ngAnimate',
   'ngAria',
   'ngMaterial',
+  'ngMessages',
   'ngMdIcons',
   'slickCarousel',
   'ngToast',
@@ -42,12 +43,12 @@ var neo4jApp = angular.module('neo4jApp', [
         angular.bootstrap(document, ['neo4jApp']);
       });
   });
-  /*$http.get('config.json').then(
-    function (response) {
-      neo4jApp.constant('CONFIG', response.data);
-      angular.element(document).ready(function() {
-        angular.bootstrap(document, ['neo4jApp']);
-      });
-    }
-  );*/
 })(angular);
+function updateNode(node) {
+  var scope = angular.element('#nbc-graph-editor').scope();
+  console.log("hello", node);
+  scope.$apply(function () {
+    scope.$broadcast('nodeUpdate');
+  });
+}
+

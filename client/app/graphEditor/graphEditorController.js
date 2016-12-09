@@ -5,6 +5,7 @@
   function graphEditorCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, ngToast, $mdDialog) {
       $scope.toggleLeft = buildToggler('filter');
       $scope.toggleEditor = buildToggler('editor');
+      $scope.graphMode = 'editor';
       function buildToggler(componentId) {
         return function() {
           $mdSidenav(componentId).toggle();
@@ -16,13 +17,13 @@
 
       var currentSchema = CONSTANTS.getSchema();
       // Calling neo4j to get all its node label
-      $scope.nodeLabels = [];
-      sigma.neo4j.getLabels(
+      $scope.nodeLabels = currentSchema.nodes;
+      /*sigma.neo4j.getLabels(
           neo4j,
           function(labels) {
               $scope.nodeLabels = labels;
           }
-      );
+      );*/
 
       //drop callback
       $scope.addNodeToGraph = function(event, index, item, external, type, allowedType) {
@@ -35,15 +36,16 @@
             });
           }
           else {
-            $scope.openNodeEditor(nodeType, item);
+            var propertyList = {};
+            $scope.openNodeEditor(nodeType, item, propertyList, {});
           }
         }
       }
 
       //Dialog box
-      $scope.openNodeEditor = function(nodeType, labelName) {
+      $scope.openNodeEditor = function(nodeType, labelName, propertyList, node) {
         $mdDialog.show({
-          locals: {nodeInfo: nodeType, labelName: labelName},
+          locals: {nodeInfo: nodeType, labelName: labelName, propertyList:propertyList, node:node},
           controller: 'editNodeCtrl',
           templateUrl: 'app/graphEditor/editNode.html',
           parent: angular.element(document.body),
@@ -56,6 +58,16 @@
           $scope.status = 'You cancelled the dialog.';
         });
       };
+      //Listen for node update
+      $scope.$on('nodeUpdate', function (event, data) {
+        var propertyList = {};
+        angular.forEach(data.neo4j_data, function(value, key){
+           propertyList[key] = value;
+        });
+        console.log();
+        var nodeType = currentSchema.nodes[data.labelType];
+        $scope.openNodeEditor(nodeType, data.labelType, propertyList, data);
+      });
   }
   angular.module('neo4jApp')
     .controller('graphEditorCtrl', graphEditorCtrl);

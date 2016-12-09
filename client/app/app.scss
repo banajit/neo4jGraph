@@ -184,6 +184,10 @@ ul.neo4j-labels li {
    float: left;
    text-transform: capitalize;
 }
+.nbc-graph-edit {
+  position: relative;
+  overflow: hidden;
+}
 
 // Component styles are injected through grunt
 // injector

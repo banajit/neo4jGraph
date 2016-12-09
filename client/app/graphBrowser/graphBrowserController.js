@@ -3,6 +3,7 @@
 (function (angular) {
 
   function graphBrowserCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv) {
+    $scope.graphMode = 'browser';
     $scope.toggleLeft = buildToggler('filter');
     $scope.toggleEditor = buildToggler('editor');
     function buildToggler(componentId) {
