@@ -28,7 +28,9 @@
       //drop callback
       $scope.addNodeToGraph = function(event, index, item, external, type, allowedType) {
         if(allowedType == 'allowed') {
+          var pos = {x:event.screenX, y:event.screenY};
           var nodeType = currentSchema.nodes[item];
+          nodeType.pos = pos;
           if(nodeType == undefined) {
             ngToast.create({
               className: 'warning',

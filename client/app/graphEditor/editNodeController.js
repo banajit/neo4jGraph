@@ -89,6 +89,7 @@
                    content: 'Node added successfully.'
                  });
                  var node = angular.merge(data.results[0].data[0].meta[0], data.results[0].data[0].row[0]);
+                 console.log(nodeInfo);
                  node.neo4j_data = neo4j_data;
                  node.labelType = labelName;
                  $rootScope.$broadcast('addNodeToGraph', node);

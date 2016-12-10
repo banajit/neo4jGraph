@@ -161,12 +161,12 @@ angular.module('neo4jApp')
           node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
           node.color = '#68BDF6';
           sigmaInstance.graph.addNode(node);
-          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+         /* var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
             iterations: 500,
             easing: 'quadraticInOut',
             duration: 800,
           });
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);*/
           sigmaInstance.refresh();
         });
 
