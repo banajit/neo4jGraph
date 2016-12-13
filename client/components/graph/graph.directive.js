@@ -3,13 +3,13 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('graph', function ($timeout, ngToast) {
+  .directive('graph', function ($timeout, ngToast, $compile, $mdDialog, CONSTANTS) {
     return {
       templateUrl: 'components/graph/graph.html',
       restrict: 'EA',
       controller: 'graphCtrl',
       link: function (scope) {
-        console.log(scope.graphMode)
+        var currentSchema = CONSTANTS.getSchema();
         var sigmaInstance, loaded = 0;
         sigma.utils.pkg('sigma.canvas.nodes');
         sigma.canvas.nodes.image = (function() {
@@ -141,7 +141,7 @@ angular.module('neo4jApp')
           sigmaInstance.graph.nodes().forEach(function (node) {
               if(inputNode.id == node.id) {
                 node.neo4j_data = inputNode.neo4j_data;
-                node.label = inputNode.name;
+                node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
               }
           });
           sigmaInstance.refresh();
@@ -156,17 +156,17 @@ angular.module('neo4jApp')
         scope.$on('addNodeToGraph', function (event, node) {
           node.x = Math.random();
           node.y = Math.random();
-          node.label = node.name;
+          node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
           node.type = 'image';
           node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
           node.color = '#68BDF6';
           sigmaInstance.graph.addNode(node);
-         /* var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
+          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
             iterations: 500,
             easing: 'quadraticInOut',
             duration: 800,
           });
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);*/
+          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           sigmaInstance.refresh();
         });
 
@@ -188,8 +188,9 @@ angular.module('neo4jApp')
               graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
           });
           graph.nodes.forEach(function(node) {
-            node.label = node.neo4j_data.name;
+
             node.labelType = node.neo4j_labels[0];
+            node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
             var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
             node.size = neighborNodes;
             node.x = Math.random();
@@ -284,7 +285,13 @@ angular.module('neo4jApp')
             edgeHoverLevel:2,
             zoomMin: 0.001,
             zoomMax: 300,
-            doubleClickEnabled: false
+            doubleClickEnabled: false,
+
+            nodeActiveBorderSize: 2,
+            nodeActiveOuterBorderSize: 3,
+            defaultNodeActiveBorderColor: '#fff',
+            defaultNodeActiveOuterBorderColor: 'rgb(236, 81, 72)',
+
           });
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
@@ -322,45 +329,188 @@ angular.module('neo4jApp')
             }
             sigmaInstance.refresh();
           });
-          sigmaInstance.bind('doubleClickNode', function (e) {
-            tooltips.close();
-            if(scope.graphMode == 'editor') {
-              scope.$broadcast('nodeUpdate', e.data.node);
+
+          function resetActiveState() {
+            neo4jRelatedNodes = {};
+            activeState.dropNodes();
+            sigmaInstance.graph.nodes().forEach(function (node) {
+                node.type = 'image';
+            });
+            sigmaInstance.refresh();
+          }
+
+          var neo4jRelatedNodes = {};
+          sigmaInstance.bind('clickNode', function (e) {
+            if(e.data.captor.ctrlKey == true) {
+              sigmaInstance.graph.nodes().forEach(function (node) {
+                  if(e.data.node.id == node.id) {
+                    if(neo4jRelatedNodes[e.data.node.id] != undefined) {
+                      delete neo4jRelatedNodes[e.data.node.id];
+                      activeState.dropNodes(node.id);
+                      node.type = 'image';
+                    }
+                    else {
+                      neo4jRelatedNodes[e.data.node.id] = e.data.node.id;
+                      activeState.addNodes(node.id);
+                      node.type = 'def';
+                    }
+                  }
+              });
+              if(activeState.nodes().length == 2) {
+                var confirm = $mdDialog.confirm()
+                      .title('Would you like to connect these two nodes?')
+                      .textContent('')
+                      .ok('Connect')
+                      .cancel('Cancel');
+
+                $mdDialog.show(confirm).then(function() {
+                  scope.$emit('addRelation', activeState.nodes());
+                  resetActiveState();
+                }, function() {
+                  resetActiveState();
+                });
+
+              }
+
+              sigmaInstance.refresh();
+              $timeout(function () {
+                  tooltips.close();
+              });
             }
           });
 
-
           //Show tooltip
           var config_tooltip = {
-            node: [/*{
+            node: [{
               show: 'rightClickNode',
-              cssClass: 'sigma-tooltip',
-              position: 'top',
+              cssClass: 'sigma-tooltip-editor',
+              position: 'right',
               autoadjust: true,
-                renderer: function(node) {
+              template:
+                  '<div class="arrow"></div>' +
+                  ' <div class="sigma-tooltip-header cursor-pointer" id="edit-element"><a ng-href"><strong>Edit</strong> {{label}}</div>' +
+                  ' <div class="sigma-tooltip-footer cursor-pointer"><a ng-href ng-click="deleteNode()"><strong>Delete</strong> {{label}}</div>',
+                renderer: function(node, template) {
                   if(scope.graphMode == 'editor') {
-                    var customTemplate = '<md-card class="entity"><div class="card-info">';
-                    customTemplate += '<h2 class="card-header" title="' + node.label + '">' + node.label + '</h2>';
-                    customTemplate += '<ul><li><a ng-href ng-click="updateNode()">Update Node</a></li><li>Delete Node</li>';
-                    customTemplate += '</ul></div></md-card>';
-                    return Mustache.render(customTemplate, node);
+                    node.degree = this.degree(node.id);
+                    /*var listItem = document.createElement('li');
+                    listItem.className = 'context-list';
+                    listItem.onclick = function () {
+                        updateNode(node);
+                    };
+                    listItem.innerHTML = 'Add ' + node.label + ' to inspector new panel';*/
+                    var arrowElement = document.createElement('div');
+                    arrowElement.className = 'arrow';
+                    var menuHeaderElm = document.createElement('div');
+                    menuHeaderElm.className = 'node-operation sigma-tooltip-header cursor-pointer';
+                    menuHeaderElm.innerHTML = 'Edit ' + node.label;
+                    menuHeaderElm.onclick = function () {
+                        updateNode(node);
+                    };
+
+                    var menuFooterElm = document.createElement('div');
+                    menuFooterElm.className = 'node-operation sigma-tooltip-footer cursor-pointer';
+                    menuFooterElm.innerHTML = 'Delete ' + node.label;
+                    menuFooterElm.onclick = function () {
+                        deleteNode(node);
+                    };
+
+                    var el = document.createElement('div');
+                    el.appendChild(arrowElement);
+                    el.appendChild(menuHeaderElm);
+                    el.appendChild(menuFooterElm);
+                    return el;
+                    //return Mustache.render(template, node);
                   }
                 }
-              },*/
+              },
               {
-                show: 'rightClickNode',
+                show: 'clickNode',
                 cssClass: 'sigma-tooltip',
                 position: 'top',
                 autoadjust: true,
                   renderer: function(node) {
-                    var customTemplate = '<md-card class="entity"><div class="card-info">';
-                    customTemplate += '<h2 class="card-header" title="' + node.label + '">' + node.label + '</h2>';
-                    customTemplate += '<ul>';
+                    //var customTemplate = '<md-card class="entity">';
+                    //customTemplate += '<div id="neo4j-card-info" class="card-info">';
+                    //customTemplate += '<h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
+                    //customTemplate += '<ul id="node-properties">';
+
+                    var mdcard = document.createElement('md-card');
+                    mdcard.className = 'entity';
+                    //mdcard.innerHTML = '<div id="neo4j-card-info" class="card-info"><h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
+
+                    var cardInfo = document.createElement('div');
+                    cardInfo.id = 'neo4j-card-info';
+                    cardInfo.className = 'card-info';
+                    cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
+
+
+                    var queryParams = [];
+                    var listInfo = '';
                     angular.forEach(node.neo4j_data, function(value, key){
-                      customTemplate += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
+                      queryParams.push(key + '=' + value);
+                      listInfo += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
                     });
-                    customTemplate += '</ul></div></md-card>';
-                    return Mustache.render(customTemplate, node);
+
+                    var cardInfoList = document.createElement('ul');
+                    cardInfoList.innerHTML = listInfo;
+
+                    cardInfo.appendChild(cardInfoList);
+
+
+                    var micaUrl = 'http://192.168.2.90:8089/#/catalog';
+                    var queryStr =  micaUrl + queryParams.join('&');
+                    //var cardFooter = '<h2 class="card-footer border-color-accent1"><div class="dropdown" onclick="toggleMenu()"><button class="btn btn-primary dropdown-toggle node-actions" type="button" data-toggle="dropdown">Actions<span class="caret"></span></button></h2><md-dialog-actions layout="row"></md-card>';
+
+                    var footerElm = document.createElement('div');
+                    footerElm.className = 'card-footer border-color-accent1';
+
+                    var dropDownElm = document.createElement('div');
+                    dropDownElm.className = 'dropdown';
+
+                    dropDownElm.innerHTML = '<a class="text-color-accent2 cursor-pointer" data-toggle="dropdown">Actions<span class="caret"></span></a>';
+                    dropDownElm.onclick = function () {
+                        jQuery(".dropdown-menu").toggle();
+                    };
+
+                    var dropDownListWrapper = document.createElement('ul');
+                    dropDownListWrapper.className = 'dropdown-menu';
+
+                    var dropDownList1 = document.createElement('li');
+
+                    dropDownList1.onclick = function () {
+                        jQuery(".dropdown-menu").toggle();
+                    };
+                    dropDownList1.innerHTML = '<a href="#">Open in MICA</a>';
+
+                    var dropDownList2 = document.createElement('li');
+
+                    dropDownList2.onclick = function () {
+                        updateNode(node);
+                    };
+                    dropDownList2.innerHTML = '<a href="#">Edit</a>';
+
+                    var dropDownList3 = document.createElement('li');
+
+                    dropDownList3.onclick = function () {
+                        deleteNode(node);
+                    };
+                    dropDownList3.innerHTML = '<a href="#">Delete</a>';
+                    //<ul class="dropdown-menu"><li"><a href="#">Open in MICA</a></li><li><a href="#">EDIT</a></li><li><a href="#">DELETE</a></li></ul></div>';
+
+
+                    dropDownListWrapper.appendChild(dropDownList1);
+                    dropDownListWrapper.appendChild(dropDownList2);
+                    dropDownListWrapper.appendChild(dropDownList3);
+
+                    dropDownElm.appendChild(dropDownListWrapper);
+                    footerElm.appendChild(dropDownElm);
+
+                    cardInfo.appendChild(footerElm);
+                    mdcard.appendChild(cardInfo);
+
+                    return mdcard;
+                    //return Mustache.to_html(customTemplate, node);
                   }
                 }
             ],
@@ -400,6 +550,10 @@ angular.module('neo4jApp')
                 tooltips.close();
             });
           });
+          //active node
+          // Instanciate the ActiveState plugin:
+
+
           return sigmaInstance;
         }
       }

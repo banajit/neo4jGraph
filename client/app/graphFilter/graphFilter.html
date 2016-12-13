@@ -10,8 +10,12 @@
 <md-content layout-margin>
   <form name="searchForm">
     <accordion>
-      <accordion-group heading="{{key}}" ng-repeat="(key, value) in searchMaster">
-        <div layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value">
+      <accordion-group ng-repeat="(key, value) in searchMaster" is-open="browser.accoStatus">
+        <accordion-heading>
+          <span class="cursor-pointer">{{key}}</span>
+          <i class="pull-right fa" ng-class="{'fa-angle-right': !browser.accoStatus, 'fa-angle-down': browser.accoStatus}"></i>
+        </accordion-heading>
+        <div layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value.properties">
           <md-autocomplete flex
                            md-input-name="autocompleteField[keyProp]"
                            md-no-cache="noCache"

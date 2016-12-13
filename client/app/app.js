@@ -34,8 +34,8 @@ var neo4jApp = angular.module('neo4jApp', [
   var initInjector = angular.injector(['ng']);
   var $http = initInjector.get('$http');
   var $q = initInjector.get('$q');
-  var configData = $http.get('config.json', {cache: false});
-  var schema = $http.get('schema.json', {cache: false});
+  var configData = $http.get('config.json?ts=' + Date.now(), {cache: false});
+  var schema = $http.get('schema.json?ts=' + Date.now(), {cache: false});
   $q.all([configData, schema]).then(function(values) {
       neo4jApp.constant('CONFIG', values[0].data);
       neo4jApp.constant('SCHEMA', values[1].data);
@@ -46,9 +46,19 @@ var neo4jApp = angular.module('neo4jApp', [
 })(angular);
 function updateNode(node) {
   var scope = angular.element('#nbc-graph-editor').scope();
-  console.log("hello", node);
+  jQuery('.sigma-tooltip-editor').remove();
+  jQuery('.sigma-tooltip').remove();
   scope.$apply(function () {
-    scope.$broadcast('nodeUpdate');
+    scope.$broadcast('nodeUpdate', node);
   });
 }
+function deleteNode(node) {
+  var scope = angular.element('#nbc-graph-editor').scope();
+  jQuery('.sigma-tooltip-editor').remove();
+  jQuery('.sigma-tooltip').remove();
+  scope.$apply(function () {
+    scope.$broadcast('nodeDelete', node);
+  });
+}
+
 

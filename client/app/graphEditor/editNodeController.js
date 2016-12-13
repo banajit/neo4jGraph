@@ -15,8 +15,8 @@
 
       $scope.deleteNode = function() {
         var query = 'MATCH (n:' + labelName + ') WHERE id(n)=' + node.id + ' DELETE n';
-         console.log('Delete Query', query);
          neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+          console.log(data)
             if(data.errors.length == 0) {
               ngToast.create({
                 className: 'success',
@@ -92,6 +92,8 @@
                  console.log(nodeInfo);
                  node.neo4j_data = neo4j_data;
                  node.labelType = labelName;
+                 /*node.x = nodeInfo.pos.x;
+                 node.y = nodeInfo.pos.y;*/
                  $rootScope.$broadcast('addNodeToGraph', node);
                  $mdDialog.hide();
                }

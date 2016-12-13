@@ -30,7 +30,6 @@
         if(allowedType == 'allowed') {
           var pos = {x:event.screenX, y:event.screenY};
           var nodeType = currentSchema.nodes[item];
-          nodeType.pos = pos;
           if(nodeType == undefined) {
             ngToast.create({
               className: 'warning',
@@ -66,9 +65,45 @@
         angular.forEach(data.neo4j_data, function(value, key){
            propertyList[key] = value;
         });
-        console.log();
         var nodeType = currentSchema.nodes[data.labelType];
         $scope.openNodeEditor(nodeType, data.labelType, propertyList, data);
+      });
+
+      //Listen for node delete
+      $scope.$on('nodeDelete', function (event, node) {
+         var query = 'MATCH (n:' + node.labelType + ') WHERE id(n)=' + node.id + ' DELETE n';
+         console.log('Delete Query', query);
+         neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+            if(data.errors.length == 0) {
+              ngToast.create({
+                className: 'success',
+                content: 'Node Deleted successfully.'
+              });
+              $scope.$broadcast('deleteNodeToGraph', node);
+            }
+            else {
+              ngToast.create({
+                className: 'danger',
+                content: data.errors[0].message
+              });
+            }
+         });
+      });
+
+
+      //Listen for relation add
+      $scope.relationShipAttr = {};
+      $scope.$on('addRelation', function (event, data) {
+        var sourceNode = data[0];
+        var targetNode = data[1];
+        var relationship = currentSchema.relationships;
+        angular.forEach(relationship, function(value, key){
+          console.log(value._appliesTo[0])
+           if((value._appliesTo[0].sourceLabel == sourceNode.labelType && value._appliesTo[0].targetLabel == targetNode.labelType) || (value._appliesTo[0].sourceLabel == targetNode.labelType && value._appliesTo[0].targetLabel == sourceNode.labelType)) {
+                         console.log(key, value)
+           }
+        });
+        //console.log("add relation", sourceNode, targetNode);
       });
   }
   angular.module('neo4jApp')
