@@ -1,59 +1,46 @@
 {
   "nodes": {
-    "SystemName": {
+    "System": {
       "_default": {
         "defaultIcon": "",
         "defaultRank": 1,
-        "defaultLabel": "SystemName"
+        "defaultLabel": "Name"
       },
       "properties": {
-        "SystemDescription": {
-          "displayName": "System Description",
+        "Owner": {
+          "displayName": "Owner",
+          "restriction": ".*"
+        },
+        "Type": {
+          "displayName": "Type",
+          "restriction": ".*"
+        },
+        "Description": {
+          "displayName": "Description",
           "restriction": ".*"
         },
         "BusinessSegment": {
-          "displayName": "BusinessSegment",
+          "displayName": "Business Segment",
           "restriction": ".*"
         },
-        "CIO": {
-          "displayName": "Chief Information Officer",
+        "Platform": {
+          "displayName": "Platform",
           "restriction": ".*"
         },
         "LineOfBusiness": {
           "displayName": "Line Of Business",
           "restriction": ".*"
         },
-        "SystemType": {
-          "displayName": "System Type",
-          "restriction": ".*"
-        },
-        "SystemName": {
-          "displayName": "System Name",
-          "restriction": ".*"
-        },
-        "SytemOwner": {
-          "displayName": "System Owner",
-          "restriction": ".*"
-        },
-        "SystemPlatform": {
-          "displayName": "System Platform",
-          "restriction": ".*"
+        "Rank": {
+          "displayName": "Rank",
+          "restriction": "[0-9]+"
         },
         "Hosting": {
           "displayName": "Hosting",
           "restriction": ".*"
-        }
-      }
-    },
-    "empZaloni": {
-      "_default": {
-        "defaultIcon": "",
-        "defaultRank": 1,
-        "defaultLabel": "name"
-      },
-      "properties": {
-        "name": {
-          "displayName": "name",
+        },
+        "Name": {
+          "displayName": "Name",
           "restriction": ".*"
         }
       }
@@ -63,20 +50,16 @@
     "Integration": {
       "_appliesTo": [
         {
-          "from": "SystemName",
-          "to": "empZaloni"
-        },
-        {
-          "from": "empZaloni",
-          "to": "SystemName"
+          "from": "System",
+          "to": "System"
         }
       ],
       "IntegrationProtocol": {
         "displayName": "Integration Protocol",
         "restriction": ".*"
       },
-      "IntegrationName": {
-        "displayName": "Integration Name",
+      "Description": {
+        "displayName": "Description",
         "restriction": ".*"
       },
       "IntegrationLayer": {
@@ -87,48 +70,8 @@
         "displayName": "Integration Set",
         "restriction": ".*"
       },
-      "IntegrationDescription": {
-        "displayName": "Integration Description",
-        "restriction": ".*"
-      },
-      "Frequency": {
-        "displayName": "Frequency",
-        "restriction": ".*"
-      },
-      "TargetSystem": {
-        "displayName": "Target System",
-        "restriction": ".*"
-      },
-      "SourceSystem": {
-        "displayName": "Source System",
-        "restriction": ".*"
-      }
-    },
-    "Inventory": {
-      "_appliesTo": [
-        {
-          "from": "SystemName",
-          "to": "empZaloni"
-        }
-      ],
-      "IntegrationProtocol": {
-        "displayName": "Integration Protocol",
-        "restriction": ".*"
-      },
-      "IntegrationName": {
-        "displayName": "Integration Name",
-        "restriction": ".*"
-      },
-      "IntegrationLayer": {
-        "displayName": "Integration Layer",
-        "restriction": ".*"
-      },
-      "IntegrationSet": {
-        "displayName": "Integration Set",
-        "restriction": ".*"
-      },
-      "IntegrationDescription": {
-        "displayName": "Integration Description",
+      "Name": {
+        "displayName": "Name",
         "restriction": ".*"
       },
       "Frequency": {

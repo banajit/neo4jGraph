@@ -221,7 +221,10 @@ angular.module('neo4jApp')
             node.labelType = node.neo4j_labels[0];
             node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
             var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
-            node.size = neighborNodes;
+            //node.size = neighborNodes;
+            var rank = node.neo4j_data.Rank;
+            node.size = (25-rank*5);
+            console.log(rank, node.size, node);
             node.x = Math.random();
             node.y = Math.random();
             node.type = 'image';
@@ -307,7 +310,7 @@ angular.module('neo4jApp')
             drawEdgeLabels: false,
             enableEdgeHovering: true,
             edgeHoverSizeRatio: 2,
-            //zoomOnLocation: true,
+            zoomOnLocation: true,
             edgeHoverExtremities: true,
             edgeLabelSize: 'proportional',
             defaultEdgeType: "arrow",
