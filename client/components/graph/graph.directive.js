@@ -128,11 +128,6 @@ angular.module('neo4jApp')
 
         //Listen for refresh layout
         scope.$on('refreshLayout', function (event) {
-          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: 500,
-            easing: 'quadraticInOut',
-            duration: 800,
-          });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           sigmaInstance.refresh();
         });
@@ -179,11 +174,6 @@ angular.module('neo4jApp')
           node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
           node.color = '#68BDF6';
           sigmaInstance.graph.addNode(node);
-          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: 500,
-            easing: 'quadraticInOut',
-            duration: 800,
-          });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           sigmaInstance.refresh();
         });
@@ -224,9 +214,8 @@ angular.module('neo4jApp')
             //node.size = neighborNodes;
             var rank = node.neo4j_data.Rank;
             node.size = (25-rank*5);
-            console.log(rank, node.size, node);
-            node.x = Math.random();
-            node.y = Math.random();
+            node.x = Math.cos(Math.PI * 2 * i / N);
+            node.y = Math.sin(Math.PI * 2 * i / N);
             node.type = 'image';
             node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
             node.color = '#68BDF6';
@@ -242,10 +231,10 @@ angular.module('neo4jApp')
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: 500,
+            iterations: 100,
             easing: 'quadraticInOut',
-            duration: 800,
-            gravity: 10
+            duration: 10,
+            gravity: 2
           });
           // Bind the events:
           frListener.bind('start stop interpolate', function(e) {
@@ -670,6 +659,11 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
+            /*var neighborNodes = graph.edgeNodeRef[event.data.node.id].source.length + graph.edgeNodeRef[event.data.node.id].target.length;
+            if(neighborNodes > 30) {
+              sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+            }*/
+
           });
           //active node
           // Instanciate the ActiveState plugin:
