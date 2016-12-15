@@ -1,0 +1,36 @@
+<md-dialog aria-label="{{labelName}}">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Connect Nodes</h2>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <p><h4>Would you like to connect <strong>{{activeNodes[0].label}}</strong> with <strong>{{activeNodes[1].label}}</strong>?</h4></p>
+      <p><strong>Possible relationships</strong></p>
+      <form ng-submit="submit()" ng-cloak>
+        <md-radio-group ng-model="selectedRelationship" class="md-primary">
+
+          <md-radio-button ng-repeat="(key, value) in relationships"
+                           ng-value="key+1">
+            {{ value.name }}: {{value.from}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{value.to}}
+
+          </md-radio-button>
+
+        </md-radio-group>
+
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <md-button ng-click="closeDialog()">
+      CANCEL
+    </md-button>
+    <md-button ng-click="connectNodes()">
+      <span>CONNECT</span>
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

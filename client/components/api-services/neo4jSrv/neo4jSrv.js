@@ -5,7 +5,7 @@
 
 (function (angular) {
 
-  function neo4jSrv($http, $q) {
+  function neo4jSrv($http, $q, CONSTANTS) {
     return {
       executeCypherQuery: function (serverConfig, query) {
          var neo4j = { url: serverConfig.serverUrl, user: serverConfig.user, password: serverConfig.password };
@@ -25,6 +25,20 @@
               deferred.resolve(data);
            }, timeout);
          return deferred.promise;
+      },
+      findRelationshipType: function (sourceNode, targetNode) {
+        var currentSchema = CONSTANTS.getSchema();
+        var relationship = currentSchema.relationships;
+        var relationKey = [];
+        angular.forEach(relationship, function(value, key){
+          var found = 0;
+          angular.forEach(value._appliesTo, function(Rvalue, Rkey){
+              if((sourceNode.labelType == Rvalue.from && targetNode.labelType == Rvalue.to) || (sourceNode.labelType == Rvalue.to && targetNode.labelType == Rvalue.from)) {
+                relationKey.push({name:key, relationship:relationship[key], index:Rkey, from:Rvalue.from, to:Rvalue.to});
+              }
+          });
+        });
+        return relationKey;
       }
     }
   }

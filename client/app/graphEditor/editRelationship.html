@@ -1,0 +1,34 @@
+<md-dialog aria-label="relation">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2></h2>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <form name="editNodeForm" role="form" novalidate>
+            <md-input-container ng-repeat="(key, value) in propertyList">
+              <label>{{value.displayName}}</label>
+              <input name="{{key}}" ng-model="propertyValues[key]"
+                     ng-pattern="value.restriction">
+              <div ng-messages="editNodeForm[key].$error">
+                <div ng-message="pattern" class="my-message">Invalid Pattern!</div>
+              </div>
+            </md-input-container>
+        </form>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="closeDialog()">
+        CANCEL
+      </md-button>
+     <!-- <md-button ng-show="editMode" ng-click="deleteNode()">
+        Delete
+      </md-button>-->
+      <md-button ng-click="saveRelation()">
+        <span ng-show="editMode == true">Update</span><span ng-show="editMode == false">Save</span>
+      </md-button>
+    </md-dialog-actions>
+</md-dialog>

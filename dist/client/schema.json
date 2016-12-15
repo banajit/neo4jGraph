@@ -44,6 +44,19 @@
           "restriction": ".*"
         }
       }
+    },
+    "empZaloni": {
+      "_default": {
+        "defaultIcon": "",
+        "defaultRank": 1,
+        "defaultLabel": "name"
+      },
+      "properties": {
+        "name": {
+          "displayName": "name",
+          "restriction": ".*"
+        }
+      }
     }
   },
   "relationships": {
@@ -51,44 +64,84 @@
       "_appliesTo": [
         {
           "from": "SystemName",
-          "to": "cbbr"
+          "to": "empZaloni"
         },
         {
-          "from": "cbbr",
+          "from": "empZaloni",
           "to": "SystemName"
         }
       ],
       "IntegrationProtocol": {
-        "_displayName": "Integration Protocol",
-        "_restriction": ".*"
+        "displayName": "Integration Protocol",
+        "restriction": ".*"
       },
       "IntegrationName": {
-        "_displayName": "Integration Name",
-        "_restriction": ".*"
+        "displayName": "Integration Name",
+        "restriction": ".*"
       },
       "IntegrationLayer": {
-        "_displayName": "Integration Layer",
-        "_restriction": ".*"
+        "displayName": "Integration Layer",
+        "restriction": ".*"
       },
       "IntegrationSet": {
-        "_displayName": "Integration Set",
-        "_restriction": ".*"
+        "displayName": "Integration Set",
+        "restriction": ".*"
       },
       "IntegrationDescription": {
-        "_displayName": "Integration Description",
-        "_restriction": ".*"
+        "displayName": "Integration Description",
+        "restriction": ".*"
       },
       "Frequency": {
-        "_displayName": "Frequency",
-        "_restriction": ".*"
+        "displayName": "Frequency",
+        "restriction": ".*"
       },
       "TargetSystem": {
-        "_displayName": "Target System",
-        "_restriction": ".*"
+        "displayName": "Target System",
+        "restriction": ".*"
       },
       "SourceSystem": {
-        "_displayName": "Source System",
-        "_restriction": ".*"
+        "displayName": "Source System",
+        "restriction": ".*"
+      }
+    },
+    "Inventory": {
+      "_appliesTo": [
+        {
+          "from": "SystemName",
+          "to": "empZaloni"
+        }
+      ],
+      "IntegrationProtocol": {
+        "displayName": "Integration Protocol",
+        "restriction": ".*"
+      },
+      "IntegrationName": {
+        "displayName": "Integration Name",
+        "restriction": ".*"
+      },
+      "IntegrationLayer": {
+        "displayName": "Integration Layer",
+        "restriction": ".*"
+      },
+      "IntegrationSet": {
+        "displayName": "Integration Set",
+        "restriction": ".*"
+      },
+      "IntegrationDescription": {
+        "displayName": "Integration Description",
+        "restriction": ".*"
+      },
+      "Frequency": {
+        "displayName": "Frequency",
+        "restriction": ".*"
+      },
+      "TargetSystem": {
+        "displayName": "Target System",
+        "restriction": ".*"
+      },
+      "SourceSystem": {
+        "displayName": "Source System",
+        "restriction": ".*"
       }
     }
   }

@@ -43,7 +43,7 @@
         }
       }
 
-      //Dialog box
+      //Dialog box for node editor
       $scope.openNodeEditor = function(nodeType, labelName, propertyList, node) {
         $mdDialog.show({
           locals: {nodeInfo: nodeType, labelName: labelName, propertyList:propertyList, node:node},
@@ -93,17 +93,69 @@
 
       //Listen for relation add
       $scope.relationShipAttr = {};
+      var relationship = currentSchema.relationships;
+
+
       $scope.$on('addRelation', function (event, data) {
-        var sourceNode = data[0];
-        var targetNode = data[1];
-        var relationship = currentSchema.relationships;
-        angular.forEach(relationship, function(value, key){
-          console.log(value._appliesTo[0])
-           if((value._appliesTo[0].sourceLabel == sourceNode.labelType && value._appliesTo[0].targetLabel == targetNode.labelType) || (value._appliesTo[0].sourceLabel == targetNode.labelType && value._appliesTo[0].targetLabel == sourceNode.labelType)) {
-                         console.log(key, value)
-           }
+        var sourceNode = data.sourceNode;
+        var targetNode = data.targetNode;
+        var relation = data.relationship;
+        $scope.relationshipProperties = angular.copy(relation.relationship, $scope.relationshipProperties);
+        var relationName = relation.name;
+        delete $scope.relationshipProperties['_appliesTo'];
+        $scope.openRelationEditor(sourceNode, targetNode, $scope.relationshipProperties, {}, relationName, {});
+      });
+
+      //Dialog box for node editor
+      $scope.openRelationEditor = function(sourceNode, targetNode, propertyList, propertyValues, relationName, edge) {
+        $mdDialog.show({
+          locals: {sourceNode: sourceNode, targetNode: targetNode, propertyList:propertyList, editMode:false, propertyValues:propertyValues, relationName:relationName, edge:edge},
+          controller: 'editRelationCtrl',
+          templateUrl: 'app/graphEditor/editRelationship.html',
+          parent: angular.element(document.body),
+          //targetEvent: ev,
+          clickOutsideToClose:true
+        })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
         });
-        //console.log("add relation", sourceNode, targetNode);
+      };
+      //Listen for node update
+      $scope.$on('edgeUpdate', function (event, data) {
+        var relationKey = data.edge.neo4j_type;
+        console.log(data.edge.neo4j_type, relationKey);
+        if(relationKey !== '') {
+          $scope.relationshipProperties = angular.copy(relationship[relationKey], $scope.relationshipProperties);
+          delete $scope.relationshipProperties['_appliesTo'];
+          var propertyValues = {};
+          angular.forEach(data.edge.neo4j_data, function(value, key){
+             propertyValues[key] = value;
+          });
+          $scope.openRelationEditor(data.sourceNode, data.targetNode, $scope.relationshipProperties, propertyValues, relationKey, data.edge);
+        }
+      });
+      //Listen for edge delete
+      $scope.$on('edgeDelete', function (event, data) {
+        var edge = data.edge;
+         var query = 'MATCH (:'+ data.sourceNode.labelType +')-[r]->(:' + data.targetNode.labelType + ') where id(r)=' + data.edge.id + ' DELETE r';
+         console.log('Delete Query', query);
+         neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+            if(data.errors.length == 0) {
+              ngToast.create({
+                className: 'success',
+                content: 'Node Deleted successfully.'
+              });
+              $scope.$broadcast('deleteEdgeToGraph', edge);
+            }
+            else {
+              ngToast.create({
+                className: 'danger',
+                content: data.errors[0].message
+              });
+            }
+         });
       });
   }
   angular.module('neo4jApp')

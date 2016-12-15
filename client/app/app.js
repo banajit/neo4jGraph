@@ -61,4 +61,23 @@ function deleteNode(node) {
   });
 }
 
+function updateEdge(edge, sourceNode, targetNode) {
+  var scope = angular.element('#nbc-graph-editor').scope();
+  jQuery('.sigma-tooltip-editor').remove();
+  jQuery('.sigma-tooltip').remove();
+  var data = {edge:edge, sourceNode:sourceNode, targetNode:targetNode};
+  scope.$apply(function () {
+    scope.$broadcast('edgeUpdate', data);
+  });
+}
+function deleteEdge(edge, sourceNode, targetNode) {
+  var scope = angular.element('#nbc-graph-editor').scope();
+  jQuery('.sigma-tooltip-editor').remove();
+  jQuery('.sigma-tooltip').remove();
+  scope.$apply(function () {
+    var data = {edge:edge, sourceNode:sourceNode, targetNode:targetNode};
+    scope.$broadcast('edgeDelete', data);
+  });
+}
+
 

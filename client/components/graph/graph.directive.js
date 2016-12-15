@@ -147,11 +147,29 @@ angular.module('neo4jApp')
           sigmaInstance.refresh();
 
         });
+        //listen for edge update
+        scope.$on('updateEdgeToGraph', function (event, inputEdge) {
+          sigmaInstance.graph.edges().forEach(function (edge) {
+              if(inputEdge.id == edge.id) {
+                edge.neo4j_data = inputEdge.neo4j_data;
+              }
+          });
+          sigmaInstance.refresh();
+
+        });
         scope.$on('deleteNodeToGraph', function (event, inputNode) {
           sigmaInstance.graph.dropNode(inputNode.id);
           sigmaInstance.refresh();
 
         });
+
+        scope.$on('deleteEdgeToGraph', function (event, inputEdge) {
+          sigmaInstance.graph.dropEdge(inputEdge.id);
+          sigmaInstance.refresh();
+
+        });
+
+
         //listen for node add
         scope.$on('addNodeToGraph', function (event, node) {
           node.x = Math.random();
@@ -167,6 +185,17 @@ angular.module('neo4jApp')
             duration: 800,
           });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+          sigmaInstance.refresh();
+        });
+
+        //listen for node add
+        scope.$on('addEdgeToGraph', function (event, edge) {
+          edge.color = '#ccc';
+          edge.hover_color = '#000';
+          edge.type = 'arrow';
+          console.log(edge)
+          sigmaInstance.graph.addEdge(edge);
+          sigma.canvas.edges.autoCurve(sigmaInstance);
           sigmaInstance.refresh();
         });
 
@@ -357,7 +386,7 @@ angular.module('neo4jApp')
                   }
               });
               if(activeState.nodes().length == 2) {
-                var confirm = $mdDialog.confirm()
+                /*var confirm = $mdDialog.confirm()
                       .title('Would you like to connect these two nodes?')
                       .textContent('')
                       .ok('Connect')
@@ -365,6 +394,21 @@ angular.module('neo4jApp')
 
                 $mdDialog.show(confirm).then(function() {
                   scope.$emit('addRelation', activeState.nodes());
+                  resetActiveState();
+                }, function() {
+
+                  resetActiveState();
+                });*/
+                $mdDialog.show({
+                  locals: {activeNodes:activeState.nodes()},
+                  controller: 'suggestRelationCtrl',
+                  templateUrl: 'app/graphEditor/suggestRelations.html',
+                  parent: angular.element(document.body),
+                  //targetEvent: ev,
+                  clickOutsideToClose:true
+                })
+                .then(function(answer) {
+                  console.log(answer)
                   resetActiveState();
                 }, function() {
                   resetActiveState();
@@ -392,13 +436,6 @@ angular.module('neo4jApp')
                   ' <div class="sigma-tooltip-footer cursor-pointer"><a ng-href ng-click="deleteNode()"><strong>Delete</strong> {{label}}</div>',
                 renderer: function(node, template) {
                   if(scope.graphMode == 'editor') {
-                    node.degree = this.degree(node.id);
-                    /*var listItem = document.createElement('li');
-                    listItem.className = 'context-list';
-                    listItem.onclick = function () {
-                        updateNode(node);
-                    };
-                    listItem.innerHTML = 'Add ' + node.label + ' to inspector new panel';*/
                     var arrowElement = document.createElement('div');
                     arrowElement.className = 'arrow';
                     var menuHeaderElm = document.createElement('div');
@@ -430,14 +467,10 @@ angular.module('neo4jApp')
                 position: 'top',
                 autoadjust: true,
                   renderer: function(node) {
-                    //var customTemplate = '<md-card class="entity">';
-                    //customTemplate += '<div id="neo4j-card-info" class="card-info">';
-                    //customTemplate += '<h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
-                    //customTemplate += '<ul id="node-properties">';
 
                     var mdcard = document.createElement('md-card');
                     mdcard.className = 'entity';
-                    //mdcard.innerHTML = '<div id="neo4j-card-info" class="card-info"><h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
+
 
                     var cardInfo = document.createElement('div');
                     cardInfo.id = 'neo4j-card-info';
@@ -460,7 +493,7 @@ angular.module('neo4jApp')
 
                     var micaUrl = 'http://192.168.2.90:8089/#/catalog';
                     var queryStr =  micaUrl + queryParams.join('&');
-                    //var cardFooter = '<h2 class="card-footer border-color-accent1"><div class="dropdown" onclick="toggleMenu()"><button class="btn btn-primary dropdown-toggle node-actions" type="button" data-toggle="dropdown">Actions<span class="caret"></span></button></h2><md-dialog-actions layout="row"></md-card>';
+
 
                     var footerElm = document.createElement('div');
                     footerElm.className = 'card-footer border-color-accent1';
@@ -482,26 +515,25 @@ angular.module('neo4jApp')
                         jQuery(".dropdown-menu").toggle();
                     };
                     dropDownList1.innerHTML = '<a href="#">Open in MICA</a>';
-
-                    var dropDownList2 = document.createElement('li');
-
-                    dropDownList2.onclick = function () {
-                        updateNode(node);
-                    };
-                    dropDownList2.innerHTML = '<a href="#">Edit</a>';
-
-                    var dropDownList3 = document.createElement('li');
-
-                    dropDownList3.onclick = function () {
-                        deleteNode(node);
-                    };
-                    dropDownList3.innerHTML = '<a href="#">Delete</a>';
-                    //<ul class="dropdown-menu"><li"><a href="#">Open in MICA</a></li><li><a href="#">EDIT</a></li><li><a href="#">DELETE</a></li></ul></div>';
-
-
                     dropDownListWrapper.appendChild(dropDownList1);
-                    dropDownListWrapper.appendChild(dropDownList2);
-                    dropDownListWrapper.appendChild(dropDownList3);
+                    if(scope.graphMode == 'editor') {
+                      var dropDownList2 = document.createElement('li');
+
+                      dropDownList2.onclick = function () {
+                          updateNode(node);
+                      };
+                      dropDownList2.innerHTML = '<a href="#">Edit</a>';
+
+                      var dropDownList3 = document.createElement('li');
+
+                      dropDownList3.onclick = function () {
+                          deleteNode(node);
+                      };
+                      dropDownList3.innerHTML = '<a href="#">Delete</a>';
+                      dropDownListWrapper.appendChild(dropDownList2);
+                      dropDownListWrapper.appendChild(dropDownList3);
+                    }
+
 
                     dropDownElm.appendChild(dropDownListWrapper);
                     footerElm.appendChild(dropDownElm);
@@ -510,7 +542,6 @@ angular.module('neo4jApp')
                     mdcard.appendChild(cardInfo);
 
                     return mdcard;
-                    //return Mustache.to_html(customTemplate, node);
                   }
                 }
             ],
@@ -520,14 +551,101 @@ angular.module('neo4jApp')
               position: 'top',
               autoadjust: true,
               renderer: function(edge) {
-                var customTemplate = '<md-card class="entity"><div class="card-info">';
-                customTemplate += '<h2 class="card-header">' + edge.label + '</h2>';
-                customTemplate += '<ul>';
+
+                var mdcard = document.createElement('md-card');
+                mdcard.className = 'entity';
+
+
+                var cardInfo = document.createElement('div');
+                cardInfo.id = 'neo4j-card-info';
+                cardInfo.className = 'card-info';
+                cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + edge.label + '">' + edge.label + '</h2>';
+
+
+                var queryParams = [];
+                var listInfo = '';
                 angular.forEach(edge.neo4j_data, function(value, key){
-                  customTemplate += '<li><span uib-tooltip="After today restriction" class="li-title">' + key + '</span><span class="li-value">' + value + '</span></li>';
+                  queryParams.push(key + '=' + value);
+                  listInfo += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
                 });
-                customTemplate += '</ul></div></md-card>';
-                return Mustache.render(customTemplate, edge);
+
+                var cardInfoList = document.createElement('ul');
+                cardInfoList.innerHTML = listInfo;
+
+                cardInfo.appendChild(cardInfoList);
+
+
+                var micaUrl = 'http://192.168.2.90:8089/#/catalog';
+                var queryStr =  micaUrl + queryParams.join('&');
+
+
+                var footerElm = document.createElement('div');
+                footerElm.className = 'card-footer border-color-accent1';
+
+                var dropDownElm = document.createElement('div');
+                dropDownElm.className = 'dropdown';
+
+                dropDownElm.innerHTML = '<a class="text-color-accent2 cursor-pointer" data-toggle="dropdown">Actions<span class="caret"></span></a>';
+                dropDownElm.onclick = function () {
+                    jQuery(".dropdown-menu").toggle();
+                };
+
+                var dropDownListWrapper = document.createElement('ul');
+                dropDownListWrapper.className = 'dropdown-menu';
+
+                var dropDownList1 = document.createElement('li');
+
+                dropDownList1.onclick = function () {
+                    jQuery(".dropdown-menu").toggle();
+                };
+                dropDownList1.innerHTML = '<a href="#">Open in MICA</a>';
+                dropDownListWrapper.appendChild(dropDownList1);
+                if(scope.graphMode == 'editor') {
+                  var dropDownList2 = document.createElement('li');
+
+                  dropDownList2.onclick = function () {
+                      var sourceNode = {};
+                      var targetNode = {};
+                      sigmaInstance.graph.nodes().forEach(function (node) {
+                          if(edge.source == node.id) {
+                            sourceNode = node;
+                          }
+                          else if(edge.target == node.id) {
+                            targetNode = node;
+                          }
+                      });
+                      updateEdge(edge, sourceNode, targetNode);
+                  };
+                  dropDownList2.innerHTML = '<a href="#">Edit</a>';
+
+                  var dropDownList3 = document.createElement('li');
+
+                  dropDownList3.onclick = function () {
+                      var sourceNode = {};
+                      var targetNode = {};
+                      sigmaInstance.graph.nodes().forEach(function (node) {
+                          if(edge.source == node.id) {
+                            sourceNode = node;
+                          }
+                          else if(edge.target == node.id) {
+                            targetNode = node;
+                          }
+                      });
+                      deleteEdge(edge,sourceNode, targetNode);
+                  };
+                  dropDownList3.innerHTML = '<a href="#">Delete</a>';
+                  dropDownListWrapper.appendChild(dropDownList2);
+                  dropDownListWrapper.appendChild(dropDownList3);
+                }
+
+
+                dropDownElm.appendChild(dropDownListWrapper);
+                footerElm.appendChild(dropDownElm);
+
+                cardInfo.appendChild(footerElm);
+                mdcard.appendChild(cardInfo);
+
+                return mdcard;
               }
             }]
           };
