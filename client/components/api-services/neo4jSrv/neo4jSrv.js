@@ -26,6 +26,26 @@
            }, timeout);
          return deferred.promise;
       },
+      uploadFile: function (file, uploadUrl) {
+        var formdata = new FormData();
+        formdata.append('file', file);
+        console.log(file);
+        var request = {
+            method: 'POST',
+            url: '/graph/upload',
+            data: formdata,
+            headers: {
+                'Content-Type': undefined
+            }
+        };
+        // SEND THE FILES.
+        $http(request)
+            .success(function (d) {
+                console.log(d)
+            })
+            .error(function () {
+            });
+      },
       findRelationshipType: function (sourceNode, targetNode) {
         var currentSchema = CONSTANTS.getSchema();
         var relationship = currentSchema.relationships;

@@ -38,6 +38,14 @@
       </md-button>
       </div>
       <div class="nbc-graph-edit" dnd-list dnd-drop="addNodeToGraph(event, index, item, external, type, 'allowed')">
+        <div class="facet-wrapper pull-right">
+          <span class="facet" ng-repeat="(Lkey, Lvalue) in searchFilters">
+            <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue">
+              <span class="pill-header cursor-pointer" ng-click="removeFilter(Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
+              <div class="term">{{value}}</div>
+            </div>
+          </span>
+        </div>
         <graph></graph>
       </div>
     </md-content>

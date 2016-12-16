@@ -183,7 +183,6 @@ angular.module('neo4jApp')
           edge.color = '#ccc';
           edge.hover_color = '#000';
           edge.type = 'arrow';
-          console.log(edge)
           sigmaInstance.graph.addEdge(edge);
           sigma.canvas.edges.autoCurve(sigmaInstance);
           sigmaInstance.refresh();
@@ -417,7 +416,7 @@ angular.module('neo4jApp')
 
           //Show tooltip
           var config_tooltip = {
-            node: [{
+            node: [/*{
               show: 'rightClickNode',
               cssClass: 'sigma-tooltip-editor',
               position: 'right',
@@ -452,7 +451,7 @@ angular.module('neo4jApp')
                     //return Mustache.render(template, node);
                   }
                 }
-              },
+              },*/
               {
                 show: 'clickNode',
                 cssClass: 'sigma-tooltip',

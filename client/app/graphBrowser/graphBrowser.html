@@ -11,14 +11,13 @@
         </md-button>
       </div>
       <div class="nbc-graph">
-        <div class="graph-slider">
-          <md-slider-container>
-            <md-slider flex min="1" max="5" ng-model="color.red" aria-label="red" id="red-slider">
-            </md-slider>
-            <!--<md-input-container>
-              <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
-            </md-input-container>-->
-          </md-slider-container>
+        <div class="facet-wrapper pull-right">
+          <span class="facet" ng-repeat="(Lkey, Lvalue) in searchFilters">
+            <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue">
+              <span class="pill-header cursor-pointer" ng-click="removeFilter(Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
+              <div class="term">{{value}}</div>
+            </div>
+          </span>
         </div>
         <graph></graph>
       </div>

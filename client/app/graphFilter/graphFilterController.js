@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function graphFilterCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv) {
+  function graphFilterCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, $rootScope) {
       $scope.searchMaster = {};
       // ******************************
       // Load all configurations for graphdb access and leftsidebar
@@ -78,12 +78,15 @@
       $scope.selectedItem = {};
       $scope.filterGraph = function() {
         var searchQueries = [];
+        $rootScope.searchFilters = {};
         angular.forEach($scope.selectedItem, function(labelVal, labelKey){
           var conditions = [], whereCond = '';
+          var innerElems = {};
           angular.forEach(labelVal, function(value, key){
             if(value !== null) {
               var cond = 'n.' + key + ' = ' + '"' + value + '"';
               conditions.push(cond);
+              innerElems[key] = labelKey + '.' + key + '=' + value;
             }
           });
           if(conditions.length>0) {
@@ -91,21 +94,33 @@
             //var query = 'MATCH (n:' + labelKey +')-[r]-() ' + whereCond + ' RETURN n,r';
             var query = 'MATCH (n:' + labelKey +') with n optional MATCH (n)-[r]-() with n,r'+ whereCond + ' RETURN n,r';
             searchQueries.push(query);
+            $rootScope.searchFilters[labelKey] = innerElems;
           }
+          /*else {
+            $scope.resetGraph();
+          }*/
 
         });
         var searchQueryStr = searchQueries.join(' UNION ');
 
-        console.log('Search Query = ', searchQueryStr);
+
         if(searchQueryStr.length > 0) {
           var config = CONSTANTS.getStateVariable('config');
           var serverConfig = config.neo4jConfig;
           var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:searchQueryStr};
           CONSTANTS.setStateVariable('searchState', graphMetaInfo);
-          $scope.toggleLeft('filter');
+          //$scope.toggleLeft('filter');
           $scope.$emit('refreshGraph', graphMetaInfo);
         }
+        if(searchQueryStr.length == 0) {
+          $scope.resetGraph();
+        }
 
+      }
+
+      $rootScope.removeFilter = function(labelKey, PropKey) {
+        delete $scope.selectedItem[labelKey][PropKey];
+        $scope.filterGraph();
       }
       //Reset graph
       $scope.resetGraph = function() {
@@ -121,9 +136,9 @@
         console.log('Query = ', queryStr);
         var graphMetaInfo = {serverConfig:neo4jConfig, neo4jQuery:queryStr};
         $scope.$emit('refreshGraph', graphMetaInfo);
-        $timeout(function () {
+        /*$timeout(function () {
            $scope.toggleLeft();
-        }, 10);
+        }, 10);*/
         $scope.selectedItem = {};
       }
 

@@ -3,7 +3,7 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('apsUploadFile', function () {
+  .directive('apsUploadFile', function (neo4jSrv) {
     return {
       template: '<input id="fileInput" type="file" class="ng-hide"><md-button id="uploadButton" class="md-fab md-mini md-ink-ripple" aria-label="attach_file"><i class="fa fa-paperclip" aria-hidden="true"></i></md-button> <md-input-container  md-no-float><input id="textInput" ng-model="fileName" type="text" placeholder="No file chosen" ng-readonly="true"></md-input-container>',
       restrict: 'E',
@@ -28,8 +28,8 @@ angular.module('neo4jApp')
           } else {
             scope.fileName = null;
           }
-          console.log(e)
           scope.$apply();
+          neo4jSrv.uploadFile(files[0], 'graph/upload');
         });
       }
     };

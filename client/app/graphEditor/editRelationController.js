@@ -81,6 +81,7 @@
                edge.target = targetNode.id;
                edge.neo4j_data = neo4j_data;
                edge.neo4j_type = relationName;
+               edge.label = relationName;
                $rootScope.$broadcast('addEdgeToGraph', edge);
                $mdDialog.hide();
              }

@@ -138,9 +138,9 @@
       });
       //Listen for edge delete
       $scope.$on('edgeDelete', function (event, data) {
-        var edge = data.edge;
          var query = 'MATCH (:'+ data.sourceNode.labelType +')-[r]->(:' + data.targetNode.labelType + ') where id(r)=' + data.edge.id + ' DELETE r';
          console.log('Delete Query', query);
+         var edge = data.edge;
          neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
             if(data.errors.length == 0) {
               ngToast.create({

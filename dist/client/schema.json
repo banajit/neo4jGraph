@@ -44,6 +44,19 @@
           "restriction": ".*"
         }
       }
+    },
+    "EmpZaloni": {
+      "_default": {
+        "defaultIcon": "",
+        "defaultRank": 1,
+        "defaultLabel": "Name"
+      },
+      "properties": {
+        "Name": {
+          "displayName": "Name",
+          "restriction": ".*"
+        }
+      }
     }
   },
   "relationships": {

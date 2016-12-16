@@ -7,7 +7,7 @@
 
     <md-dialog-content>
       <div class="md-dialog-content">
-        <form name="editNodeForm" role="form" novalidate>
+        <form name="editNodeForm" action="upload" enctype="multipart/form-data" role="form" novalidate>
             <md-input-container ng-repeat="(key, value) in nodeInfo.properties">
               <label>{{value.displayName}}</label>
               <input name="{{key}}" ng-model="propertyList[key]"
