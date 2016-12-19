@@ -25,7 +25,7 @@ angular.module('neo4jApp')
         input.on('change', function(e) {
           var files = e.target.files;
           if (files[0]) {
-            scope.fileName = 'graph/uploads/' + files[0].name;
+            scope.fileName = 'uploads/' + files[0].name;
             scope.node.url = scope.fileName;
           } else {
             scope.fileName = null;

@@ -294,7 +294,7 @@ angular.module('neo4jApp')
                   sigma.canvas.nodes.image.cache(
                     url,
                     function() {
-                      if (++loaded === image_urls.length){
+                      if (++loaded == image_urls.length){
                         sigmaInstance = createSigmaInstance(graph);
                       }
                     }
