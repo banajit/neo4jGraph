@@ -3,11 +3,12 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('apsUploadFile', function (neo4jSrv, $rootScope) {
+  .directive('apsUploadFile', function (neo4jSrv, ngToast) {
     return {
       template: '<input id="fileInput" type="file" class="ng-hide"><md-button id="uploadButton" class="md-fab md-mini md-ink-ripple" aria-label="attach_file"><i class="fa fa-paperclip" aria-hidden="true"></i></md-button> <md-input-container  md-no-float><input id="textInput" ng-model="fileName" type="text" placeholder="No file chosen" ng-readonly="true"></md-input-container>',
       restrict: 'E',
       link: function (scope, element, attrs) {
+        scope.fileName = scope.node.url;
         var input = $(element[0].querySelector('#fileInput'));
         var button = $(element[0].querySelector('#uploadButton'));
         var textInput = $(element[0].querySelector('#textInput'));
@@ -24,14 +25,18 @@ angular.module('neo4jApp')
         input.on('change', function(e) {
           var files = e.target.files;
           if (files[0]) {
-            scope.fileName = files[0].name;
+            scope.fileName = 'graph/uploads/' + files[0].name;
+            scope.node.url = scope.fileName;
           } else {
             scope.fileName = null;
           }
           scope.$apply();
-          $rootScope.uploadPromise = neo4jSrv.uploadFile(files[0], 'graph/upload')
+          scope.uploadPromise = neo4jSrv.uploadFile(files[0], 'graph/upload')
             .success(function (d) {
-               console.log("File uploaded")
+               ngToast.create({
+                 className: 'success',
+                 content: 'File uploaded successfully.'
+               });
             })
             .error(function () {
               return false;

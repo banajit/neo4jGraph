@@ -92,10 +92,7 @@ angular.module('neo4jApp')
         //TODO Needs to remove hardcoded urls
         var graph1 = {
           urls : [
-                'assets/images/img1.png',
-                'assets/images/img2.png',
-                'assets/images/img3.png',
-                'assets/images/img4.png'
+                'graph/uploads/Penguins.jpg'
               ],
           colors : [
                 '#617db4',
@@ -136,18 +133,21 @@ angular.module('neo4jApp')
           sigmaInstance.graph.nodes().forEach(function (node) {
               if(inputNode.id == node.id) {
                 node.neo4j_data = inputNode.neo4j_data;
-                console.log('inputNode', inputNode);
-                node.url = inputNode.url;
+                if(inputNode.neo4j_data.iconUrl !== undefined) {
+                  image_urls.push(inputNode.neo4j_data.iconUrl);
+                }
+                node.url = inputNode.neo4j_data.iconUrl;
                 node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
-                console.log('node', node);
               }
           });
-          sigma.canvas.nodes.image.cache(
-            inputNode.url,
-            function() {
-              sigmaInstance.refresh();
-            }
-          );
+          image_urls.forEach(function(url) {
+            sigma.canvas.nodes.image.cache(
+              url,
+              function() {
+                sigmaInstance.refresh();
+              }
+            );
+          });
         });
         //listen for edge update
         scope.$on('updateEdgeToGraph', function (event, inputEdge) {
@@ -178,11 +178,21 @@ angular.module('neo4jApp')
           node.y = Math.random();
           node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
           node.type = 'image';
-          node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+          if(node.neo4j_data.iconUrl !== undefined) {
+            image_urls.push(node.neo4j_data.iconUrl);
+          }
+          node.url = node.neo4j_data.iconUrl;
           node.color = '#68BDF6';
           sigmaInstance.graph.addNode(node);
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-          sigmaInstance.refresh();
+          image_urls.forEach(function(url) {
+            sigma.canvas.nodes.image.cache(
+              url,
+              function() {
+                sigmaInstance.refresh();
+              }
+            );
+          });
         });
 
         //listen for node add
@@ -199,22 +209,7 @@ angular.module('neo4jApp')
         //update node and edge array
         function layoutNodesEdges(graph) {
           var N = graph.nodes.length, i=0;
-          graph.edgeNodeRef = {};
-          angular.forEach(graph.nodes, function (value, key) {
-              var tempSource = [];
-              var tempTarget = [];
-              angular.forEach(graph.edges, function (edgeVal) {
-                  if (value.id === edgeVal.source) {
-                      tempTarget.push(edgeVal.target);
-                  }
-                  if (value.id === edgeVal.target) {
-                      tempSource.push(edgeVal.source);
-                  }
-              });
-              graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
-          });
           graph.nodes.forEach(function(node) {
-
             node.labelType = node.neo4j_labels[0];
             node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
             var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
@@ -224,7 +219,7 @@ angular.module('neo4jApp')
             node.x = Math.cos(Math.PI * 2 * i / N);
             node.y = Math.sin(Math.PI * 2 * i / N);
             node.type = 'image';
-            node.url = 'assets/images/img1.png';
+            node.url = node.neo4j_data.iconUrl;
             node.color = '#68BDF6';
             sigmaInstance.graph.addNode(node);
             i++;
@@ -271,16 +266,41 @@ angular.module('neo4jApp')
               { url: graphMeta.serverConfig.serverUrl, user: graphMeta.serverConfig.user, password: graphMeta.serverConfig.password },
               graphMeta.neo4jQuery,
             function(graph) {
-              graph1.urls.forEach(function(url) {
-                sigma.canvas.nodes.image.cache(
-                  url,
-                  function() {
-                    if (++loaded === graph1.urls.length)
-                      // Instantiate sigma:
-                       sigmaInstance = createSigmaInstance(graph);
+              graph.edgeNodeRef = {};
+              angular.forEach(graph.nodes, function (value, key) {
+                  var tempSource = [];
+                  var tempTarget = [];
+                  if(value.neo4j_data.iconUrl !== undefined) {
+                    image_urls.push(value.neo4j_data.iconUrl);
                   }
-                );
+                  angular.forEach(graph.edges, function (edgeVal) {
+                      if (value.id === edgeVal.source) {
+                          tempTarget.push(edgeVal.target);
+                      }
+                      if (value.id === edgeVal.target) {
+                          tempSource.push(edgeVal.source);
+                      }
+                  });
+                  graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
               });
+              if(image_urls.length == 0) {
+                sigmaInstance = createSigmaInstance(graph);
+              }
+              else {
+                image_urls = image_urls.filter(function(elem, index, self) {
+                   return index == self.indexOf(elem);
+                })
+                image_urls.forEach(function(url) {
+                  sigma.canvas.nodes.image.cache(
+                    url,
+                    function() {
+                      if (++loaded === image_urls.length){
+                        sigmaInstance = createSigmaInstance(graph);
+                      }
+                    }
+                  );
+                });
+              }
             }
           );
         }
@@ -407,7 +427,6 @@ angular.module('neo4jApp')
                   clickOutsideToClose:true
                 })
                 .then(function(answer) {
-                  console.log(answer)
                   resetActiveState();
                 }, function() {
                   resetActiveState();

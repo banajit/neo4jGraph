@@ -38,16 +38,7 @@
                 'Content-Type': undefined
             }
         };
-        // SEND THE FILES.
-        /*$http(request)
-            .success(function (d) {
-                return true;
-            })
-            .error(function () {
-              return false;
-            });*/
-        //return $http(request);
-        return $http.get('http://httpbin.org/delay/3');
+        return $http(request);
       },
       findRelationshipType: function (sourceNode, targetNode) {
         var currentSchema = CONSTANTS.getSchema();

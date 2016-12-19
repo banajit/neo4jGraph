@@ -1,4 +1,4 @@
-<md-dialog aria-label="{{labelName}}">
+<md-dialog aria-label="{{labelName}}" cg-busy="{promise:uploadPromise,message:'Uploading Icon...'}">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>{{labelName}}</h2>
@@ -6,7 +6,7 @@
     </md-toolbar>
 
     <md-dialog-content>
-      <div class="md-dialog-content" cg-busy="{promise:uploadPromise,message:'Uploading Icon...'}">
+      <div class="md-dialog-content">
         <form name="editNodeForm" action="upload" enctype="multipart/form-data" role="form" novalidate>
             <md-input-container ng-repeat="(key, value) in nodeInfo.properties">
               <label>{{value.displayName}}</label>
