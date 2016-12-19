@@ -5,7 +5,7 @@
 
 (function (angular) {
 
-  function neo4jSrv($http, $q, CONSTANTS) {
+  function neo4jSrv($http, $q, CONSTANTS, $rootScope) {
     return {
       executeCypherQuery: function (serverConfig, query) {
          var neo4j = { url: serverConfig.serverUrl, user: serverConfig.user, password: serverConfig.password };
@@ -32,19 +32,22 @@
         console.log(file);
         var request = {
             method: 'POST',
-            url: '/graph/upload',
+            url: 'http://192.168.1.221:8080/graph/upload',
             data: formdata,
             headers: {
                 'Content-Type': undefined
             }
         };
         // SEND THE FILES.
-        $http(request)
+        /*$http(request)
             .success(function (d) {
-                console.log(d)
+                return true;
             })
             .error(function () {
-            });
+              return false;
+            });*/
+        //return $http(request);
+        return $http.get('http://httpbin.org/delay/3');
       },
       findRelationshipType: function (sourceNode, targetNode) {
         var currentSchema = CONSTANTS.getSchema();

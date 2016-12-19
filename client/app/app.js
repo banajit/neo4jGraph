@@ -15,7 +15,8 @@ var neo4jApp = angular.module('neo4jApp', [
   'ngMdIcons',
   'slickCarousel',
   'ngToast',
-  'dndLists'
+  'dndLists',
+  'cgBusy'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

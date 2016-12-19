@@ -136,11 +136,18 @@ angular.module('neo4jApp')
           sigmaInstance.graph.nodes().forEach(function (node) {
               if(inputNode.id == node.id) {
                 node.neo4j_data = inputNode.neo4j_data;
+                console.log('inputNode', inputNode);
+                node.url = inputNode.url;
                 node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
+                console.log('node', node);
               }
           });
-          sigmaInstance.refresh();
-
+          sigma.canvas.nodes.image.cache(
+            inputNode.url,
+            function() {
+              sigmaInstance.refresh();
+            }
+          );
         });
         //listen for edge update
         scope.$on('updateEdgeToGraph', function (event, inputEdge) {
@@ -187,6 +194,7 @@ angular.module('neo4jApp')
           sigma.canvas.edges.autoCurve(sigmaInstance);
           sigmaInstance.refresh();
         });
+        var image_urls = [];
 
         //update node and edge array
         function layoutNodesEdges(graph) {
@@ -216,7 +224,7 @@ angular.module('neo4jApp')
             node.x = Math.cos(Math.PI * 2 * i / N);
             node.y = Math.sin(Math.PI * 2 * i / N);
             node.type = 'image';
-            node.url = graph1.urls[Math.floor(Math.random() * graph1.urls.length)];
+            node.url = 'assets/images/img1.png';
             node.color = '#68BDF6';
             sigmaInstance.graph.addNode(node);
             i++;

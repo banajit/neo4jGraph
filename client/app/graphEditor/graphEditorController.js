@@ -125,7 +125,6 @@
       //Listen for node update
       $scope.$on('edgeUpdate', function (event, data) {
         var relationKey = data.edge.neo4j_type;
-        console.log(data.edge.neo4j_type, relationKey);
         if(relationKey !== '') {
           $scope.relationshipProperties = angular.copy(relationship[relationKey], $scope.relationshipProperties);
           delete $scope.relationshipProperties['_appliesTo'];

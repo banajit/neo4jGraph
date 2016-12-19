@@ -61,6 +61,7 @@
                 var node = angular.merge(data.results[0].data[0].meta[0], data.results[0].data[0].row[0]);
                 node.neo4j_data = neo4j_data;
                 node.labelType = labelName;
+                node.url = 'assets/images/img6.png';
                 $rootScope.$broadcast('updateNodeToGraph', node);
                 $mdDialog.hide();
               }
