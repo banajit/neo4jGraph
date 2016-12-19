@@ -32,7 +32,7 @@
         console.log(file);
         var request = {
             method: 'POST',
-            url: 'http://192.168.1.221:8080/graph/upload',
+            url: uploadUrl,
             data: formdata,
             headers: {
                 'Content-Type': undefined
