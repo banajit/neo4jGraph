@@ -31,7 +31,7 @@ angular.module('neo4jApp')
             scope.fileName = null;
           }
           scope.$apply();
-          scope.uploadPromise = neo4jSrv.uploadFile(files[0], 'graph/upload')
+          scope.uploadPromise = neo4jSrv.uploadFile(files[0], 'upload')
             .success(function (d) {
                ngToast.create({
                  className: 'success',
