@@ -10,7 +10,7 @@ angular.module('neo4jApp')
         templateUrl: 'app/home/home.html',
         controller: 'HomeCtrl',
         controllerAs: 'Home',
-        authenticate: true
+        authenticate: true,
       })
   });
 

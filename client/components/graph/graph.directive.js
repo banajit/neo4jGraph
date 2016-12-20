@@ -3,7 +3,7 @@
 (function (angular) {
 
 angular.module('neo4jApp')
-  .directive('graph', function ($timeout, ngToast, $compile, $mdDialog, CONSTANTS) {
+  .directive('graph', function ($timeout, ngToast, $compile, $mdDialog, CONSTANTS, neo4jSrv) {
     return {
       templateUrl: 'components/graph/graph.html',
       restrict: 'EA',
@@ -135,8 +135,11 @@ angular.module('neo4jApp')
                 node.neo4j_data = inputNode.neo4j_data;
                 if(inputNode.neo4j_data.iconUrl !== undefined) {
                   image_urls.push(inputNode.neo4j_data.iconUrl);
+                  node.url = inputNode.neo4j_data.iconUrl;
                 }
-                node.url = inputNode.neo4j_data.iconUrl;
+                var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
+                var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
+                node.size = getNodeSize(rank);
                 node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
               }
           });
@@ -178,11 +181,14 @@ angular.module('neo4jApp')
           node.y = Math.random();
           node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
           node.type = 'image';
+          var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
+          var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
+          node.size = getNodeSize(rank);
           if(node.neo4j_data.iconUrl !== undefined) {
             image_urls.push(node.neo4j_data.iconUrl);
+            node.url = node.neo4j_data.iconUrl;
           }
-          node.url = node.neo4j_data.iconUrl;
-          node.color = '#68BDF6';
+          node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
           sigmaInstance.graph.addNode(node);
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           image_urls.forEach(function(url) {
@@ -206,21 +212,26 @@ angular.module('neo4jApp')
         });
         var image_urls = [];
 
+        function getNodeSize(rank) {
+          return (25-rank*5);
+        }
+
         //update node and edge array
         function layoutNodesEdges(graph) {
           var N = graph.nodes.length, i=0;
           graph.nodes.forEach(function(node) {
             node.labelType = node.neo4j_labels[0];
             node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
-            var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
+            //var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
             //node.size = neighborNodes;
-            var rank = node.neo4j_data.Rank;
-            node.size = (25-rank*5);
+            var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
+            var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
+            node.size = getNodeSize(rank);
             node.x = Math.cos(Math.PI * 2 * i / N);
             node.y = Math.sin(Math.PI * 2 * i / N);
             node.type = 'image';
             node.url = node.neo4j_data.iconUrl;
-            node.color = '#68BDF6';
+            node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
             sigmaInstance.graph.addNode(node);
             i++;
           });
@@ -270,10 +281,10 @@ angular.module('neo4jApp')
               angular.forEach(graph.nodes, function (value, key) {
                   var tempSource = [];
                   var tempTarget = [];
-                  if(value.neo4j_data.iconUrl !== undefined) {
+                  if(value.neo4j_data.iconUrl != undefined) {
                     image_urls.push(value.neo4j_data.iconUrl);
                   }
-                  angular.forEach(graph.edges, function (edgeVal) {
+                  /*angular.forEach(graph.edges, function (edgeVal) {
                       if (value.id === edgeVal.source) {
                           tempTarget.push(edgeVal.target);
                       }
@@ -281,14 +292,15 @@ angular.module('neo4jApp')
                           tempSource.push(edgeVal.source);
                       }
                   });
-                  graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};
+                  graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};*/
               });
+              //sigmaInstance = createSigmaInstance(graph);
               if(image_urls.length == 0) {
                 sigmaInstance = createSigmaInstance(graph);
               }
               else {
                 image_urls = image_urls.filter(function(elem, index, self) {
-                   return index == self.indexOf(elem);
+                   return index == self.indexOf(elem) && elem != undefined;
                 })
                 image_urls.forEach(function(url) {
                   sigma.canvas.nodes.image.cache(
@@ -405,19 +417,6 @@ angular.module('neo4jApp')
                   }
               });
               if(activeState.nodes().length == 2) {
-                /*var confirm = $mdDialog.confirm()
-                      .title('Would you like to connect these two nodes?')
-                      .textContent('')
-                      .ok('Connect')
-                      .cancel('Cancel');
-
-                $mdDialog.show(confirm).then(function() {
-                  scope.$emit('addRelation', activeState.nodes());
-                  resetActiveState();
-                }, function() {
-
-                  resetActiveState();
-                });*/
                 $mdDialog.show({
                   locals: {activeNodes:activeState.nodes()},
                   controller: 'suggestRelationCtrl',
@@ -485,7 +484,6 @@ angular.module('neo4jApp')
                 position: 'top',
                 autoadjust: true,
                   renderer: function(node) {
-
                     var mdcard = document.createElement('md-card');
                     mdcard.className = 'entity';
 
@@ -498,11 +496,17 @@ angular.module('neo4jApp')
 
                     var queryParams = [];
                     var listInfo = '';
-                    angular.forEach(node.neo4j_data, function(value, key){
-                      queryParams.push(key + '=' + value);
-                      listInfo += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
+                    angular.forEach(currentSchema['nodes'][node.labelType]['properties'], function(value, key){
+                      var KeyVal = node.neo4j_data[key];
+                      queryParams.push(key + '=' + KeyVal);
+                      listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                     });
-
+                    var missingProps = _.difference(Object.keys(node.neo4j_data), Object.keys(currentSchema['nodes'][node.labelType]['properties']));
+                    angular.forEach(missingProps, function(value){
+                      var KeyVal = node.neo4j_data[value];
+                      queryParams.push(value + '=' + KeyVal);
+                      listInfo += '<li><span class="li-title">' + value + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                    });
                     var cardInfoList = document.createElement('ul');
                     cardInfoList.innerHTML = listInfo;
 
@@ -582,9 +586,24 @@ angular.module('neo4jApp')
 
                 var queryParams = [];
                 var listInfo = '';
-                angular.forEach(edge.neo4j_data, function(value, key){
+               /* angular.forEach(edge.neo4j_data, function(value, key){
                   queryParams.push(key + '=' + value);
                   listInfo += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
+                });*/
+
+                angular.forEach(currentSchema['relationships'][edge.neo4j_type], function(value, key){
+                  if(key !== '_appliesTo') {
+                    var KeyVal = edge.neo4j_data[key];
+                    queryParams.push(key + '=' + KeyVal);
+                    listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                  }
+
+                });
+                var missingProps = _.difference(Object.keys(edge.neo4j_data), Object.keys(currentSchema['relationships'][edge.neo4j_type]));
+                angular.forEach(missingProps, function(value){
+                  var KeyVal = edge.neo4j_data[value];
+                  queryParams.push(value + '=' + KeyVal);
+                  listInfo += '<li><span class="li-title">' + value + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                 });
 
                 var cardInfoList = document.createElement('ul');

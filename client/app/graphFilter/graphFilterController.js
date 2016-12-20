@@ -16,30 +16,6 @@
       CONSTANTS.setStateVariable('config', data);
       var serverConfig = data.neo4jConfig;
 
-      /*var data = CONSTANTS.getConfig();
-       CONSTANTS.setStateVariable('config', data);
-       var serverConfig = data.neo4jConfig;
-       var params = {};
-       var query = 'CALL db.propertyKeys();'
-       var neo4j = { url: serverConfig.serverUrl, user: serverConfig.user, password: serverConfig.password };
-       var endpoint = '/db/data/transaction/commit', timeout = -1;
-       var data = JSON.stringify({
-         "statements": [
-             {
-                 "statement": query,
-                 "params": {},
-                 "includeStats": false
-             }
-         ]
-       });
-       sigma.neo4j.send(neo4j, endpoint, 'POST', data,
-       function(data) {
-          var tempKeys = [];
-          angular.forEach(data.results[0].data, function(value, key){
-            tempKeys.push(value.row[0]);
-          });
-          $scope.searchMaster['propertiesKeys'] = tempKeys;
-       }, timeout);*/
 
       // ******************************
       // Search query for populating autocomplete box
@@ -50,16 +26,16 @@
          var conditions = [], whereCond = '';
          angular.forEach($scope.selectedItem[labelType], function(value, key){
            if(value !== null) {
-             var cond = 'n.' + key + ' = ' + '"' + value + '"';
+             var cond = 'lower(n.' + key + ') = ' + '"' + value.toLowerCase() + '"';
              conditions.push(cond);
            }
          });
-         conditions.push('n.' + propertyKey + ' =~ "' + queryStrn + '.*"');
+         conditions.push('lower(n.' + propertyKey + ') =~ "' + queryStrn.toLowerCase() + '.*"');
          if(conditions.length>0) {
            whereCond = ' WHERE ' + conditions.join(' AND ');
          }
          var query = 'MATCH(n:' + labelType + ') ' + whereCond + ' return n;';
-         console.log('Property Value Search = ', query);
+         console.log('Typeahead - Property Value Search = ', query);
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
            angular.forEach(data.results[0].data, function(Rvalue, Rkey){
@@ -91,25 +67,21 @@
           });
           if(conditions.length>0) {
             whereCond = ' WHERE ' + conditions.join(' AND ');
-            //var query = 'MATCH (n:' + labelKey +')-[r]-() ' + whereCond + ' RETURN n,r';
             var query = 'MATCH (n:' + labelKey +') with n optional MATCH (n)-[r]-() with n,r'+ whereCond + ' RETURN n,r';
             searchQueries.push(query);
             $rootScope.searchFilters[labelKey] = innerElems;
           }
-          /*else {
-            $scope.resetGraph();
-          }*/
+
 
         });
         var searchQueryStr = searchQueries.join(' UNION ');
-
+        console.log(searchQueryStr);
 
         if(searchQueryStr.length > 0) {
           var config = CONSTANTS.getStateVariable('config');
           var serverConfig = config.neo4jConfig;
           var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:searchQueryStr};
           CONSTANTS.setStateVariable('searchState', graphMetaInfo);
-          //$scope.toggleLeft('filter');
           $scope.$emit('refreshGraph', graphMetaInfo);
         }
         if(searchQueryStr.length == 0) {

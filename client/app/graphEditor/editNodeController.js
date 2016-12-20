@@ -48,13 +48,13 @@
              properties.push('n.' + key + ' = "' + value + '"');
              neo4j_data[key] = value;
            }
-           if(key === 'iconUrl') {
+           if(key === 'iconUrl' && node.url != undefined) {
             properties.push('n.' + key + ' = "' + node.url + '"');
             neo4j_data[key] = node.url;
             iconExist = 1;
            }
         });
-        if(iconExist == 0) {
+        if(iconExist == 0 && node.url != undefined) {
            properties.push('n.iconUrl = "' + node.url + '"');
            neo4j_data['iconUrl'] = node.url;
         }

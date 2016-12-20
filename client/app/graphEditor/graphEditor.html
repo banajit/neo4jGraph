@@ -17,12 +17,12 @@
       </md-toolbar>
 
       <ul layout-margin dnd-list="nodeLabels" dnd-drop="addNodeToGraph(event, index, key, external, type, 'notAllowed')" class="list-group neo4j-labels">
-        <li class="list-group-item" ng-repeat="(key, value) in nodeLabels track by $index"
+        <li ng-style="getNodeColor(key)" class="list-group-item node-label" ng-repeat="(key, value) in nodeLabels track by $index"
             dnd-draggable="key"
             dnd-moved="nodeLabels.splice($index, 1)"
             dnd-effect-allowed="copy"
           >
-          <i class="fa fa-table" aria-hidden="true"></i> {{key}}
+          <div class="node-label-title"><strong>{{key}} </strong></div>
         </li>
       </ul>
     </md-sidenav>

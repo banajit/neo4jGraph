@@ -18,12 +18,12 @@
       var currentSchema = CONSTANTS.getSchema();
       // Calling neo4j to get all its node label
       $scope.nodeLabels = currentSchema.nodes;
-      /*sigma.neo4j.getLabels(
-          neo4j,
-          function(labels) {
-              $scope.nodeLabels = labels;
-          }
-      );*/
+      //Get node color
+      $scope.getNodeColor = function(nodeType) {
+        return {
+          "background-color" : currentSchema.nodes[nodeType]._default['defaultColor'],
+        }
+      }
 
       //drop callback
       $scope.addNodeToGraph = function(event, index, item, external, type, allowedType) {

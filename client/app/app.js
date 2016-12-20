@@ -24,13 +24,10 @@ var neo4jApp = angular.module('neo4jApp', [
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
-  .run(['$rootScope', '$state', function ($rootScope, $state) {
-    //Load config file
-   /* CONSTANTS.getConfig().success(function (data) {
-      CONSTANTS.setStateVariable('neo4jConfig', data);
-    });*/
-    // Redirect to login if route requires auth and the user is not logged in
-
+  .run(['$rootScope', '$state', 'CONSTANTS', function ($rootScope, $state, CONSTANTS) {
+    var configData = CONSTANTS.getConfig();
+    //set page title
+    $rootScope.pageTitle = configData.pageTitle;
   }]);
   var initInjector = angular.injector(['ng']);
   var $http = initInjector.get('$http');

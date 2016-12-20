@@ -53,6 +53,14 @@
           });
         });
         return relationKey;
+      },
+      getIntersection: function (object1, object2) {
+        return Object.keys(object1).concat(Object.keys(object2)).sort().reduce(function (r, a, i, aa) {
+            if (i && aa[i - 1] === a) {
+                r.push(a);
+            }
+            return r;
+        }, []);
       }
     }
   }

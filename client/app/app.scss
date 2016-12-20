@@ -170,17 +170,7 @@ body.neo4j-app h2 {
 
 
 ul.neo4j-labels li {
-   background-color: #4C4957;
-   border: 1px solid #4C4957;
-   border-radius: .25em;
-   color: #FFF;
-   font-weight: 700;
-   height: 30px;
-   margin-top: 10px;
-   padding: 7px 0px 0px 0px;
-   text-align: center;
    cursor: move;
-   width: 42%;
    float: left;
    text-transform: capitalize;
 }
@@ -321,6 +311,15 @@ ul.neo4j-labels li {
     left: 234px;
     top: 10px;
     z-index: 10;
+  }
+  .node-label {
+    height: 70px !important;
+    width: 70px !important;
+    border-radius: 35px !important;
+  }
+  .node-label-title {
+    margin-top: 66px;
+    margin-left: -8px;
   }
 
 
