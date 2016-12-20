@@ -213,7 +213,7 @@ angular.module('neo4jApp')
         var image_urls = [];
 
         function getNodeSize(rank) {
-          return (25-rank*5);
+          return (35-rank*10);
         }
 
         //update node and edge array
@@ -329,7 +329,7 @@ angular.module('neo4jApp')
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
             minNodeSize: 10,
-            maxNodeSize: 20,
+            maxNodeSize: 30,
            /* minEdgeSize: 1.3,
             maxEdgeSize: 1.3,*/
             defaultLabelColor: '#000',
