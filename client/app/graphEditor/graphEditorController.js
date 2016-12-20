@@ -22,6 +22,7 @@
       $scope.getNodeColor = function(nodeType) {
         return {
           "background-color" : currentSchema.nodes[nodeType]._default['defaultColor'],
+          "color" : currentSchema.nodes[nodeType]._default['defaultColor'],
         }
       }
 
