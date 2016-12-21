@@ -61,6 +61,23 @@
             }
             return r;
         }, []);
+      },
+      getDataType: function (nodeType, property) {
+        var currentSchema = CONSTANTS.getSchema();
+        return (currentSchema['nodes'][nodeType]['properties'][property]['dataType'])?currentSchema['nodes'][nodeType]['properties'][property]['dataType']:'string';
+      },
+      getMicaNodeKey: function (nodeType, property) {
+        var currentSchema = CONSTANTS.getSchema();
+        return (currentSchema['nodes'][nodeType]['properties'][property]['micaName'])?currentSchema['nodes'][nodeType]['properties'][property]['micaName']:false;
+      },
+      getMicaEdgeKey: function (edgeType, property) {
+        var currentSchema = CONSTANTS.getSchema();
+        return (currentSchema['relationships'][edgeType][property]['micaName'])?currentSchema['relationships'][edgeType][property]['micaName']:false;
+      },
+      getMicaUrl: function () {
+         var currentSchema = CONSTANTS.getConfig();
+         return CONSTANTS.getConfig().micaUrl;
+
       }
     }
   }

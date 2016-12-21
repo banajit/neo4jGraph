@@ -25,12 +25,18 @@
          var serverConfig = config.neo4jConfig;
          var conditions = [], whereCond = '';
          angular.forEach($scope.selectedItem[labelType], function(value, key){
-           if(value !== null) {
-             var cond = 'lower(n.' + key + ') = ' + '"' + value.toLowerCase() + '"';
+           if(value !== null && key!== propertyKey) {
+             var cond = (neo4jSrv.getDataType(labelType, key) == 'string')?'lower(n.' + key + ') = ' + '"' + value.toLowerCase() + '"':'n.' + key + ' = ' + value;
              conditions.push(cond);
            }
          });
-         conditions.push('lower(n.' + propertyKey + ') =~ "' + queryStrn.toLowerCase() + '.*"');
+         if(neo4jSrv.getDataType(labelType, propertyKey) == 'string') {
+            conditions.push('lower(n.' + propertyKey + ') =~ "' + queryStrn.toLowerCase() + '.*"');
+         }
+         else {
+            conditions.push('n.' + propertyKey + ' = ' + queryStrn);
+         }
+
          if(conditions.length>0) {
            whereCond = ' WHERE ' + conditions.join(' AND ');
          }
@@ -60,7 +66,7 @@
           var innerElems = {};
           angular.forEach(labelVal, function(value, key){
             if(value !== null) {
-              var cond = 'n.' + key + ' = ' + '"' + value + '"';
+              var cond = (neo4jSrv.getDataType(labelKey, key) == 'string')?'n.' + key + ' = ' + '"' + value + '"':'n.' + key + ' = ' + value;
               conditions.push(cond);
               innerElems[key] = labelKey + '.' + key + '=' + value;
             }

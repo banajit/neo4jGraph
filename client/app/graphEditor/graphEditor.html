@@ -17,12 +17,13 @@
       </md-toolbar>
 
       <ul layout-margin dnd-list="nodeLabels" dnd-drop="addNodeToGraph(event, index, key, external, type, 'notAllowed')" class="list-group neo4j-labels">
-        <li ng-style="getNodeColor(key)" class="list-group-item node-label" ng-repeat="(key, value) in nodeLabels track by $index"
+        <li ng-style="getNodeStyle(key)" class="list-group-item node-label" ng-repeat="(key, value) in nodeLabels track by $index"
             dnd-draggable="key"
             dnd-moved="nodeLabels.splice($index, 1)"
             dnd-effect-allowed="copy"
           >
-          <div class="node-label-title"><strong>{{key}} </strong></div>
+          <img ng-if="getBackgroundIcon(key)" src="{{getBackgroundIcon(key)}}" class="img-circle" alt="Cinque Terre" width="70" height="70">
+          <div ng-class="{'no-icon-title': !getBackgroundIcon(key), 'icon-title': getBackgroundIcon(key)}" class="node-label-title"><strong>{{key}} </strong></div></img>
         </li>
       </ul>
     </md-sidenav>
@@ -46,6 +47,7 @@
             </div>
           </span>
         </div>
+        <div class="page-title">{{pageTitle}}</div>
         <graph></graph>
       </div>
     </md-content>

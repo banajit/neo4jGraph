@@ -18,11 +18,15 @@
       var currentSchema = CONSTANTS.getSchema();
       // Calling neo4j to get all its node label
       $scope.nodeLabels = currentSchema.nodes;
+      $scope.getBackgroundIcon = function(nodeType) {
+        return currentSchema.nodes[nodeType]._default['defaultIcon'];
+      }
       //Get node color
-      $scope.getNodeColor = function(nodeType) {
+      $scope.getNodeStyle = function(nodeType) {
         return {
           "background-color" : currentSchema.nodes[nodeType]._default['defaultColor'],
           "color" : currentSchema.nodes[nodeType]._default['defaultColor'],
+          //"background-image" : 'url("' + currentSchema.nodes[nodeType]._default['defaultIcon'] + '")',
         }
       }
 
@@ -145,7 +149,7 @@
             if(data.errors.length == 0) {
               ngToast.create({
                 className: 'success',
-                content: 'Node Deleted successfully.'
+                content: 'Edge Deleted successfully.'
               });
               $scope.$broadcast('deleteEdgeToGraph', edge);
             }

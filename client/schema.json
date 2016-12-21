@@ -2,15 +2,16 @@
   "nodes": {
     "System": {
       "_default": {
-        "defaultIcon": "",
+        "defaultIcon": "graph/uploads/cc7b782c.img2.png",
         "defaultRank": 1,
         "defaultLabel": "Name",
-        "defaultColor": "#668f3c"
+        "defaultColor": "#3585D4"
       },
       "properties": {
         "Name": {
           "displayName": "Name",
-          "restriction": ".*"
+          "restriction": ".*",
+          "dataType": "string"
         },
         "Type": {
           "displayName": "Type",
@@ -26,7 +27,9 @@
         },
         "BusinessSegment": {
           "displayName": "Business Segment",
-          "restriction": ".*"
+          "restriction": ".*",
+          "micaName": "businessSegment"
+
         },
         "LineOfBusiness": {
           "displayName": "Line Of Business",
@@ -34,7 +37,8 @@
         },
         "Rank": {
           "displayName": "Rank",
-          "restriction": "[0-9]+"
+          "restriction": "[0-9]+",
+          "dataType": "string"
         },
         "Hosting": {
           "displayName": "Hosting",
@@ -44,10 +48,10 @@
     },
     "EmpZaloni": {
       "_default": {
-        "defaultIcon": "",
+        "defaultIcon": "graph/uploads/img4.png",
         "defaultRank": 1,
         "defaultLabel": "Name",
-        "defaultColor": "#68bdf6"
+        "defaultColor": "#389600"
       },
       "properties": {
         "Name": {
@@ -67,7 +71,8 @@
       ],
       "IntegrationProtocol": {
         "displayName": "Integration Protocol",
-        "restriction": ".*"
+        "restriction": ".*",
+        "micaName": "integrationProtocol"
       },
       "Description": {
         "displayName": "Description",

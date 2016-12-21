@@ -316,10 +316,80 @@ ul.neo4j-labels li {
     height: 70px !important;
     width: 70px !important;
     border-radius: 35px !important;
+    padding: 0px !important;
   }
-  .node-label-title {
-    margin-top: 66px;
-    margin-left: -8px;
+  .node-label-title.no-icon-title {
+    margin-top: 75px;
+    margin-left: 4px;
+  }
+  .node-label-title.icon-title {
+    margin-top: 5px;
+    margin-left: 9px;
+  }
+  .sigma-tooltip  .arrow {
+    border-width: 10px;
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+
+  .sigma-tooltip.top {
+    margin-top: -12px;
+  }
+  .sigma-tooltip.top  .arrow {
+    left: 50%;
+    bottom: -10px;
+    margin-left: -10px;
+    border-top-color: #c33;
+    border-bottom-width: 0;
+  }
+
+  .sigma-tooltip.bottom {
+    margin-top: 12px;
+  }
+  .sigma-tooltip.bottom  .arrow {
+    left: 50%;
+    top: -10px;
+    margin-left: -10px;
+    border-bottom-color: #c33;
+    border-top-width: 0;
+  }
+
+  .sigma-tooltip.left {
+    margin-left: -12px;
+  }
+  .sigma-tooltip.left  .arrow {
+    top: 50%;
+    right: -10px;
+    margin-top: -10px;
+    border-left-color: #c33;
+    border-right-width: 0;
+  }
+
+  .sigma-tooltip.right {
+    margin-left: 12px;
+  }
+  .sigma-tooltip.right  .arrow {
+    top: 50%;
+    left: -10px;
+    margin-top: -10px;
+    border-right-color: #c33;
+    border-left-width: 0;
+  }
+  .page-title {
+   position: absolute;
+   bottom: 0;
+   right: 5px;
+   background: #373934;
+   padding: 10px;
+   color: #FFF;
+   font-weight: bold;
+   border-top: 2px solid #c33;
+   border-bottom: 2px solid #c33;
+   border-radius: 3px;
   }
 
 
