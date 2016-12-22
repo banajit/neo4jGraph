@@ -16,7 +16,7 @@
     }
 
     $scope.saveRelation = function() {
-      if($scope.editNodeForm.$valid && $scope.propertyValues.length>0) {
+      if($scope.editNodeForm.$valid && Object.keys($scope.propertyValues).length>0) {
         if($scope.editMode) {
           updateRelation();
         }
