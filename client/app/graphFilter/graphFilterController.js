@@ -121,11 +121,12 @@
         console.log('Query = ', queryStr);
         var graphMetaInfo = {serverConfig:neo4jConfig, neo4jQuery:queryStr};
         $scope.$emit('refreshGraph', graphMetaInfo);
-        /*$timeout(function () {
-           $scope.toggleLeft();
-        }, 10);*/
         $scope.selectedItem = {};
+        $rootScope.searchFilters = {};
         angular.element('#search-form input').val("");
+        angular.element('#search-form input').attr('aria-expanded', 'false');
+        searchForm.$pristine = true
+        searchForm.$valid = true
       }
 
       //Refresh layout
