@@ -28,7 +28,7 @@
       <md-button ng-show="editMode" ng-click="deleteNode()">
         Delete
       </md-button>
-      <md-button ng-click="saveNode()">
+      <md-button ng-click="saveNode()" ng-disabled="!editNodeForm.$valid">
         <span ng-show="editMode == true">Update</span><span ng-show="editMode == false">Save</span>
       </md-button>
     </md-dialog-actions>
