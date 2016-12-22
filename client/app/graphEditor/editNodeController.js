@@ -29,6 +29,7 @@
       }
 
       $scope.saveNode = function() {
+        console.log(Object.keys($scope.propertyList).length, $scope.propertyList)
         if($scope.editNodeForm.$valid && Object.keys($scope.propertyList).length>0) {
           if($scope.editMode) {
             updateNode();

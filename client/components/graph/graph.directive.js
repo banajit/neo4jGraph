@@ -507,7 +507,7 @@ angular.module('neo4jApp')
                     angular.forEach(currentSchema['nodes'][node.labelType]['properties'], function(value, key){
                       var KeyVal = node.neo4j_data[key];
                       if(neo4jSrv.getMicaNodeKey(node.labelType, key) != false) {
-                         queryParams.push('entity.' + key + ':' + encodeURI(KeyVal));
+                         queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal));
                       }
                       listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                     });
@@ -603,7 +603,7 @@ angular.module('neo4jApp')
                   if(key !== '_appliesTo') {
                     var KeyVal = edge.neo4j_data[key];
                     if(neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) != false) {
-                       queryParams.push('entity.' + key + ':' + encodeURI(KeyVal));
+                       queryParams.push('entity.' + neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) + ':' + encodeURI(KeyVal));
                     }
                     listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                   }
