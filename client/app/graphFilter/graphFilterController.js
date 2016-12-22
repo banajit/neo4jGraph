@@ -66,6 +66,7 @@
       // Filter graph on search form submit
       // ******************************
       $scope.filterGraph = function() {
+        console.log($scope.searchForm);
         var searchQueries = [];
         $rootScope.searchFilters = {};
         angular.forEach($scope.selectedItem, function(labelVal, labelKey){

@@ -2,7 +2,7 @@
   "nodes": {
     "System": {
       "_default": {
-        "defaultIcon": "graph/uploads/cc7b782c.img2.png",
+        "defaultIcon": "",
         "defaultRank": 1,
         "defaultLabel": "Name",
         "defaultColor": "#3585D4"

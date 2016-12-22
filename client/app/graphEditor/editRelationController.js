@@ -27,7 +27,7 @@
       else {
          ngToast.create({
            className: 'warning',
-           content: 'Please provide atleast one attribute to save the relation.'
+           content: 'At least one attribute must be defined before saving!'
          });
       }
     }
