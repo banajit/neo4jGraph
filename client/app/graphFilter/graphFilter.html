@@ -8,7 +8,7 @@
 </md-toolbar>
 
 <md-content layout-margin>
-  <form name="searchForm">
+  <form id="search-form" name="searchForm" novalidate>
     <accordion>
       <accordion-group ng-repeat="(key, value) in searchMaster" is-open="value.open">
         <accordion-heading>
@@ -29,7 +29,7 @@
             <md-not-found>
               No items matching "{{searchText[keyProp]}}" were found.
             </md-not-found>
-            <div ng-messages="searchForm.autocompleteField[value].$error" ng-if="searchForm.autocompleteField[value].$touched">
+            <div ng-messages="searchForm.autocompleteField[valueProp].$error" ng-if="searchForm.autocompleteField[valueProp].$touched">
             </div>
           </md-autocomplete>
         </div>

@@ -29,13 +29,19 @@
       }
 
       $scope.saveNode = function() {
-        if($scope.editNodeForm.$valid) {
+        if($scope.editNodeForm.$valid && $scope.propertyList.length>0) {
           if($scope.editMode) {
             updateNode();
           }
           else {
             addNode();
           }
+        }
+        else {
+          ngToast.create({
+            className: 'warning',
+            content: 'Please provide atleast one attribute to save the node.'
+          });
         }
       }
 

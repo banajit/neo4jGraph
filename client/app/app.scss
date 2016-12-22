@@ -392,6 +392,10 @@ ul.neo4j-labels li {
    border-radius: 3px;
   }
 
+  #search-form md-input-container {
+    margin: 0px !important;
+  }
+
 
 // Component styles are injected through grunt
 // injector

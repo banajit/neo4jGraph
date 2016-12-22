@@ -28,6 +28,7 @@ var neo4jApp = angular.module('neo4jApp', [
     var configData = CONSTANTS.getConfig();
     //set page title
     $rootScope.pageTitle = configData.pageTitle;
+    $rootScope.customCss = configData.customCss;
   }]);
   var initInjector = angular.injector(['ng']);
   var $http = initInjector.get('$http');

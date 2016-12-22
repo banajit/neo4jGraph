@@ -42,6 +42,7 @@
          }
          var query = 'MATCH(n:' + labelType + ') ' + whereCond + ' return n;';
          console.log('Typeahead - Property Value Search = ', query);
+
          return neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
            var results = [];
            angular.forEach(data.results[0].data, function(Rvalue, Rkey){
@@ -54,10 +55,16 @@
          });
 
       }
+      $scope.selectedItem = {};
+      $scope.changeSelectedItem = function(label, key, text) {
+        $timeout(function () {
+          $scope.selectedItem[label][key] = text;
+        }, 100);
+
+      }
       // ******************************
       // Filter graph on search form submit
       // ******************************
-      $scope.selectedItem = {};
       $scope.filterGraph = function() {
         var searchQueries = [];
         $rootScope.searchFilters = {};
@@ -118,6 +125,7 @@
            $scope.toggleLeft();
         }, 10);*/
         $scope.selectedItem = {};
+        angular.element('#search-form input').val("");
       }
 
       //Refresh layout

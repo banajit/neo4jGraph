@@ -16,13 +16,19 @@
     }
 
     $scope.saveRelation = function() {
-      if($scope.editNodeForm.$valid) {
+      if($scope.editNodeForm.$valid && $scope.propertyValues.length>0) {
         if($scope.editMode) {
           updateRelation();
         }
         else {
           addRelation();
         }
+      }
+      else {
+         ngToast.create({
+           className: 'warning',
+           content: 'Please provide atleast one attribute to save the relation.'
+         });
       }
     }
     //update relation
@@ -66,7 +72,6 @@
          }
        });
        if(properties.length>0) {
-        console.log(sourceNode, targetNode)
           properties = '{' + properties.join(',') + '}';
           var query = 'MATCH (frm:' + sourceNode.labelType + '),(to:' + targetNode.labelType + ') where id(frm) = ' + sourceNode.id + ' and id(to) = ' + targetNode.id + ' create (frm)-[r:' + relationName + ' ' +  properties + ']->(to) return r';
            console.log('Relation Add Query', query);

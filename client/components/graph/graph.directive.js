@@ -408,7 +408,7 @@ angular.module('neo4jApp')
 
           var neo4jRelatedNodes = {};
           sigmaInstance.bind('clickNode', function (e) {
-            if(e.data.captor.ctrlKey == true) {
+            if(e.data.captor.ctrlKey == true && scope.graphMode == 'editor') {
               sigmaInstance.graph.nodes().forEach(function (node) {
                   if(e.data.node.id == node.id) {
                     if(neo4jRelatedNodes[e.data.node.id] != undefined) {

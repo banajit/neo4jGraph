@@ -1,0 +1,19 @@
+.background-color-primary{
+  background-color: rgb(21, 59, 216) !important;
+}
+.background-color-secondary{
+  background-color: rgb(232, 36, 213) !important;
+}
+.background-color-accent1{
+  background-color: rgb(0, 226, 38) !important;
+}
+.background-color-primary-hover-only:hover{
+  background-color: rgb(21, 59, 216) !important;
+} .text-color-primary {color: rgb(21, 59, 216) !important;}
+
+.text-color-primary:hover{
+  color: rgb(21, 59, 216) !important;
+} .text-color-primary-hover-only:hover{color: rgb(21, 59, 216) !important;}
+.text-color-secondary{
+color: rgb(232, 36, 213) !important;
+} .text-color-accent1{color: rgb(0, 226, 38) !important;} .text-color-accent1-hover-only:hover{color: rgb(0, 226, 38) !important;} .svg-color-primary{fill: rgb(21, 59, 216) !important;} .svg-color-secondary{fill: rgb(232, 36, 213) !important;} .border-color-primary{border-color: rgb(21, 59, 216) !important;} .border-color-secondary{border-color: rgb(232, 36, 213) !important;} .logo-background-color{background-color: rgb(193, 43, 43) !important;}
