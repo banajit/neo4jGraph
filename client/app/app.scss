@@ -9,6 +9,11 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 /**
  * App-wide Styles
  */
+@font-face {
+    font-family: Open_Sans;
+    src: url("../fonts/Open_Sans/OpenSans-Regular.ttf");
+}
+
 body, html {
     font-family: Open_Sans,Helvetica,Arial,sans-serif;
     font-weight: 400;
@@ -131,7 +136,7 @@ body.neo4j-app h2 {
     padding-right: 5px;
 }
 .card-info ul li .li-value {
-    font-weight: 600;
+    font-weight: 700;
 }
 .modal-backdrop {
   opacity: 0.6;
@@ -394,6 +399,19 @@ ul.neo4j-labels li {
 
   #search-form md-input-container {
     margin: 0px !important;
+  }
+  .graph-refresh button:hover {
+    color: #FFF;
+  }
+  .graph-refresh {
+    position: absolute;
+    right: 3px;
+    z-index: 10;
+    top: 3px;
+    color: #FFF;
+  }
+  .card-footer .dropdown {
+    font-size: 1rem;
   }
 
 

@@ -114,6 +114,23 @@ angular.module('neo4jApp')
               function(graph) {
                 sigmaInstance.graph.clear();
                 layoutNodesEdges(graph);
+                var conf = {
+                  animation: {
+                    node: {
+                      duration: 800
+                    },
+                    edge: {
+                      duration: 800
+                    },
+                    center: {
+                      duration: 300
+                    }
+                  },
+                  //focusOut: true,
+                  zoomDef: 1
+                };
+                var locate = sigma.plugins.locate(sigmaInstance, conf);
+                locate.center(1);
               }
           );
         }
@@ -228,8 +245,10 @@ angular.module('neo4jApp')
             var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
             var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
             node.size = getNodeSize(rank);
-            node.x = Math.cos(Math.PI * 2 * i / N);
-            node.y = Math.sin(Math.PI * 2 * i / N);
+            /*node.x = Math.cos(Math.PI * 2 * i / N);
+            node.y = Math.sin(Math.PI * 2 * i / N);*/
+            node.x = Math.random();
+            node.y = Math.random();
             node.type = 'image';
             node.url = node.neo4j_data.iconUrl;
             node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
@@ -499,7 +518,7 @@ angular.module('neo4jApp')
                     var cardInfo = document.createElement('div');
                     cardInfo.id = 'neo4j-card-info';
                     cardInfo.className = 'card-info';
-                    cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + node.label + '">' + node.label + '</h2>';
+                    cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + node.label + '"><span class="text-color-accent2">' + node.label + '</span></h2>';
 
 
                     var queryParams = [];
@@ -544,7 +563,7 @@ angular.module('neo4jApp')
                     dropDownList1.onclick = function () {
                         jQuery(".dropdown-menu").toggle();
                     };
-                    dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Open in MICA</a>';
+                    dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Search</a>';
                     dropDownListWrapper.appendChild(dropDownList1);
                     if(scope.graphMode == 'editor') {
                       var dropDownList2 = document.createElement('li');
@@ -642,7 +661,7 @@ angular.module('neo4jApp')
                 dropDownList1.onclick = function () {
                     jQuery(".dropdown-menu").toggle();
                 };
-                dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Open in MICA</a>';
+                dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Search</a>';
                 dropDownListWrapper.appendChild(dropDownList1);
                 if(scope.graphMode == 'editor') {
                   var dropDownList2 = document.createElement('li');

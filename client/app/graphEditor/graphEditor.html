@@ -8,7 +8,7 @@
 
     <md-sidenav class="md-sidenav-left" md-component-id="editor" md-whiteframe="4" md-disable-backdrop>
       <md-toolbar>
-        <div class="left-sidebar">
+        <div class="left-sidebar background-color-primary">
           <div class="pull-left"><h1 class="md-toolbar-tools">Drag Node to Add</h1></div>
           <div class="pull-right">
             <div class="md-accent md-toolbar-tools cursor-pointer" ng-click="toggleEditor()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></div>
@@ -31,10 +31,10 @@
 
     <md-content flex>
       <div class="neo4j-toggle-left">
-        <md-button ng-click="toggleLeft()" class="md-raised md-primary">
+        <md-button ng-click="toggleLeft()" class="md-raised md-primary background-color-primary">
         <i class="fa fa-search" aria-hidden="true"></i> Filter
       </md-button>
-      <md-button ng-click="toggleEditor()" class="md-raised md-primary">
+      <md-button ng-click="toggleEditor()" class="md-raised md-primary background-color-primary">
         <i class="fa fa-plus" aria-hidden="true"></i> Node
       </md-button>
       </div>
@@ -47,7 +47,12 @@
             </div>
           </span>
         </div>
-        <div class="page-title">{{pageTitle}}</div>
+        <div class="graph-refresh">
+          <button ng-click="resetGraph()" class="btn md-raised background-color-secondary">
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="page-title border-color-accent1">{{pageTitle}}</div>
         <graph></graph>
       </div>
     </md-content>

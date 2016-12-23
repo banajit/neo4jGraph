@@ -6,7 +6,7 @@
 
     <md-content flex>
       <div class="neo4j-toggle-left">
-        <md-button ng-click="toggleLeft()" class="md-raised md-primary">
+        <md-button ng-click="toggleLeft()" class="md-raised md-primary background-color-primary">
           <i class="fa fa-search" aria-hidden="true"></i> Filter
         </md-button>
       </div>
@@ -19,7 +19,12 @@
             </div>
           </span>
         </div>
-        <div class="page-title">{{pageTitle}}</div>
+        <div class="graph-refresh">
+          <button ng-click="resetGraph()" class="btn md-raised background-color-secondary">
+            <i class="fa fa-refresh" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="page-title border-color-accent1">{{pageTitle}}</div>
         <graph></graph>
       </div>
     </md-content>

@@ -1,6 +1,6 @@
 <md-dialog aria-label="{{labelName}}">
   <md-toolbar>
-    <div class="md-toolbar-tools">
+    <div class="md-toolbar-tools background-color-primary">
       <h2>Connect Nodes</h2>
     </div>
   </md-toolbar>
@@ -26,10 +26,10 @@
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <md-button ng-click="closeDialog()">
+    <md-button ng-click="closeDialog()" class="md-raised">
       CANCEL
     </md-button>
-    <md-button ng-click="connectNodes()">
+    <md-button ng-click="connectNodes()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
       <span>CONNECT</span>
     </md-button>
   </md-dialog-actions>

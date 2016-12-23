@@ -1,6 +1,6 @@
 <md-dialog aria-label="{{labelName}}" cg-busy="{promise:uploadPromise,message:'Uploading Icon...'}">
     <md-toolbar>
-      <div class="md-toolbar-tools">
+      <div class="md-toolbar-tools background-color-primary">
         <h2>{{labelName}}</h2>
       </div>
     </md-toolbar>
@@ -10,9 +10,10 @@
         <form name="editNodeForm" action="upload" enctype="multipart/form-data" role="form" novalidate>
             <md-input-container ng-repeat="(key, value) in nodeInfo.properties">
               <label>{{value.displayName}}</label>
-              <input name="{{key}}" ng-model="propertyList[key]"
+              <input name="{{key}}" ng-model="propertyList[key]" ng-required="value.required"
                      ng-pattern="value.restriction">
               <div ng-messages="editNodeForm[key].$error">
+                <div ng-message="required">This is required.</div>
                 <div ng-message="pattern" class="my-message">Invalid Data type!</div>
               </div>
             </md-input-container>
@@ -22,13 +23,13 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <md-button ng-click="closeDialog()">
+      <md-button ng-click="closeDialog()" class="md-raised">
         CANCEL
       </md-button>
-      <md-button ng-show="editMode" ng-click="deleteNode()">
+      <md-button ng-show="editMode" ng-click="deleteNode()" class="md-raised">
         Delete
       </md-button>
-      <md-button ng-click="saveNode()" ng-disabled="!editNodeForm.$valid">
+      <md-button ng-click="saveNode()" ng-disabled="!editNodeForm.$valid" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
         <span ng-show="editMode == true">Update</span><span ng-show="editMode == false">Save</span>
       </md-button>
     </md-dialog-actions>

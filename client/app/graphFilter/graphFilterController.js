@@ -109,7 +109,7 @@
         $scope.filterGraph();
       }
       //Reset graph
-      $scope.resetGraph = function() {
+      $rootScope.resetGraph = function() {
         var data = CONSTANTS.getConfig();
         var neo4jConfig = data.neo4jConfig;
         var currentSchema = CONSTANTS.getSchema();
