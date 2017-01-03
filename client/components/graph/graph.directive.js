@@ -32,7 +32,7 @@ angular.module('neo4jApp')
                 node[prefix + 'y'],
                 node[prefix + 'size'],
                 0,
-                Math.PI * 2,
+                0,
                 true
               );
               context.closePath();
@@ -174,6 +174,7 @@ angular.module('neo4jApp')
           sigmaInstance.graph.edges().forEach(function (edge) {
               if(inputEdge.id == edge.id) {
                 edge.neo4j_data = inputEdge.neo4j_data;
+                 edge.label = edge.neo4j_data[currentSchema['relationships'][edge.neo4j_type]['_default']['defaultLabel']];
               }
           });
           sigmaInstance.refresh();
@@ -221,9 +222,10 @@ angular.module('neo4jApp')
 
         //listen for node add
         scope.$on('addEdgeToGraph', function (event, edge) {
-          edge.color = '#ccc';
+          edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
           edge.hover_color = '#000';
-          edge.type = 'arrow';
+          edge.type = 'curvedArrow';
+          edge.label = edge.neo4j_data[currentSchema['relationships'][edge.neo4j_type]['_default']['defaultLabel']];
           sigmaInstance.graph.addEdge(edge);
           sigma.canvas.edges.autoCurve(sigmaInstance);
           sigmaInstance.refresh();
@@ -249,8 +251,15 @@ angular.module('neo4jApp')
             node.y = Math.sin(Math.PI * 2 * i / N);*/
             node.x = Math.random();
             node.y = Math.random();
-            node.type = 'image';
-            node.url = node.neo4j_data.iconUrl;
+            node.type = 'circle';
+            //node.url = node.neo4j_data.iconUrl;
+            node.image = {
+              url: node.neo4j_data.iconUrl,
+              clip: 1,
+              scale: 1,
+              w: 1,
+              h: 1
+            };
             node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
             node.border_size = 1;
             node.border_color = '#11507a';
@@ -258,10 +267,10 @@ angular.module('neo4jApp')
             i++;
           });
           graph.edges.forEach(function(edge, key) {
-            //edge.count = key;
-            edge.color = '#ccc';
+            edge.label = edge.neo4j_data[currentSchema['relationships'][edge.neo4j_type]['_default']['defaultLabel']];
+            edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
             edge.hover_color = '#000';
-            edge.type = 'arrow';
+            edge.type = "arrow";
             sigmaInstance.graph.addEdge(edge);
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
@@ -354,13 +363,14 @@ angular.module('neo4jApp')
             maxNodeSize: 30,
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
+            nodeHoverLevel:2,
             defaultLabelSize: 9,
             drawEdgeLabels: false,
             enableEdgeHovering: true,
             edgeHoverSizeRatio: 2,
             zoomOnLocation: true,
             edgeHoverExtremities: true,
-            edgeHoverLevel:0,
+            //edgeHoverLevel:0,
             zoomMin: 0.001,
             zoomMax: 300,
             doubleClickEnabled: false,
@@ -387,7 +397,7 @@ angular.module('neo4jApp')
             if (!e.data.enter.nodes.length) {
               //on mouseout
               sigmaInstance.graph.edges().forEach(function (edge) {
-                  edge.color = '#ccc';
+                  edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
                   //edge.hidden = false;
               });
               sigmaInstance.graph.nodes().forEach(function (node) {
@@ -532,8 +542,10 @@ angular.module('neo4jApp')
                     });
                     var missingProps = _.difference(Object.keys(node.neo4j_data), Object.keys(currentSchema['nodes'][node.labelType]['properties']));
                     angular.forEach(missingProps, function(value){
-                      var KeyVal = node.neo4j_data[value];
-                      listInfo += '<li><span class="li-title">' + value + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                      if(value!= 'iconUrl') {
+                        var KeyVal = node.neo4j_data[value];
+                        listInfo += '<li><span class="li-title">' + value + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                      }
                     });
                     var cardInfoList = document.createElement('ul');
                     cardInfoList.innerHTML = listInfo;
@@ -563,7 +575,7 @@ angular.module('neo4jApp')
                     dropDownList1.onclick = function () {
                         jQuery(".dropdown-menu").toggle();
                     };
-                    dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Search</a>';
+                    dropDownList1.innerHTML = '<a href="' + queryStr + '">Search</a>';
                     dropDownListWrapper.appendChild(dropDownList1);
                     if(scope.graphMode == 'editor') {
                       var dropDownList2 = document.createElement('li');
@@ -619,7 +631,7 @@ angular.module('neo4jApp')
                 });*/
 
                 angular.forEach(currentSchema['relationships'][edge.neo4j_type], function(value, key){
-                  if(key !== '_appliesTo') {
+                  if(key !== '_appliesTo' && key !== '_default') {
                     var KeyVal = edge.neo4j_data[key];
                     if(neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) != false) {
                        queryParams.push('entity.' + neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) + ':' + encodeURI(KeyVal));
@@ -661,7 +673,7 @@ angular.module('neo4jApp')
                 dropDownList1.onclick = function () {
                     jQuery(".dropdown-menu").toggle();
                 };
-                dropDownList1.innerHTML = '<a href="' + queryStr + '" target="_blank">Search</a>';
+                dropDownList1.innerHTML = '<a href="' + queryStr + '">Search</a>';
                 dropDownListWrapper.appendChild(dropDownList1);
                 if(scope.graphMode == 'editor') {
                   var dropDownList2 = document.createElement('li');

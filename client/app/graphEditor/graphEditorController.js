@@ -108,6 +108,7 @@
         $scope.relationshipProperties = angular.copy(relation.relationship, $scope.relationshipProperties);
         var relationName = relation.name;
         delete $scope.relationshipProperties['_appliesTo'];
+        delete $scope.relationshipProperties['_default'];
         $scope.openRelationEditor(sourceNode, targetNode, $scope.relationshipProperties, {}, relationName, {});
       });
 
@@ -133,6 +134,7 @@
         if(relationKey !== '') {
           $scope.relationshipProperties = angular.copy(relationship[relationKey], $scope.relationshipProperties);
           delete $scope.relationshipProperties['_appliesTo'];
+          delete $scope.relationshipProperties['_default'];
           var propertyValues = {};
           angular.forEach(data.edge.neo4j_data, function(value, key){
              propertyValues[key] = value;

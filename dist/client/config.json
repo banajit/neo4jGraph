@@ -1,0 +1,27 @@
+{
+  "pageTitle": "Application Landscape",
+  "slideConfig": {
+    "slideInterval": 1000
+  },
+  "slideUrls": [
+    {
+      "url": "graphBrowser"
+    },
+    {
+      "url": "graphEditor"
+    },
+    {
+      "url": "http://localhost/test/index.html",
+      "siteWidth": 1024
+    },
+    {
+      "url": "http://www.zaloni.com"
+    }
+  ],
+  "neo4jConfig": {
+    "serverUrl": "http://localhost:7474",
+    "user": "neo4j",
+    "password": "neo4j@zaloni"
+  },
+  "micaUrl": "http://192.168.2.90:8089/#/catalog"
+}

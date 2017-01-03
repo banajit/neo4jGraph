@@ -23,7 +23,7 @@
             dnd-effect-allowed="copy"
           >
           <img ng-if="getBackgroundIcon(key)" src="{{getBackgroundIcon(key)}}" class="img-circle" alt="Cinque Terre" width="70" height="70">
-          <div ng-class="{'no-icon-title': !getBackgroundIcon(key), 'icon-title': getBackgroundIcon(key)}" class="node-label-title"><strong>{{key}} </strong></div></img>
+          <div ng-class="{'no-icon-title': !getBackgroundIcon(key), 'icon-title': getBackgroundIcon(key)}" class="node-label-title"><strong>{{value._default.displayName}} </strong></div></img>
         </li>
       </ul>
     </md-sidenav>
@@ -48,7 +48,7 @@
           </span>
         </div>
         <div class="graph-refresh">
-          <button ng-click="resetGraph()" class="btn md-raised background-color-secondary">
+          <button ng-click="resetGraph()" class="btn md-raised background-color-primary">
             <i class="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>

@@ -31,7 +31,7 @@
            }
          });
          if(neo4jSrv.getDataType(labelType, propertyKey) == 'string') {
-            conditions.push('lower(n.' + propertyKey + ') =~ "' + queryStrn.toLowerCase() + '.*"');
+            conditions.push('lower(n.' + propertyKey + ') =~ ".*' + queryStrn.toLowerCase() + '.*"');
          }
          else {
             conditions.push('n.' + propertyKey + ' = ' + queryStrn);

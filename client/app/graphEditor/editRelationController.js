@@ -41,7 +41,6 @@
            neo4j_data[key] = value;
          }
       });
-      console.log(edge, properties)
       if(properties.length>0) {
          properties = properties.join(',');
          var query = 'MATCH (:' + sourceNode.labelType + ')-[r]->(:' + targetNode.labelType + ') where id(r)=' + edge.id + ' set ' + properties + ' return r';
