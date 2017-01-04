@@ -39,7 +39,8 @@
         "Rank": {
           "displayName": "Rank",
           "restriction": "[0-9]+",
-          "dataType": "string"
+          "dataType": "string",
+          "visibility": false
         },
         "Hosting": {
           "displayName": "Hosting",
@@ -60,6 +61,12 @@
           "displayName": "Name",
           "restriction": ".*",
           "required": true
+        },
+        "Rank": {
+          "displayName": "Rank",
+          "restriction": "[0-9]+",
+          "dataType": "string",
+          "visibility": false
         }
       }
     }

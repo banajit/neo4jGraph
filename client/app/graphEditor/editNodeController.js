@@ -68,7 +68,7 @@
            properties = properties.join(',');
            var query = 'match (n:' + labelName + ') where id(n) = ' + node.id + ' set ' + properties + ' return n';
            console.log('Update Query', query);
-           neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+           $scope.uploadPromise = neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
               if(data.errors.length == 0) {
                 ngToast.create({
                   className: 'success',
@@ -104,7 +104,7 @@
             properties = properties.join(',');
             var query = 'CREATE (n:' + labelName + ' {' + properties + '}) return n';
             console.log(query)
-            neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+            $scope.uploadPromise = neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
                if(data.errors.length == 0) {
                  ngToast.create({
                    className: 'success',

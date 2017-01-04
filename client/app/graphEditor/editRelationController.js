@@ -45,7 +45,7 @@
          properties = properties.join(',');
          var query = 'MATCH (:' + sourceNode.labelType + ')-[r]->(:' + targetNode.labelType + ') where id(r)=' + edge.id + ' set ' + properties + ' return r';
          console.log('Update Query', query);
-         neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+         $scope.uploadPromise = neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
             if(data.errors.length == 0) {
                ngToast.create({
                  className: 'success',
@@ -74,7 +74,7 @@
           properties = '{' + properties.join(',') + '}';
           var query = 'MATCH (frm:' + sourceNode.labelType + '),(to:' + targetNode.labelType + ') where id(frm) = ' + sourceNode.id + ' and id(to) = ' + targetNode.id + ' create (frm)-[r:' + relationName + ' ' +  properties + ']->(to) return r';
            console.log('Relation Add Query', query);
-          neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
+          $scope.uploadPromise = neo4jSrv.executeCypherQuery(serverConfig, query).then(function(data) {
              if(data.errors.length == 0) {
                ngToast.create({
                  className: 'success',

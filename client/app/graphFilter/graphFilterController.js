@@ -8,8 +8,10 @@
       // Load all configurations for graphdb access and leftsidebar
       // ******************************
       var currentSchema = CONSTANTS.getSchema();
+      $scope.selectedLabels = {};
       angular.forEach(currentSchema.nodes, function(value, key){
         $scope.searchMaster[key] = value;
+        $scope.selectedLabels[key] = true;
       });
 
       var data = CONSTANTS.getConfig();
@@ -66,12 +68,12 @@
       // Filter graph on search form submit
       // ******************************
       $scope.filterGraph = function() {
-        console.log($scope.searchForm);
         var searchQueries = [];
         $rootScope.searchFilters = {};
         angular.forEach($scope.selectedItem, function(labelVal, labelKey){
           var conditions = [], whereCond = '';
           var innerElems = {};
+          $scope.selectedLabels[labelKey] = true;
           angular.forEach(labelVal, function(value, key){
             if(value !== null) {
               var cond = (neo4jSrv.getDataType(labelKey, key) == 'string')?'n.' + key + ' = ' + '"' + value + '"':'n.' + key + ' = ' + value;
@@ -109,14 +111,15 @@
         $scope.filterGraph();
       }
       //Reset graph
+      var neo4jConfig = data.neo4jConfig;
+      var currentSchema = CONSTANTS.getSchema();
       $rootScope.resetGraph = function() {
         var data = CONSTANTS.getConfig();
-        var neo4jConfig = data.neo4jConfig;
-        var currentSchema = CONSTANTS.getSchema();
         var queryList = [];
         angular.forEach(currentSchema.nodes, function(value, key){
           var query = 'match (n:' + key + ') with n optional MATCH (n)-[r]-() RETURN n,r';
           queryList.push(query);
+          $scope.selectedLabels[key] = true;
         });
         var queryStr = queryList.join(' UNION ');
         console.log('Query = ', queryStr);
@@ -133,6 +136,33 @@
       //Refresh layout
       $scope.refreshLayout = function() {
         $scope.$broadcast('refreshLayout');
+      }
+
+      //update graph
+      $scope.updateGraph = function($event, key) {
+        $scope.searchMaster[key].open = ($scope.searchMaster[key].open == true)?false:true;
+        if(Object.keys($scope.selectedLabels).length == 1 && $scope.selectedLabels[key] != undefined) {
+          return true;
+        }
+        $timeout(function () {
+          var checkbox = $event.target;
+          var action = (checkbox.checked ? 'add' : 'remove');
+          if($scope.selectedLabels[key] == undefined) {
+            $scope.selectedLabels[key] = true;
+          }
+          else {
+            delete $scope.selectedLabels[key];
+          }
+          var queryList = [];
+          angular.forEach($scope.selectedLabels, function(value, key){
+            var query = 'match (n:' + key + ') with n optional MATCH (n)-[r]-() RETURN n,r';
+            queryList.push(query);
+          });
+          var queryStr = queryList.join(' UNION ');
+          console.log('Query = ', queryStr);
+          var graphMetaInfo = {serverConfig:neo4jConfig, neo4jQuery:queryStr};
+          $scope.$emit('refreshGraph', graphMetaInfo);
+        });
       }
   }
   angular.module('neo4jApp')

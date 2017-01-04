@@ -12,7 +12,8 @@
     <accordion>
       <accordion-group ng-repeat="(key, value) in searchMaster" is-open="value.open">
         <accordion-heading>
-          <div class="cursor-pointer">{{key}}<i class="pull-right fa" ng-class="{'fa-angle-right': !value.open, 'fa-angle-down': value.open}"></i></div>
+          <span><input ng-attr-id="{{key}}" ng-checked="selectedLabels[key]" ng-click="updateGraph($event, key)" type="checkbox" name="group"></span>
+          <span class="cursor-pointer">{{key}}<i class="pull-right fa" ng-class="{'fa-angle-right': !value.open, 'fa-angle-down': value.open}"></i></span>
         </accordion-heading>
         <div layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value.properties">
           <md-autocomplete flex

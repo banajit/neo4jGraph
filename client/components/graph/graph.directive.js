@@ -11,6 +11,7 @@ angular.module('neo4jApp')
       link: function (scope) {
         var currentSchema = CONSTANTS.getSchema();
         var sigmaInstance, loaded = 0;
+        var appConfig = CONSTANTS.getConfig();
         sigma.utils.pkg('sigma.canvas.nodes');
         sigma.canvas.nodes.image = (function() {
           var _cache = {},
@@ -233,7 +234,8 @@ angular.module('neo4jApp')
         var image_urls = [];
 
         function getNodeSize(rank) {
-          return (35-rank*10);
+          var nodeSize = ((appConfig.graphConfig.maxNodeSize+appConfig.graphConfig.nodeSizeFactor)-rank*appConfig.graphConfig.nodeSizeFactor);
+          return nodeSize;
         }
 
         //update node and edge array
@@ -275,7 +277,7 @@ angular.module('neo4jApp')
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: 100,
+            iterations: N,
             easing: 'quadraticInOut',
             duration: 10,
             gravity: 2
@@ -290,6 +292,7 @@ angular.module('neo4jApp')
             }
           });
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
+
         }
 
         function startLoader(message) {
@@ -315,15 +318,6 @@ angular.module('neo4jApp')
                   if(value.neo4j_data.iconUrl != undefined) {
                     image_urls.push(value.neo4j_data.iconUrl);
                   }
-                  /*angular.forEach(graph.edges, function (edgeVal) {
-                      if (value.id === edgeVal.source) {
-                          tempTarget.push(edgeVal.target);
-                      }
-                      if (value.id === edgeVal.target) {
-                          tempSource.push(edgeVal.source);
-                      }
-                  });
-                  graph.edgeNodeRef[value.id] = {source: tempSource, target: tempTarget};*/
               });
               //sigmaInstance = createSigmaInstance(graph);
               if(image_urls.length == 0) {
@@ -359,8 +353,8 @@ angular.module('neo4jApp')
           layoutNodesEdges(graph);
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
-            minNodeSize: 10,
-            maxNodeSize: 30,
+            minNodeSize: appConfig.graphConfig.minNodeSize,
+            maxNodeSize: appConfig.graphConfig.maxNodeSize,
             defaultLabelColor: '#000',
             labelAlignment: 'bottom',
             nodeHoverLevel:2,
@@ -370,7 +364,6 @@ angular.module('neo4jApp')
             edgeHoverSizeRatio: 2,
             zoomOnLocation: true,
             edgeHoverExtremities: true,
-            //edgeHoverLevel:0,
             zoomMin: 0.001,
             zoomMax: 300,
             doubleClickEnabled: false,
@@ -399,9 +392,6 @@ angular.module('neo4jApp')
               sigmaInstance.graph.edges().forEach(function (edge) {
                   edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
                   //edge.hidden = false;
-              });
-              sigmaInstance.graph.nodes().forEach(function (node) {
-                  //node.hidden = false;
               });
             }
             else {
@@ -479,42 +469,7 @@ angular.module('neo4jApp')
 
           //Show tooltip
           var config_tooltip = {
-            node: [/*{
-              show: 'rightClickNode',
-              cssClass: 'sigma-tooltip-editor',
-              position: 'right',
-              autoadjust: true,
-              template:
-                  '<div class="arrow"></div>' +
-                  ' <div class="sigma-tooltip-header cursor-pointer" id="edit-element"><a ng-href"><strong>Edit</strong> {{label}}</div>' +
-                  ' <div class="sigma-tooltip-footer cursor-pointer"><a ng-href ng-click="deleteNode()"><strong>Delete</strong> {{label}}</div>',
-                renderer: function(node, template) {
-                  if(scope.graphMode == 'editor') {
-                    var arrowElement = document.createElement('div');
-                    arrowElement.className = 'arrow';
-                    var menuHeaderElm = document.createElement('div');
-                    menuHeaderElm.className = 'node-operation sigma-tooltip-header cursor-pointer';
-                    menuHeaderElm.innerHTML = 'Edit ' + node.label;
-                    menuHeaderElm.onclick = function () {
-                        updateNode(node);
-                    };
-
-                    var menuFooterElm = document.createElement('div');
-                    menuFooterElm.className = 'node-operation sigma-tooltip-footer cursor-pointer';
-                    menuFooterElm.innerHTML = 'Delete ' + node.label;
-                    menuFooterElm.onclick = function () {
-                        deleteNode(node);
-                    };
-
-                    var el = document.createElement('div');
-                    el.appendChild(arrowElement);
-                    el.appendChild(menuHeaderElm);
-                    el.appendChild(menuFooterElm);
-                    return el;
-                    //return Mustache.render(template, node);
-                  }
-                }
-              },*/
+            node: [
               {
                 show: 'clickNode',
                 cssClass: 'sigma-tooltip',
@@ -538,7 +493,9 @@ angular.module('neo4jApp')
                       if(neo4jSrv.getMicaNodeKey(node.labelType, key) != false) {
                          queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal));
                       }
-                      listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                      if(value.visibility != false) {
+                        listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
+                      }
                     });
                     var missingProps = _.difference(Object.keys(node.neo4j_data), Object.keys(currentSchema['nodes'][node.labelType]['properties']));
                     angular.forEach(missingProps, function(value){
@@ -620,7 +577,7 @@ angular.module('neo4jApp')
                 var cardInfo = document.createElement('div');
                 cardInfo.id = 'neo4j-card-info';
                 cardInfo.className = 'card-info';
-                cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + edge.label + '">' + edge.label + '</h2>';
+                cardInfo.innerHTML = '<h2 class="card-header border-color-accent1" title="' + edge.label + '"><span class="text-color-accent2">' + edge.label + '</span></h2>';
 
 
                 var queryParams = [];

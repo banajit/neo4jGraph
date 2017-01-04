@@ -29,7 +29,6 @@
       uploadFile: function (file, uploadUrl) {
         var formdata = new FormData();
         formdata.append('file', file);
-        console.log(file);
         var request = {
             method: 'POST',
             url: uploadUrl,
