@@ -274,7 +274,6 @@ angular.module('neo4jApp')
             }
             else {
               node.type = 'image';
-              console.log(node.neo4j_data.iconUrl);
               //node.url = node.neo4j_data.iconUrl;
               node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
               node.image = {
@@ -377,11 +376,11 @@ angular.module('neo4jApp')
             autoCurveSortByDirection: true,
             minNodeSize: appConfig.graphConfig.minNodeSize,
             maxNodeSize: appConfig.graphConfig.maxNodeSize,
-            defaultLabelColor: appConfig.graphConfig.nodeLabelColor,
+            defaultLabelColor: appConfig.graphConfig.nodeLabelFontColor,
             labelHoverBGColor: 'node',
             labelAlignment: 'center',
             nodeHoverLevel:2,
-            defaultLabelSize: appConfig.graphConfig.nodeLabelSize,
+            defaultLabelSize: appConfig.graphConfig.nodeLabelFontSize,
             drawEdgeLabels: false,
             enableEdgeHovering: true,
             edgeHoverSizeRatio: 2,
