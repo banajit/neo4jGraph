@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function homeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window) {
+  function homeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window, $timeout) {
     /**
      * Controller variables
      */
@@ -14,26 +14,33 @@
 
     //get config data
     var slideConfig = {};
-    $scope.slickConfigLoaded  = true;
+
+
     var data = CONSTANTS.getConfig();
     CONSTANTS.setStateVariable('neo4jConfig', data.neo4jConfig);
     slideConfig = data.slideConfig;
     $scope.slides = data.slideUrls;
-      $scope.slickConfig = {
-        dots: true,
-        autoplay: true,
-        initialSlide: 0,
-        infinite: false,
-        autoplaySpeed: slideConfig.slideInterval,
-        method: {}
-      };
+    $scope.slickConfig = {
+      dots: true,
+      autoplay: true,
+      initialSlide: 0,
+      infinite: false,
+      autoplaySpeed: slideConfig.slideInterval,
+      method: {}
+    };
+    $scope.slickConfigLoaded  = true;
+    $timeout(function () {
+       angular.forEach($scope.slides, function(value, key){
+         angular.element('#caraousal-wrapper-' + key).width(value.siteWidth+100);
+       });
+    }, 100);
+
 
     //adjust width for less resolution frame
     $scope.getCaraousalWidth = function(width) {
-      if(width !== undefined) {
-        return { width:width+100 + 'px' };
-      }
-
+       if(width !== undefined) {
+         return { width:width+100 + 'px' };
+       }
     }
 
   };

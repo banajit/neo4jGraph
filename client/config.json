@@ -5,17 +5,17 @@
   },
   "slideUrls": [
     {
-      "url": "graphBrowser"
+      "url": "http://www.zaloni.com"
     },
     {
       "url": "graphEditor"
     },
     {
-      "url": "http://localhost/test/index.html",
-      "siteWidth": 1024
+      "url": "graphBrowser"
     },
     {
-      "url": "http://www.zaloni.com"
+      "url": "http://localhost/test/index.html",
+      "siteWidth": 1024
     }
   ],
   "neo4jConfig": {
@@ -24,9 +24,11 @@
     "password": "neo4j@zaloni"
   },
   "graphConfig": {
-    "minNodeSize": 5,
-    "maxNodeSize": 30,
-    "nodeSizeFactor": 10
+    "minNodeSize": 10,
+    "maxNodeSize": 35,
+    "nodeSizeFactor": 10,
+    "nodeLabelColor": "#FFF",
+    "nodeLabelSize": 12
   },
   "micaUrl": "http://192.168.2.90:8089/#/catalog"
 }

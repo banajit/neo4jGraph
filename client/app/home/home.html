@@ -2,8 +2,8 @@
   <div flex class="carausal-slider" ng-mouseover="stopCaraousal">
     <div flex>
       <slick class="slider" settings="slickConfig" ng-if="slickConfigLoaded" dots="true">
-        <div ng-repeat="(key,slide) in slides">
-          <div class="caraousal-wrapper" ng-attr-id="caraousal-wrapper-{{key}}" ng-style="getCaraousalWidth(slide.siteWidth);">
+        <div ng-repeat="(key,slide) in slides" class="neo4j-slider">
+          <div class="caraousal-wrapper" ng-attr-id="caraousal-wrapper-{{key}}">
             <iframe class="caraousal" height="100%" width="100%" ng-src="{{slide.url | trustAsResourceUrl}}"></iframe>
           </div>
         </div>

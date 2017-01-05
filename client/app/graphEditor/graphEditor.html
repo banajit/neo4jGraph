@@ -1,4 +1,4 @@
-<div id="nbc-graph-editor" ng-cloak>
+<div id="nbc-graph-editor">
   <section layout="row" flex>
     <md-sidenav class="md-sidenav-left" md-component-id="filter" md-whiteframe="4" md-enable-backdrop>
       <div ng-controller="graphFilterCtrl"><ng-include src="'app/graphFilter/graphFilter.html'"></ng-include></div>
@@ -52,7 +52,7 @@
             <i class="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>
-        <div class="page-title border-color-accent1">{{pageTitle}}</div>
+        <div class="page-title">{{pageTitle}}</div>
         <graph></graph>
       </div>
     </md-content>
