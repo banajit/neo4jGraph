@@ -153,7 +153,14 @@ angular.module('neo4jApp')
                 node.neo4j_data = inputNode.neo4j_data;
                 if(inputNode.neo4j_data.iconUrl !== undefined) {
                   image_urls.push(inputNode.neo4j_data.iconUrl);
-                  node.url = inputNode.neo4j_data.iconUrl;
+                  //node.url = inputNode.neo4j_data.iconUrl;
+                  node.image = {
+                    url: node.neo4j_data.iconUrl,
+                    clip: 1,
+                    scale: 1.4,
+                    w: 1,
+                    h: 1
+                  };
                 }
                 var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
                 var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
@@ -205,7 +212,14 @@ angular.module('neo4jApp')
           node.size = getNodeSize(rank);
           if(node.neo4j_data.iconUrl !== undefined) {
             image_urls.push(node.neo4j_data.iconUrl);
-            node.url = node.neo4j_data.iconUrl;
+            //node.url = node.neo4j_data.iconUrl;
+            node.image = {
+              url: node.neo4j_data.iconUrl,
+              clip: 1,
+              scale: 1.4,
+              w: 1,
+              h: 1
+            };
           }
           node.border_color = '#11507a';
           node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
@@ -253,16 +267,25 @@ angular.module('neo4jApp')
             node.y = Math.sin(Math.PI * 2 * i / N);*/
             node.x = Math.random();
             node.y = Math.random();
-            node.type = 'circle';
             //node.url = node.neo4j_data.iconUrl;
-            node.image = {
-              url: node.neo4j_data.iconUrl,
-              clip: 1,
-              scale: 1,
-              w: 1,
-              h: 1
-            };
-            node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
+            if(node.neo4j_data.iconUrl == undefined) {
+              //node.type = 'def';
+              node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
+            }
+            else {
+              node.type = 'image';
+              console.log(node.neo4j_data.iconUrl);
+              //node.url = node.neo4j_data.iconUrl;
+              node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
+              node.image = {
+                url: node.neo4j_data.iconUrl,
+                clip: 1,
+                scale: 1.4,
+                w: 1,
+                h: 1
+              };
+            }
+
             node.border_size = 1;
             node.border_color = '#11507a';
             sigmaInstance.graph.addNode(node);
@@ -319,7 +342,6 @@ angular.module('neo4jApp')
                     image_urls.push(value.neo4j_data.iconUrl);
                   }
               });
-              //sigmaInstance = createSigmaInstance(graph);
               if(image_urls.length == 0) {
                 sigmaInstance = createSigmaInstance(graph);
               }
