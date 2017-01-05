@@ -263,10 +263,10 @@ angular.module('neo4jApp')
             var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
             var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
             node.size = getNodeSize(rank);
-            node.x = Math.cos(Math.PI * 2 * i / N);
-            node.y = Math.sin(Math.PI * 2 * i / N);
-            /*node.x = Math.random();
-            node.y = Math.random();*/
+            /*node.x = Math.cos(Math.PI * 2 * i / N);
+            node.y = Math.sin(Math.PI * 2 * i / N);*/
+            node.x = Math.random();
+            node.y = Math.random();
             //node.url = node.neo4j_data.iconUrl;
             if(node.neo4j_data.iconUrl == undefined) {
               //node.type = 'def';
