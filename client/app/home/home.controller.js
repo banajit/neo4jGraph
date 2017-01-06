@@ -29,18 +29,18 @@
       method: {}
     };
     $scope.slickConfigLoaded  = true;
-    $timeout(function () {
+    /*$timeout(function () {
        angular.forEach($scope.slides, function(value, key){
          angular.element('#caraousal-wrapper-' + key).width(value.siteWidth+100);
        });
-    }, 100);
+    }, 100);*/
 
 
     //adjust width for less resolution frame
-    $scope.getCaraousalWidth = function(width) {
-       if(width !== undefined) {
-         return { width:width+100 + 'px' };
-       }
+    $scope.getCaraousalWidth = function(key,width) {
+       $timeout(function () {
+          angular.element('#caraousal-wrapper-' + key).width(width+100);
+       },5000);
     }
 
   };

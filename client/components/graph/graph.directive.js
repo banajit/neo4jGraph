@@ -222,6 +222,7 @@ angular.module('neo4jApp')
             };
           }
           node.border_color = '#11507a';
+          node.border_size = 1;
           node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
           sigmaInstance.graph.addNode(node);
           sigma.layouts.fruchtermanReingold.start(sigmaInstance);
@@ -376,7 +377,7 @@ angular.module('neo4jApp')
             autoCurveSortByDirection: true,
             minNodeSize: appConfig.graphConfig.minNodeSize,
             maxNodeSize: appConfig.graphConfig.maxNodeSize,
-            defaultLabelColor: appConfig.graphConfig.nodeLabelFontColor,
+            labelColor: appConfig.graphConfig.nodeLabelFontColor,
             labelHoverBGColor: 'node',
             labelAlignment: 'center',
             nodeHoverLevel:2,
@@ -554,7 +555,15 @@ angular.module('neo4jApp')
                     dropDownList1.onclick = function () {
                         jQuery(".dropdown-menu").toggle();
                     };
-                    dropDownList1.innerHTML = '<a href="' + queryStr + '">Search</a>';
+
+                    var dropDownSearch = document.createElement('a');
+                    dropDownSearch.className = 'cursor-pointer';
+                    dropDownSearch.onclick = function () {
+                        window.top.location.href = queryStr;
+                    };
+                    dropDownSearch.innerHTML = 'Search';
+
+                    dropDownList1.appendChild(dropDownSearch);
                     dropDownListWrapper.appendChild(dropDownList1);
                     if(scope.graphMode == 'editor') {
                       var dropDownList2 = document.createElement('li');
@@ -652,7 +661,15 @@ angular.module('neo4jApp')
                 dropDownList1.onclick = function () {
                     jQuery(".dropdown-menu").toggle();
                 };
-                dropDownList1.innerHTML = '<a href="' + queryStr + '">Search</a>';
+                var dropDownSearch = document.createElement('a');
+                dropDownSearch.className = 'cursor-pointer';
+                dropDownSearch.onclick = function () {
+                    window.top.location.href = queryStr;
+                };
+                dropDownSearch.innerHTML = 'Search';
+
+                dropDownList1.appendChild(dropDownSearch);
+                //dropDownList1.innerHTML = '<a href="' + queryStr + '">Search</a>';
                 dropDownListWrapper.appendChild(dropDownList1);
                 if(scope.graphMode == 'editor') {
                   var dropDownList2 = document.createElement('li');

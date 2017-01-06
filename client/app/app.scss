@@ -413,7 +413,20 @@ ul.neo4j-labels li {
   .card-footer .dropdown {
     font-size: 1rem;
   }
-
+  .accordian-label {
+    padding: 10px;
+  }
+  .accordian-label .accordian-label-checkbox {
+    width: 6%;
+  }
+  .accordian-label .accordian-label-text {
+    width: 93%;
+    margin-top: 2px;
+    font-size: 14px;
+  }
+  #search-form .panel-heading {
+    padding: 0px !important;
+  }
 
 // Component styles are injected through grunt
 // injector

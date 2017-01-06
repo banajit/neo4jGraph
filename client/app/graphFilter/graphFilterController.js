@@ -151,6 +151,7 @@
             $scope.selectedLabels[key] = true;
           }
           else {
+            $scope.searchMaster[key].open = false;
             delete $scope.selectedLabels[key];
           }
           var queryList = [];

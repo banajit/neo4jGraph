@@ -1,12 +1,9 @@
 {
   "pageTitle": "Application Landscape",
   "slideConfig": {
-    "slideInterval": 1000
+    "slideInterval": 1000000
   },
   "slideUrls": [
-    {
-      "url": "http://www.zaloni.com"
-    },
     {
       "url": "graphEditor"
     },
@@ -16,6 +13,9 @@
     {
       "url": "http://localhost/test/index.html",
       "siteWidth": 1024
+    },
+    {
+      "url": "http://www.zaloni.com"
     }
   ],
   "neo4jConfig": {
@@ -28,7 +28,7 @@
     "maxNodeSize": 35,
     "nodeSizeFactor": 10,
     "nodeLabelFontColor": "#000",
-    "nodeLabelFontSize": 12
+    "nodeLabelFontSize": 10
   },
   "micaUrl": "http://192.168.2.90:8089/#/catalog"
 }
