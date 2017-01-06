@@ -40,7 +40,7 @@
     $scope.getCaraousalWidth = function(key,width) {
        $timeout(function () {
           angular.element('#caraousal-wrapper-' + key).width(width+100);
-       },5000);
+       },1000);
     }
 
   };
