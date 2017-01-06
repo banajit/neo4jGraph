@@ -724,9 +724,11 @@ angular.module('neo4jApp')
           // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
           var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
            //nonoverlaping node config
+          var NoOfEdges = graph.edges.length;
           var config = {
             nodeMargin: 5,
-            scaleNodes: 5
+            scaleNodes: 2,
+            maxIterations: NoOfEdges
           };
           var listener = sigmaInstance.configNoverlap(config);
           sigmaInstance.startNoverlap();

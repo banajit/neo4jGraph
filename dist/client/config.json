@@ -1,7 +1,7 @@
 {
   "pageTitle": "Application Landscape",
   "slideConfig": {
-    "slideInterval": 1000
+    "slideInterval": 10000
   },
   "slideUrls": [
     {
