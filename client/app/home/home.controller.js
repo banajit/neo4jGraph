@@ -41,7 +41,7 @@
       if(width != undefined) {
         $timeout(function () {
           angular.element('#caraousal-wrapper-' + key).width(width+100);
-        },3000);
+        },slideConfig.slideInterval);
       }
     }
 
