@@ -38,9 +38,11 @@
 
     //adjust width for less resolution frame
     $scope.getCaraousalWidth = function(key,width) {
-       $timeout(function () {
+      if(width != undefined) {
+        $timeout(function () {
           angular.element('#caraousal-wrapper-' + key).width(width+100);
-       },1000);
+        },3000);
+      }
     }
 
   };
