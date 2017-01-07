@@ -379,7 +379,7 @@ angular.module('neo4jApp')
             maxNodeSize: appConfig.graphConfig.maxNodeSize,
             labelColor: appConfig.graphConfig.nodeLabelFontColor,
             labelHoverBGColor: 'node',
-            labelAlignment: 'inside',
+            labelAlignment: 'right',
             nodeHoverLevel:2,
             defaultLabelSize: appConfig.graphConfig.nodeLabelFontSize,
             drawEdgeLabels: false,

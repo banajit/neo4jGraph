@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function homeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window, $timeout) {
+  function homeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window, $timeout, $interval) {
     /**
      * Controller variables
      */
@@ -37,10 +37,15 @@
 
 
     //adjust width for less resolution frame
+    var sliderTracker = {};
     $scope.getCaraousalWidth = function(key,width) {
       if(width != undefined) {
-        $timeout(function () {
-          angular.element('#caraousal-wrapper-' + key).width(width+100);
+        sliderTracker[key] = $interval(function (key) {
+          if($('#caraousal-wrapper-' + key).is(':visible')) {
+            angular.element('#caraousal-wrapper-' + key).width(width+100);
+            $interval.cancel(sliderTracker[key]);
+            delete sliderTracker[key];
+          }
         });
       }
     }

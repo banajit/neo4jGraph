@@ -15,7 +15,8 @@
       "siteWidth": 1024
     },
     {
-      "url": "http://www.zaloni.com"
+      "url": "http://www.zaloni.com",
+      "siteWidth": 1024
     }
   ],
   "neo4jConfig": {

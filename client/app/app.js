@@ -39,7 +39,7 @@ var neo4jApp = angular.module('neo4jApp', [
       neo4jApp.constant('CONFIG', values[0].data);
       neo4jApp.constant('SCHEMA', values[1].data);
       angular.element(document).ready(function() {
-         angular.bootstrap(document, ['neo4jApp']);
+        angular.bootstrap(document, ['neo4jApp']);
       });
   });
 })(angular);
