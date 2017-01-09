@@ -5,7 +5,7 @@ body.neo4j-custom, html  {
   line-height: 1.125 em;
   height: 100%;
   color: rgba(0,0,0,.87);
-  background-color: #ddd;
+  background-color: #4A6986;
 }
 
 body.neo4j-custom #neo4jgraph {

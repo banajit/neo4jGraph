@@ -1,11 +1,7 @@
-<header></header>
-
-<div class="container">
+<div class="login-container login">
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="ap-panel">
       <form class="form login-form" name="form" ng-submit="Login.login(form)" novalidate>
-        <p>Admin account is <code>admin@admin.com</code> / <code>admin</code></p>
-        <h2>Please Sign In</h2>
         <div class="form-group">
           <label>Email</label>
 
@@ -30,15 +26,9 @@
         </div>
 
         <div>
-          <button class="btn btn-inverse btn-lg btn-login" type="submit">
+          <button class="login-button md-raised md-primary background-color-primary md-button md-ink-ripple" type="submit">
             Login
           </button>
-          <a class="btn btn-default btn-lg btn-register" ui-sref="signUp">
-            Register
-          </a>
-          <a class="forgot-password" ui-sref="forgotPassword">
-            Forgot Password
-          </a>
         </div>
       </form>
     </div>

@@ -384,7 +384,7 @@ angular.module('neo4jApp')
             maxNodeSize: appConfig.graphConfig.maxNodeSize,
             labelColor: appConfig.graphConfig.nodeLabelFontColor,
             labelHoverBGColor: 'node',
-            labelAlignment: 'right',
+            labelAlignment: 'bottom',
             nodeHoverLevel:2,
             defaultLabelSize: appConfig.graphConfig.nodeLabelFontSize,
             drawEdgeLabels: false,
@@ -400,7 +400,7 @@ angular.module('neo4jApp')
             nodeActiveOuterBorderSize: 3,
             defaultNodeActiveBorderColor: '#fff',
             defaultNodeActiveOuterBorderColor: 'rgb(236, 81, 72)',
-            rescaleIgnoreSize: false,
+            rescaleIgnoreSize: true,
             nodesPowRatio: 1
 
           });
@@ -743,11 +743,11 @@ angular.module('neo4jApp')
           });
           //active node
           // Instanciate the ActiveState plugin:
-          sigmaInstance.startCola({
+         /* sigmaInstance.startCola({
               handleDisconnected: false,
               convergenceThreshold: 0.01,
 
-          }, dragListener);
+          }, dragListener);*/
 
           return sigmaInstance;
         }
