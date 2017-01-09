@@ -266,8 +266,8 @@ angular.module('neo4jApp')
             node.size = getNodeSize(rank);
             /*node.x = Math.cos(Math.PI * 2 * i / N);
             node.y = Math.sin(Math.PI * 2 * i / N);*/
-            node.x = Math.random();
-            node.y = Math.random();
+//            node.x = Math.random();
+//            node.y = Math.random();
             //node.url = node.neo4j_data.iconUrl;
             if(node.neo4j_data.iconUrl == undefined) {
               //node.type = 'def';
@@ -372,7 +372,12 @@ angular.module('neo4jApp')
               type: 'canvas',
             }
           });
+
+
+
           layoutNodesEdges(graph);
+
+
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
             minNodeSize: appConfig.graphConfig.minNodeSize,
@@ -387,8 +392,6 @@ angular.module('neo4jApp')
             edgeHoverSizeRatio: 2,
             zoomOnLocation: true,
             edgeHoverExtremities: true,
-            zoomMin: 0.001,
-            zoomMax: 300,
             doubleClickEnabled: false,
             borderSize: 2,
             defaultNodeBorderColor: '#000',
@@ -397,14 +400,11 @@ angular.module('neo4jApp')
             nodeActiveOuterBorderSize: 3,
             defaultNodeActiveBorderColor: '#fff',
             defaultNodeActiveOuterBorderColor: 'rgb(236, 81, 72)',
+            rescaleIgnoreSize: false,
+            nodesPowRatio: 1
 
           });
-          /*sigmaInstance.bind('clickStage', function (e) {
-            sigmaInstance.graph.nodes().forEach(function (node) {
-                node.border_size = 1;
-            });
-            sigmaInstance.refresh();
-          });*/
+
           //bind the events
           sigmaInstance.bind('hovers', function (e) {
             var adjacentNodes = {},
@@ -724,14 +724,14 @@ angular.module('neo4jApp')
           // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
           var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
            //nonoverlaping node config
-          var NoOfEdges = graph.edges.length;
+          /*var NoOfEdges = graph.edges.length;
           var config = {
             nodeMargin: 5,
             scaleNodes: 2,
             maxIterations: NoOfEdges
           };
-          var listener = sigmaInstance.configNoverlap(config);
-          sigmaInstance.startNoverlap();
+          var listener = sigmaInstance.configNoverlap(config);*/
+          //sigmaInstance.startNoverlap();
           //make nodes draggable
           var activeState = sigma.plugins.activeState(sigmaInstance);
           var renderer = sigmaInstance.renderers[0];
@@ -740,15 +740,14 @@ angular.module('neo4jApp')
             $timeout(function () {
                 tooltips.close();
             });
-            /*var neighborNodes = graph.edgeNodeRef[event.data.node.id].source.length + graph.edgeNodeRef[event.data.node.id].target.length;
-            if(neighborNodes > 30) {
-              sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-            }*/
-
           });
           //active node
           // Instanciate the ActiveState plugin:
+          sigmaInstance.startCola({
+              handleDisconnected: false,
+              convergenceThreshold: 0.01,
 
+          }, dragListener);
 
           return sigmaInstance;
         }
