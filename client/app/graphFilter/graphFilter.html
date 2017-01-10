@@ -17,7 +17,7 @@
             <div class="pull-left accordian-label-text">{{key}}<i class="pull-right fa" ng-class="{'fa-angle-right': !value.open, 'fa-angle-down': value.open}"></i></div>
           </div>
         </accordion-heading>
-        <div ng-if="valueProp.visibility !=false" layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value.properties">
+        <div ng-if="valueProp.searchable !=false" layout-gt-sm="row" ng-repeat="(keyProp, valueProp) in value.properties">
           <md-autocomplete flex
                            md-input-name="autocompleteField[keyProp]"
                            md-no-cache="noCache"

@@ -1,5 +1,6 @@
 {
   "pageTitle": "Application Landscape",
+  "backgroundColor": "#DDD",
   "slideConfig": {
     "slideInterval": 10000
   },
@@ -12,11 +13,14 @@
     },
     {
       "url": "http://localhost/test/index.html",
-      "siteWidth": 1024
+      "siteWidth": 1124
     },
     {
       "url": "http://www.zaloni.com",
       "siteWidth": 1024
+    },
+    {
+      "url": "http://www.tableau.com/products/cloud-bi"
     }
   ],
   "neo4jConfig": {

@@ -34,13 +34,15 @@
         },
         "LineOfBusiness": {
           "displayName": "Line Of Business",
-          "restriction": ".*"
+          "restriction": ".*",
+          "searchable": true
         },
         "Rank": {
           "displayName": "Rank",
           "restriction": "[0-9]+",
           "dataType": "string",
-          "visibility": false
+          "visibility": false,
+          "searchable": false
         },
         "Hosting": {
           "displayName": "Hosting",
