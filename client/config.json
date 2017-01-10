@@ -18,9 +18,6 @@
     {
       "url": "http://www.zaloni.com",
       "siteWidth": 1024
-    },
-    {
-      "url": "http://www.tableau.com/products/cloud-bi"
     }
   ],
   "neo4jConfig": {

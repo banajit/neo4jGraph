@@ -300,7 +300,7 @@ angular.module('neo4jApp')
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: N,
+            iterations: N/2,
             easing: 'quadraticInOut',
             duration: 10,
             gravity: 2
