@@ -391,13 +391,14 @@ ul.neo4j-labels li {
   }
   .page-title {
      position: absolute;
-     right: 45px;
+     right: 50%;
      padding: 10px;
      color: #000;
      border-top: 2px solid #c33;
      border-bottom: 2px solid #c33;
      border-radius: 3px;
      background: #98E2D5;
+     z-index: 10;
   }
 
   #search-form md-input-container {

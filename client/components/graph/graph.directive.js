@@ -300,7 +300,7 @@ angular.module('neo4jApp')
           });
           sigma.canvas.edges.autoCurve(sigmaInstance);
           var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: N/2,
+            iterations: Math.ceil(N/2),
             easing: 'quadraticInOut',
             duration: 10,
             gravity: 2
@@ -516,7 +516,7 @@ angular.module('neo4jApp')
                       if(neo4jSrv.getMicaNodeKey(node.labelType, key) != false) {
                          queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal));
                       }
-                      if(value.visibility != false) {
+                      if(value.visible != false) {
                         listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                       }
                     });

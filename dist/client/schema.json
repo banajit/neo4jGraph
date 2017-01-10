@@ -41,7 +41,7 @@
           "displayName": "Rank",
           "restriction": "[0-9]+",
           "dataType": "string",
-          "visibility": false,
+          "visible": false,
           "searchable": false
         },
         "Hosting": {
