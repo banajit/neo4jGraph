@@ -48,10 +48,15 @@
           </span>
         </div>
         <div class="graph-refresh">
-          <button ng-click="resetGraph()" class="btn md-raised background-color-primary">
+          <button ng-click="resetGraph()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
             <i class="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>
+       <!-- <div class="graph-logout">
+          <button ng-click="logout()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
+            <i class="fa fa-power-off" aria-hidden="true"></i>
+          </button>
+        </div>-->
         <div ng-if="pageTitle != ''" class="page-title">{{pageTitle}}</div>
         <graph></graph>
       </div>

@@ -35,6 +35,10 @@ body.neo4j-app h2 {
 
 .caraousal-wrapper {
   margin: 0 auto;
+  width: calc(100vw);
+}
+.carausal-slider {
+  width: 100%;
 }
 
 .browsehappy {
@@ -426,19 +430,18 @@ ul.neo4j-labels li {
   #search-form .panel-heading {
     padding: 0px !important;
   }
-  .login-container {
-    width: 40%;
-    background: #FFF;
-    padding: 50px;
-    position: absolute;
-    left: 400px;
-    top: 68px;
+  .neo4j-main-wrapper .login-wrapper {
+    height: calc(100vh - 5px);
   }
-
-
-
-
-
+  .neo4j-main-wrapper .login-panel {
+    background: #FFF;
+    padding: 15px;
+    margin: 0px;
+  }
+  .graph-refresh button, .graph-logout button {
+    min-width: 40px !important;
+    margin: 0px;
+  }
 // Component styles are injected through grunt
 // injector
 // endinjector

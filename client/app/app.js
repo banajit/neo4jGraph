@@ -20,7 +20,7 @@ var neo4jApp = angular.module('neo4jApp', [
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
-      .otherwise('/login');
+      .otherwise('/home');
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
@@ -28,6 +28,7 @@ var neo4jApp = angular.module('neo4jApp', [
     var configData = CONSTANTS.getConfig();
     //set page title
     $rootScope.pageTitle = configData.pageTitle;
+    $rootScope.backgroundColor = configData.backgroundColor;
     $rootScope.customCss = configData.customCss;
   }]);
   var initInjector = angular.injector(['ng']);

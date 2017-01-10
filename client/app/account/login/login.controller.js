@@ -25,7 +25,7 @@ function loginCtrl($scope, Auth, $state, $window) {
         })
         .then(function() {
           // Logged in, redirect to home
-          $state.go('home');
+          $state.go('graphEditor');
         })
         .catch(function(error) {
             Login.errors.other = error.message;
