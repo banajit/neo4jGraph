@@ -1,3 +1,4 @@
+<div ng-if="pageTitle != ''" class="page-title">{{pageTitle}}</div>
 <div layout="row" layout-align="center center" class="login-wrapper">
   <div flex="30" class="login-panel">
     <div>
@@ -22,7 +23,7 @@
              Please enter a valid email.
           </p>
 
-          <p class="help-block">{{ Login.errors.other }}</p>
+          <p class="help-block"><strong>{{ Login.errors.other }}</strong></p>
         </div>
 
         <div>

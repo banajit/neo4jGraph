@@ -26,6 +26,10 @@ angular.module('neo4jApp')
           event.preventDefault();
           $state.go('graphEditor');
         }
+        if(loggedIn && next.name === 'login'){
+          event.preventDefault();
+          $state.go('graphEditor');
+        }
 
       });
     });

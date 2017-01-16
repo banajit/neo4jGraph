@@ -13,9 +13,6 @@ body.neo4j-custom .page-title {
   right: 50%;
   padding: 10px;
   color: #000;
-  border-top: 2px solid #c33;
-  border-bottom: 2px solid #c33;
-  border-radius: 3px;
   background: #98E2D5;
 }
 

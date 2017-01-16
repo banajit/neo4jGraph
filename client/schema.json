@@ -1,4 +1,13 @@
 {
+  "graphConfig": {
+    "minNodeSize": 5,
+    "maxNodeSize": 15,
+    "nodeSizeFactor": 5,
+    "nodeLabelFontColor": "#000",
+    "labelHoverBGColor": "node",
+    "nodeLabelFontSize": 10,
+    "iterationFactor": 2
+  },
   "nodes": {
     "System": {
       "_default": {

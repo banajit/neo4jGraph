@@ -2,12 +2,10 @@
 (function (angular) {
 
 
-  function Auth($http, User, $cookieStore, $q, Config) {
+  function Auth($http, $cookieStore, $q, Config) {
     var currentUser = {};
     var token = $cookieStore && $cookieStore.get('token');
-    if (token) {
-      currentUser = User.get();
-    }
+
 
     return {
 
@@ -21,23 +19,27 @@
       login: function (user, callback) {
         var cb = callback || angular.noop;
         var deferred = $q.defer();
-
-        $http.post(Config.getHost() + '/auth/local', {
-          email: user.email,
-          password: user.password
-        }).
-          success(function (data) {
+        $http({
+            method: 'POST',
+            url: 'api/authenticate',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data: {user: user.username, password: user.password}
+        }).success(function (data) {
             $cookieStore.put('token', data.token);
-            currentUser = User.get();
             deferred.resolve(data);
             return cb();
-          }).
-          error(function (err) {
-            this.logout();
-            deferred.reject(err);
-            return cb(err);
-          }.bind(this));
-
+        }).
+        error(function (err) {
+          this.logout();
+          deferred.reject(err);
+          return cb(err);
+        }.bind(this));
         return deferred.promise;
       },
 
@@ -51,92 +53,39 @@
         currentUser = {};
       },
 
-      /**
-       * Create a new user
-       *
-       * @param  {Object}   user     - user info
-       * @param  {Function} callback - optional
-       * @return {Promise}
-       */
-      createUser: function (user, callback) {
-        var cb = callback || angular.noop;
 
-        return User.save(user,
-          function (data) {
-            $cookieStore.put('token', data.token);
-            currentUser = User.get();
-            return cb(user);
-          },
-          function (err) {
-            this.logout();
-            return cb(err);
-          }.bind(this)).$promise;
-      },
-
-      /**
-       * Change password
-       *
-       * @param  {String}   oldPassword
-       * @param  {String}   newPassword
-       * @param  {Function} callback    - optional
-       * @return {Promise}
-       */
-      changePassword: function (oldPassword, newPassword, callback) {
-        var cb = callback || angular.noop;
-
-        return User.changePassword({id: currentUser._id}, {
-          oldPassword: oldPassword,
-          newPassword: newPassword
-        }, function (user) {
-          return cb(user);
-        }, function (err) {
-          return cb(err);
-        }).$promise;
-      },
-
-      /**
-       * Gets all available info on authenticated user
-       *
-       * @return {Object} user
-       */
-      getCurrentUser: function () {
-        return currentUser;
-      },
-
-      /**
-       * Check if a user is logged in
-       *
-       * @return {Boolean}
-       */
-      isLoggedIn: function () {
-        return currentUser.hasOwnProperty('role');
-      },
 
       /**
        * Waits for currentUser to resolve before checking if user is logged in
        */
       isLoggedInAsync: function (cb) {
-        if (currentUser.hasOwnProperty('$promise')) {
-          currentUser.$promise.then(function () {
-            cb(true);
-          }).catch(function () {
-            cb(false);
-          });
-        } else if (currentUser.hasOwnProperty('role')) {
-          cb(true);
-        } else {
+        var deferred = $q.defer();
+        if(this.getToken()) {
+          $http({
+              method: 'POST',
+              url: 'api/validateToken',
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+              transformRequest: function(obj) {
+                  var str = [];
+                  for(var p in obj)
+                  str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                  return str.join("&");
+              },
+              data: {token: this.getToken()}
+          }).success(function (data) {
+             cb(true);
+          }).
+          error(function (err) {
+            this.logout();
+            deferred.reject(err);
+            return cb(err);
+          }.bind(this));
+        }
+        else {
           cb(false);
         }
       },
 
-      /**
-       * Check if a user is an admin
-       *
-       * @return {Boolean}
-       */
-      isAdmin: function () {
-        return currentUser.role === 'admin';
-      },
 
       /**
        * Get auth token

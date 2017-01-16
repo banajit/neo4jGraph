@@ -2,10 +2,20 @@
 
 (function (angular) {
 
-  function graphEditorCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, ngToast, $mdDialog) {
+  function graphEditorCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, ngToast, $mdDialog, Auth, $state) {
       $scope.toggleLeft = buildToggler('filter');
       $scope.toggleEditor = buildToggler('editor');
       $scope.graphMode = 'editor';
+      $scope.loggedIn = false;
+      Auth.isLoggedInAsync(function(loggedIn) {
+        $scope.loggedIn = loggedIn;
+      });
+
+      $scope.logOutSession = function() {
+        Auth.logout();
+        $state.go('login');
+      }
+
       function buildToggler(componentId) {
         return function() {
           $mdSidenav(componentId).toggle();

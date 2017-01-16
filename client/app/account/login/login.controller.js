@@ -15,12 +15,13 @@ function loginCtrl($scope, Auth, $state, $window) {
    *Login user
    * @param form
    */
+
     Login.login = function(form) {
       Login.submitted = true;
 
       if (form.$valid) {
         Auth.login({
-          email: Login.user.email,
+          username: Login.user.email,
           password: Login.user.password
         })
         .then(function() {

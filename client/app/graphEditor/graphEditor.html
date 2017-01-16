@@ -52,11 +52,11 @@
             <i class="fa fa-refresh" aria-hidden="true"></i>
           </button>
         </div>
-       <!-- <div class="graph-logout">
+        <div ng-if="loggedIn == true" class="graph-logout cursor-pointer" ng-click="logOutSession()">
           <button ng-click="logout()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
             <i class="fa fa-power-off" aria-hidden="true"></i>
           </button>
-        </div>-->
+        </div>
         <div ng-if="pageTitle != ''" class="page-title">{{pageTitle}}</div>
         <graph></graph>
       </div>

@@ -318,9 +318,13 @@ ul.neo4j-labels li {
 
   .facet-wrapper {
     position: absolute;
-    left: 90px;
-    top: 50px;
+    left: 10px;
+    top: 53px;
     z-index: 10;
+    padding: 10px;
+  }
+  .facet-wrapper:hover {
+    background: #FFF;
   }
   .node-label {
     height: 70px !important;
@@ -394,9 +398,6 @@ ul.neo4j-labels li {
      right: 50%;
      padding: 10px;
      color: #000;
-     border-top: 2px solid #c33;
-     border-bottom: 2px solid #c33;
-     border-radius: 3px;
      background: #98E2D5;
      z-index: 10;
   }
@@ -409,7 +410,7 @@ ul.neo4j-labels li {
   }
   .graph-refresh {
     position: absolute;
-    right: 3px;
+    right: 44px;
     z-index: 10;
     top: 3px;
     color: #FFF;
@@ -442,6 +443,15 @@ ul.neo4j-labels li {
   .graph-refresh button, .graph-logout button {
     min-width: 40px !important;
     margin: 0px;
+  }
+  .graph-logout {
+    position: absolute;
+    right: 2px;
+    top: 3px;
+    z-index: 10;
+  }
+  .upload-file-wrapper {
+    display: inline-block;
   }
 // Component styles are injected through grunt
 // injector

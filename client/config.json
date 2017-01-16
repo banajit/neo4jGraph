@@ -12,25 +12,16 @@
       "url": "graphBrowser"
     },
     {
-      "url": "http://localhost/test/index.html",
-      "siteWidth": 1124
+      "url": "http://192.168.2.90:8089/#/homepage"
     },
     {
-      "url": "http://www.zaloni.com",
-      "siteWidth": 1024
+      "url": "http://www.zaloni.com"
     }
   ],
   "neo4jConfig": {
     "serverUrl": "http://localhost:7474",
     "user": "neo4j",
     "password": "neo4j@zaloni"
-  },
-  "graphConfig": {
-    "minNodeSize": 10,
-    "maxNodeSize": 35,
-    "nodeSizeFactor": 10,
-    "nodeLabelFontColor": "#000",
-    "nodeLabelFontSize": 10
   },
   "micaUrl": "http://192.168.2.90:8089/#/catalog"
 }

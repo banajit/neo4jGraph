@@ -11,7 +11,7 @@ angular.module('neo4jApp')
       link: function (scope) {
         var currentSchema = CONSTANTS.getSchema();
         var sigmaInstance, loaded = 0;
-        var appConfig = CONSTANTS.getConfig();
+        var appConfig = currentSchema;
         sigma.utils.pkg('sigma.canvas.nodes');
         sigma.canvas.nodes.image = (function() {
           var _cache = {},
@@ -141,11 +141,7 @@ angular.module('neo4jApp')
           renderSigmaInstance(data);
         });
 
-        //Listen for refresh layout
-        scope.$on('refreshLayout', function (event) {
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-          sigmaInstance.refresh();
-        });
+
         //listen for node update
         scope.$on('updateNodeToGraph', function (event, inputNode) {
           sigmaInstance.graph.nodes().forEach(function (node) {
@@ -191,7 +187,6 @@ angular.module('neo4jApp')
         scope.$on('deleteNodeToGraph', function (event, inputNode) {
           sigmaInstance.graph.dropNode(inputNode.id);
           sigmaInstance.refresh();
-
         });
 
         scope.$on('deleteEdgeToGraph', function (event, inputEdge) {
@@ -225,7 +220,6 @@ angular.module('neo4jApp')
           node.border_size = 1;
           node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
           sigmaInstance.graph.addNode(node);
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
           image_urls.forEach(function(url) {
             sigma.canvas.nodes.image.cache(
               url,
@@ -234,6 +228,7 @@ angular.module('neo4jApp')
               }
             );
           });
+          startColaLayout();
         });
 
         //listen for node add
@@ -253,22 +248,26 @@ angular.module('neo4jApp')
           return nodeSize;
         }
 
+        //start cola layout
+        function startColaLayout() {
+          sigmaInstance.startCola({
+              handleDisconnected: true,
+              convergenceThreshold: 0.01,
+              initialUnconstrainedIterations: sigmaInstance.graph.nodes().length,
+              initialUserConstraintIterations: sigmaInstance.graph.nodes().length,
+              linkLength:50,
+          });
+        }
+
         //update node and edge array
         function layoutNodesEdges(graph) {
           var N = graph.nodes.length, i=0;
           graph.nodes.forEach(function(node) {
             node.labelType = node.neo4j_labels[0];
             node.label = node.neo4j_data[currentSchema.nodes[node.labelType]._default['defaultLabel']];
-            //var neighborNodes = graph.edgeNodeRef[node.id].source.length + graph.edgeNodeRef[node.id].target.length;
-            //node.size = neighborNodes;
             var defaultRank = currentSchema.nodes[node.labelType]._default['defaultRank'];
             var rank = (node.neo4j_data.Rank != undefined)?node.neo4j_data.Rank:defaultRank;
             node.size = getNodeSize(rank);
-            /*node.x = Math.cos(Math.PI * 2 * i / N);
-            node.y = Math.sin(Math.PI * 2 * i / N);*/
-//            node.x = Math.random();
-//            node.y = Math.random();
-            //node.url = node.neo4j_data.iconUrl;
             if(node.neo4j_data.iconUrl == undefined) {
               //node.type = 'def';
               node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
@@ -298,24 +297,9 @@ angular.module('neo4jApp')
             edge.type = "arrow";
             sigmaInstance.graph.addEdge(edge);
           });
+          stopLoader();
           sigma.canvas.edges.autoCurve(sigmaInstance);
-          var frListener = sigma.layouts.fruchtermanReingold.configure(sigmaInstance, {
-            iterations: Math.ceil(N/2),
-            easing: 'quadraticInOut',
-            duration: 10,
-            gravity: 2
-          });
-          // Bind the events:
-          frListener.bind('start stop interpolate', function(e) {
-            if (e.type == 'start') {
-               //startLoader('Layout in progress, please wait...');
-            }
-            else if(e.type == 'stop') {
-              stopLoader();
-            }
-          });
-          sigma.layouts.fruchtermanReingold.start(sigmaInstance);
-
+          startColaLayout(graph);
         }
 
         function startLoader(message) {
@@ -373,17 +357,15 @@ angular.module('neo4jApp')
             }
           });
 
-
-
           layoutNodesEdges(graph);
-
 
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
             minNodeSize: appConfig.graphConfig.minNodeSize,
             maxNodeSize: appConfig.graphConfig.maxNodeSize,
-            labelColor: appConfig.graphConfig.nodeLabelFontColor,
-            labelHoverBGColor: 'node',
+            defaultLabelColor: appConfig.graphConfig.nodeLabelFontColor,
+            labelHoverBGColor: appConfig.graphConfig.labelHoverBGColor,
+            defaultHoverLabelBGColor: appConfig.graphConfig.labelHoverBGColor,
             labelAlignment: 'bottom',
             nodeHoverLevel:2,
             defaultLabelSize: appConfig.graphConfig.nodeLabelFontSize,
@@ -400,7 +382,6 @@ angular.module('neo4jApp')
             nodeActiveOuterBorderSize: 3,
             defaultNodeActiveBorderColor: '#fff',
             defaultNodeActiveOuterBorderColor: 'rgb(236, 81, 72)',
-            rescaleIgnoreSize: true,
             nodesPowRatio: 1
 
           });
@@ -613,10 +594,6 @@ angular.module('neo4jApp')
 
                 var queryParams = [];
                 var listInfo = '';
-               /* angular.forEach(edge.neo4j_data, function(value, key){
-                  queryParams.push(key + '=' + value);
-                  listInfo += '<li><span class="li-title">' + key + '</span><span title="' + value + '" class="li-value">' + value + '</span></li>';
-                });*/
 
                 angular.forEach(currentSchema['relationships'][edge.neo4j_type], function(value, key){
                   if(key !== '_appliesTo' && key !== '_default') {
@@ -723,15 +700,6 @@ angular.module('neo4jApp')
 
           // Instanciate the tooltips plugin with a Mustache renderer for node tooltips:
           var tooltips = sigma.plugins.tooltips(sigmaInstance, sigmaInstance.renderers[0], config_tooltip);
-           //nonoverlaping node config
-          /*var NoOfEdges = graph.edges.length;
-          var config = {
-            nodeMargin: 5,
-            scaleNodes: 2,
-            maxIterations: NoOfEdges
-          };
-          var listener = sigmaInstance.configNoverlap(config);*/
-          //sigmaInstance.startNoverlap();
           //make nodes draggable
           var activeState = sigma.plugins.activeState(sigmaInstance);
           var renderer = sigmaInstance.renderers[0];
@@ -741,14 +709,7 @@ angular.module('neo4jApp')
                 tooltips.close();
             });
           });
-          //active node
-          // Instanciate the ActiveState plugin:
-         /* sigmaInstance.startCola({
-              handleDisconnected: false,
-              convergenceThreshold: 0.01,
-
-          }, dragListener);*/
-
+          startColaLayout(graph);
           return sigmaInstance;
         }
       }
