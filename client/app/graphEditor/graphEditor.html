@@ -40,22 +40,25 @@
       </div>
       <div class="nbc-graph-edit" dnd-list dnd-drop="addNodeToGraph(event, index, item, external, type, 'allowed')">
         <div class="facet-wrapper pull-right">
-          <span class="facet" ng-repeat="(Lkey, Lvalue) in searchFilters">
-            <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue">
-              <span class="pill-header cursor-pointer" ng-click="removeFilter(Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
-              <div class="term">{{value}}</div>
-            </div>
+          <span ng-repeat="(Skey, Svalue) in masterQuery" class="search-level-1">
+            <span class="facet search-level-2" ng-attr-id="{{Lkey}}-{{Skey}}" ng-repeat="(Lkey, Lvalue) in Svalue.data" ng-class="getPillStyle(Lkey, Skey)">
+              <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue" ng-if="value!=null">
+                <span class="pill-header cursor-pointer" ng-click="removeFilter(Skey, Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
+                <div class="term">{{Lkey}}:{{value}}</div>
+              </div>
+            </span>
           </span>
         </div>
         <div class="graph-refresh">
-          <button ng-click="resetGraph()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
+          <span class="fa fa-refresh" aria-hidden="true" ng-click="resetGraph()"></span>
+          <!--<button ng-click="resetGraph()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
             <i class="fa fa-refresh" aria-hidden="true"></i>
-          </button>
+          </button>-->
         </div>
         <div ng-if="loggedIn == true" class="graph-logout cursor-pointer" ng-click="logOutSession()">
-          <button ng-click="logout()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
-            <i class="fa fa-power-off" aria-hidden="true"></i>
-          </button>
+          <span class="fa fa-sign-in" aria-hidden="true" name="sign-in"></span>
+          <!--<button ng-click="logout()" aria-hidden="true" class="fa fa-sign-in md-raised md-button md-ink-ripple">
+          </button>-->
         </div>
         <div ng-if="pageTitle != ''" class="page-title">{{pageTitle}}</div>
         <graph></graph>

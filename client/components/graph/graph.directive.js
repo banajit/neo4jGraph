@@ -11,7 +11,7 @@ angular.module('neo4jApp')
       link: function (scope) {
         var currentSchema = CONSTANTS.getSchema();
         var sigmaInstance, loaded = 0;
-        var appConfig = currentSchema;
+        var appConfig = CONSTANTS.getConfig();
         sigma.utils.pkg('sigma.canvas.nodes');
         sigma.canvas.nodes.image = (function() {
           var _cache = {},
@@ -114,6 +114,17 @@ angular.module('neo4jApp')
               graphMeta.neo4jQuery,
               function(graph) {
                 sigmaInstance.graph.clear();
+                if(graphMeta.existGraph != undefined) {
+                  var tempNodes = graphMeta.existGraph.nodes.concat(graph.nodes);
+                  var graphNodes = {};
+                  graph.nodes = [];
+                  tempNodes.forEach(function(node) {
+                    graphNodes[node.id] = node;
+                  })
+                  angular.forEach(graphNodes, function(node){
+                    graph.nodes.push(node);
+                  });
+                }
                 layoutNodesEdges(graph);
                 var conf = {
                   animation: {
@@ -132,6 +143,7 @@ angular.module('neo4jApp')
                 };
                 var locate = sigma.plugins.locate(sigmaInstance, conf);
                 locate.center(1);
+
               }
           );
         }
@@ -216,8 +228,8 @@ angular.module('neo4jApp')
               h: 1
             };
           }
-          node.border_color = '#11507a';
-          node.border_size = 1;
+          node.border_color = appConfig.graphConfig.nodeBorderColor;
+          node.border_size = appConfig.graphConfig.nodeBorderSize;
           node.color = currentSchema.nodes[node.labelType]._default['defaultColor'];
           sigmaInstance.graph.addNode(node);
           image_urls.forEach(function(url) {
@@ -253,9 +265,10 @@ angular.module('neo4jApp')
           sigmaInstance.startCola({
               handleDisconnected: true,
               convergenceThreshold: 0.01,
-              initialUnconstrainedIterations: sigmaInstance.graph.nodes().length,
-              initialUserConstraintIterations: sigmaInstance.graph.nodes().length,
-              linkLength:50,
+              initialUnconstrainedIterations: 20,//sigmaInstance.graph.nodes().length,
+              initialUserConstraintIterations: 20,//sigmaInstance.graph.nodes().length,
+              linkLength:0,
+              symmetricDiffLinkLengths:20
           });
         }
 
@@ -285,8 +298,8 @@ angular.module('neo4jApp')
               };
             }
 
-            node.border_size = 1;
-            node.border_color = '#11507a';
+            node.border_size = appConfig.graphConfig.nodeBorderSize;
+            node.border_color = appConfig.graphConfig.nodeBorderColor;
             sigmaInstance.graph.addNode(node);
             i++;
           });
@@ -382,7 +395,10 @@ angular.module('neo4jApp')
             nodeActiveOuterBorderSize: 3,
             defaultNodeActiveBorderColor: '#fff',
             defaultNodeActiveOuterBorderColor: 'rgb(236, 81, 72)',
-            nodesPowRatio: 1
+            zoomMin: 0.1,
+            zoomMax:2,
+            minArrowSize:6,
+            sideMargin: 5
 
           });
 
@@ -441,7 +457,7 @@ angular.module('neo4jApp')
                     }
                     else {
                       neo4jRelatedNodes[e.data.node.id] = e.data.node.id;
-                      node.border_size = 1;
+                      node.border_size = appConfig.graphConfig.nodeBorderSize;
                       activeState.addNodes(node.id);
                       node.type = 'def';
                     }
@@ -495,7 +511,7 @@ angular.module('neo4jApp')
                     angular.forEach(currentSchema['nodes'][node.labelType]['properties'], function(value, key){
                       var KeyVal = node.neo4j_data[key];
                       if(neo4jSrv.getMicaNodeKey(node.labelType, key) != false) {
-                         queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal));
+                         queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal.toLowerCase()));
                       }
                       if(value.visible != false) {
                         listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';

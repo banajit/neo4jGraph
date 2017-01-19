@@ -23,5 +23,16 @@
     "user": "neo4j",
     "password": "neo4j@zaloni"
   },
+  "graphConfig": {
+    "minNodeSize": 5,
+    "maxNodeSize": 15,
+    "nodeSizeFactor": 5,
+    "nodeLabelFontColor": "#000",
+    "labelHoverBGColor": "node",
+    "nodeLabelFontSize": 10,
+    "iterationFactor": 2,
+    "nodeBorderSize": 1,
+    "nodeBorderColor": "#999"
+  },
   "micaUrl": "http://192.168.2.90:8089/#/catalog"
 }

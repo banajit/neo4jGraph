@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function graphEditorCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, ngToast, $mdDialog, Auth, $state) {
+  function graphEditorCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, ngToast, $mdDialog, Auth, $state, $rootScope) {
       $scope.toggleLeft = buildToggler('filter');
       $scope.toggleEditor = buildToggler('editor');
       $scope.graphMode = 'editor';
@@ -173,6 +173,16 @@
             }
          });
       });
+      $scope.getPillStyle = function(key, searchKey) {
+        angular.forEach($rootScope.masterQuery[searchKey]['data'][key], function(valueL, keyL){
+          if(valueL == null) {
+            delete $rootScope.masterQuery[searchKey]['data'][key][keyL];
+          }
+          if(Object.keys($rootScope.masterQuery[searchKey]['data'][key]).length == 0) {
+            delete $rootScope.masterQuery[searchKey]['data'][key];
+          }
+        });
+      }
   }
   angular.module('neo4jApp')
     .controller('graphEditorCtrl', graphEditorCtrl);

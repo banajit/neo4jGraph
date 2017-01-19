@@ -19,6 +19,7 @@
       login: function (user, callback) {
         var cb = callback || angular.noop;
         var deferred = $q.defer();
+        var prefix = 'http://192.168.1.221:8080/graph/';
         $http({
             method: 'POST',
             url: 'api/authenticate',
@@ -59,6 +60,7 @@
        * Waits for currentUser to resolve before checking if user is logged in
        */
       isLoggedInAsync: function (cb) {
+        var prefix = 'http://192.168.1.221:8080/graph/';
         var deferred = $q.defer();
         if(this.getToken()) {
           $http({

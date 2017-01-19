@@ -12,11 +12,13 @@
       </div>
       <div class="nbc-graph">
         <div class="facet-wrapper pull-right">
-          <span class="facet" ng-repeat="(Lkey, Lvalue) in searchFilters">
-            <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue">
-              <span class="pill-header cursor-pointer" ng-click="removeFilter(Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
-              <div class="term">{{value}}</div>
-            </div>
+          <span ng-repeat="(Skey, Svalue) in masterQuery" class="search-level-1">
+            <span class="facet search-level-2" ng-attr-id="{{Lkey}}-{{Skey}}" ng-repeat="(Lkey, Lvalue) in Svalue.data" ng-class="getPillStyle(Lkey, Skey)">
+              <div class="filter-tag term-pill" ng-repeat="(key, value) in Lvalue" ng-if="value!=null">
+                <span class="pill-header cursor-pointer" ng-click="removeFilter(Skey, Lkey, key)"><i class="fa fa-times" aria-hidden="true"></i> Filter:</span>
+                <div class="term">{{Lkey}}:{{value}}</div>
+              </div>
+            </span>
           </span>
         </div>
         <div class="graph-refresh">
