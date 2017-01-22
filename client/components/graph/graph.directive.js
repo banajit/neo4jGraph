@@ -265,8 +265,8 @@ angular.module('neo4jApp')
           sigmaInstance.startCola({
               handleDisconnected: true,
               convergenceThreshold: 0.01,
-              initialUnconstrainedIterations: 20,//sigmaInstance.graph.nodes().length,
-              initialUserConstraintIterations: 20,//sigmaInstance.graph.nodes().length,
+              initialUnconstrainedIterations: sigmaInstance.graph.nodes().length,
+              initialUserConstraintIterations: sigmaInstance.graph.nodes().length,
               linkLength:0,
               symmetricDiffLinkLengths:20
           });
@@ -388,9 +388,6 @@ angular.module('neo4jApp')
             zoomOnLocation: true,
             edgeHoverExtremities: true,
             doubleClickEnabled: false,
-            borderSize: 2,
-            defaultNodeBorderColor: '#000',
-
             nodeActiveBorderSize: 2,
             nodeActiveOuterBorderSize: 3,
             defaultNodeActiveBorderColor: '#fff',
@@ -398,7 +395,7 @@ angular.module('neo4jApp')
             zoomMin: 0.1,
             zoomMax:2,
             minArrowSize:6,
-            sideMargin: 5
+            sideMargin: 10
 
           });
 

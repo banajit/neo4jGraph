@@ -20,6 +20,12 @@
           delete $rootScope.masterQuery[searchKey]['data'][key];
         }
       });
+      if($rootScope.masterQuery[searchKey]['data'] !== undefined && $rootScope.masterQuery[searchKey]['data'][key] !== undefined && Object.keys($rootScope.masterQuery[searchKey]['data'][key]).length > 0) {
+        return 'facet-border-1';
+      }
+      else {
+        return 'facet-border-0';
+      }
     }
   }
 

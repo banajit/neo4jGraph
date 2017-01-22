@@ -13,7 +13,7 @@ angular.module('neo4jApp')
       })
   })
   .run(function($rootScope, Auth, $state) {
-    $rootScope.$on('$stateChangeStart', function(event, next) {
+    /*$rootScope.$on('$stateChangeStart', function(event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
         //check for user authentication
         if (!loggedIn && next.name === 'graphEditor') {
@@ -32,6 +32,6 @@ angular.module('neo4jApp')
         }
 
       });
-    });
+    });*/
   });
 })(angular)

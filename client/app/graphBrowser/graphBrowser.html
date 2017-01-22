@@ -22,9 +22,7 @@
           </span>
         </div>
         <div class="graph-refresh">
-          <button ng-click="resetGraph()" class="md-raised md-primary background-color-primary md-button md-ink-ripple">
-            <i class="fa fa-refresh" aria-hidden="true"></i>
-          </button>
+          <span class="fa fa-refresh" aria-hidden="true" ng-click="resetGraph()"></span>
         </div>
         <div ng-if="pageTitle != ''" class="page-title">{{pageTitle}}</div>
         <graph></graph>

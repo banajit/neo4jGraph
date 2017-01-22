@@ -18,11 +18,12 @@ var neo4jApp = angular.module('neo4jApp', [
   'dndLists',
   'cgBusy'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $animateProvider) {
     $urlRouterProvider
       .otherwise('/home');
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+    $animateProvider.classNameFilter(/carousel/);
   })
   .run(['$rootScope', '$state', 'CONSTANTS', function ($rootScope, $state, CONSTANTS) {
     var configData = CONSTANTS.getConfig();

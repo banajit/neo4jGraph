@@ -125,7 +125,9 @@
 
       $scope.filterGraph = function(insert) {
         var searchQueries = [];
-        $rootScope.masterQuery.push({data:$scope.selectedItem});
+        if(insert == undefined) {
+           $rootScope.masterQuery.push({data:$scope.selectedItem});
+        }
         angular.forEach($scope.selectedItem, function(labelVal, labelKey){
           var conditions = [], whereCond = '';
           var innerElems = {};
@@ -172,13 +174,13 @@
             }
           });
           if(countFlag == 1) {
+            $scope.selectedItem = $rootScope.masterQuery[key]['data'];
             count++;
           }
         });
+
         if(count==1) {
-          $scope.selectedItem = $rootScope.masterQuery[0]['data'];
-          $rootScope.masterQuery = [];
-          $scope.searchInGraph(0);
+         $scope.filterGraph(0);
         }
         else if(count == 0) {
           $rootScope.resetGraph();
