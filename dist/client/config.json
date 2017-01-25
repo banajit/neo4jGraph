@@ -1,6 +1,6 @@
 {
   "pageTitle": "Application Landscape",
-  "backgroundColor": "#B6AFAA",
+  "backgroundColor": "#FFF",
   "slideConfig": {
     "slideInterval": 3000
   },
@@ -28,9 +28,9 @@
     "nodeLabelFontColor": "#000",
     "labelHoverBGColor": "node",
     "nodeLabelFontSize": 10,
-    "iterationFactor": 2,
     "nodeBorderSize": 1,
-    "nodeBorderColor": "#999"
+    "nodeBorderColor": "#999",
+    "edgeHoverLabelBGColor": "#B956AF"
   },
   "micaUrl": "http://192.168.2.90:8089/#/catalog"
 }

@@ -2,7 +2,7 @@
   <div class="carausal-slider" ng-mouseover="stopCaraousal">
     <div>
       <carousel interval="caraousalInterval">
-        <slide ng-repeat="(key,slide) in slides" class="neo4j-slider" active="active" no-wrap="false">
+        <slide ng-repeat="(key,slide) in slides" class="neo4j-slider" active="slide.active">
           <div class="caraousal-wrapper" ng-attr-id="caraousal-wrapper-{{key}}" ng-init="getCaraousalWidth(key,slide.siteWidth)">
             <iframe class="caraousal-frame" height="100%" width="100%" ng-src="{{slide.url | trustAsResourceUrl}}"></iframe>
           </div>

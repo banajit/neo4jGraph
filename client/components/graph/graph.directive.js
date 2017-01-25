@@ -360,6 +360,18 @@ angular.module('neo4jApp')
             }
           );
         }
+
+        function rescaleWindow() {
+          $timeout(function () {
+              if($(document).width() == 0) {
+                rescaleWindow();
+              }
+              else {
+                sigmaInstance.refresh();
+              }
+          });
+        }
+
         //create sigma instance
         function createSigmaInstance(graph) {
           sigmaInstance = new sigma({
@@ -370,8 +382,9 @@ angular.module('neo4jApp')
             }
           });
 
-          layoutNodesEdges(graph);
+          rescaleWindow();
 
+          layoutNodesEdges(graph);
           sigmaInstance.settings({
             autoCurveSortByDirection: true,
             minNodeSize: appConfig.graphConfig.minNodeSize,
@@ -395,8 +408,8 @@ angular.module('neo4jApp')
             zoomMin: 0.1,
             zoomMax:2,
             minArrowSize:6,
-            sideMargin: 10
-
+            sideMargin: 10,
+            defaultEdgeHoverLabelBGColor: appConfig.graphConfig.edgeHoverLabelBGColor
           });
 
           //bind the events
@@ -508,9 +521,9 @@ angular.module('neo4jApp')
                     angular.forEach(currentSchema['nodes'][node.labelType]['properties'], function(value, key){
                       var KeyVal = node.neo4j_data[key];
                       if(neo4jSrv.getMicaNodeKey(node.labelType, key) != false) {
-                         queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal.toLowerCase()));
+                         queryParams.push('entity.' + neo4jSrv.getMicaNodeKey(node.labelType, key) + ':' + encodeURI(KeyVal));
                       }
-                      if(value.visible != false) {
+                      if(value.visible != false && !angular.isUndefined(KeyVal)) {
                         listInfo += '<li><span class="li-title">' + key + '</span><span title="' + KeyVal + '" class="li-value">' + KeyVal + '</span></li>';
                       }
                     });
@@ -609,8 +622,8 @@ angular.module('neo4jApp')
                 var listInfo = '';
 
                 angular.forEach(currentSchema['relationships'][edge.neo4j_type], function(value, key){
-                  if(key !== '_appliesTo' && key !== '_default') {
-                    var KeyVal = edge.neo4j_data[key];
+                  var KeyVal = edge.neo4j_data[key];
+                  if(key !== '_appliesTo' && key !== '_default'  && !angular.isUndefined(KeyVal)) {
                     if(neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) != false) {
                        queryParams.push('entity.' + neo4jSrv.getMicaEdgeKey(edge.neo4j_type, key) + ':' + encodeURI(KeyVal));
                     }

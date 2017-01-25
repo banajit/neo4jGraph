@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function nbcomeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window, $timeout, $interval) {
+  function nbcomeCtrl($scope, $mdSidenav, CONSTANTS, Helper, $window, $timeout, $interval, $rootScope) {
 
     //adjust width for less resolution frame
     var sliderTracker = {};
@@ -37,7 +37,6 @@
     angular.element("#main-wrapper").hover(function(){
         $scope.caraousalInterval = -10;
     });
-
 
   };
 

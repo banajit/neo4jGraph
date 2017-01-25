@@ -102,6 +102,7 @@
             var config = CONSTANTS.getStateVariable('config');
             var serverConfig = config.neo4jConfig;
             var nids = [];
+            console.log(searchQueryStr);
             sigma.neo4j.cypher(
                 { url: serverConfig.serverUrl, user: serverConfig.user, password: serverConfig.password },
                 searchQueryStr,
