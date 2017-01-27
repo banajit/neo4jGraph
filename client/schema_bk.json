@@ -1,0 +1,121 @@
+{
+  "nodes": {
+    "System": {
+      "_default": {
+        "defaultIcon": "",
+        "defaultRank": 1,
+        "defaultLabel": "Name",
+        "defaultColor": "#3585D4",
+        "displayName": "System"
+      },
+      "properties": {
+        "Name": {
+          "displayName": "Name",
+          "restriction": ".*",
+          "dataType": "string",
+          "required": true
+        },
+        "Type": {
+          "displayName": "Type",
+          "restriction": ".*"
+        },
+        "Owner": {
+          "displayName": "Owner",
+          "restriction": ".*"
+        },
+        "Description": {
+          "displayName": "Description",
+          "restriction": ".*"
+        },
+        "BusinessSegment": {
+          "displayName": "Business Segment",
+          "restriction": ".*",
+          "micaName": "businessSegment"
+        },
+        "LineOfBusiness": {
+          "displayName": "Line Of Business",
+          "restriction": ".*",
+          "searchable": true
+        },
+        "Rank": {
+          "displayName": "Rank",
+          "restriction": "[0-9]+",
+          "dataType": "string",
+          "visible": false,
+          "searchable": false
+        },
+        "Hosting": {
+          "displayName": "Hosting",
+          "restriction": ".*"
+        }
+      }
+    },
+    "EmpZaloni": {
+      "_default": {
+        "defaultIcon": "uploads/img4.png",
+        "defaultRank": 1,
+        "defaultLabel": "Name",
+        "defaultColor": "#389600",
+        "displayName": "Zaloni"
+      },
+      "properties": {
+        "Name": {
+          "displayName": "Name",
+          "restriction": ".*",
+          "required": true,
+          "micaName": "businessName"
+        },
+        "Rank": {
+          "displayName": "Rank",
+          "restriction": "[0-9]+",
+          "dataType": "string",
+          "visibility": false
+        }
+      }
+    }
+  },
+  "relationships": {
+    "Integration": {
+      "_default": {
+        "defaultColor": "#B956AF",
+        "defaultLabel": "Name"
+      },
+      "_appliesTo": [
+        {
+          "from": "System",
+          "to": "System"
+        }
+      ],
+      "IntegrationProtocol": {
+        "displayName": "Integration Protocol",
+        "restriction": ".*",
+        "micaName": "integrationProtocol"
+      },
+      "Description": {
+        "displayName": "Description",
+        "restriction": ".*"
+      },
+      "IntegrationLayer": {
+        "displayName": "Integration Layer",
+        "restriction": ".*"
+      },
+      "IntegrationSet": {
+        "displayName": "Integration Set",
+        "restriction": ".*"
+      },
+      "Name": {
+        "displayName": "Name",
+        "restriction": ".*",
+        "required": true
+      },
+      "TargetSystem": {
+        "displayName": "Target System",
+        "restriction": ".*"
+      },
+      "SourceSystem": {
+        "displayName": "Source System",
+        "restriction": ".*"
+      }
+    }
+  }
+}

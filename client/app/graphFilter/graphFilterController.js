@@ -2,7 +2,7 @@
 
 (function (angular) {
 
-  function graphFilterCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, $rootScope) {
+  function graphFilterCtrl($scope, $mdSidenav, CONSTANTS, $timeout, neo4jSrv, $rootScope, $q) {
       $scope.searchMaster = {};
       // ******************************
       // Load all configurations for graphdb access and leftsidebar
@@ -15,6 +15,7 @@
       });
 
       var data = CONSTANTS.getConfig();
+      var maxHops = data.maxHops;
       CONSTANTS.setStateVariable('config', data);
       var serverConfig = data.neo4jConfig;
 
@@ -108,21 +109,23 @@
                 searchQueryStr,
               function(graph) {
                 angular.forEach(graph.nodes, function(value, key){
-                  nids.push(value.id);
+                   nids.push(parseInt(value.id));
                 });
+
                 if(nids.length > 0) {
-                  var nidParam = '[' + nids.join(',') + ']';
-                  var neo4jQuery = 'MATCH (a)-[r]->(b) WHERE id(a) IN ' + nidParam + ' AND id(b) IN ' + nidParam + ' RETURN r;';
-                  console.log(neo4jQuery);
-                  var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:neo4jQuery, existGraph:graph};
-                  $scope.$emit('refreshGraph', graphMetaInfo);
-                }
+                   var nidParam = '[' + nids.join(',') + ']';
+                   var neo4jQuery = 'MATCH (a)-[r*..' + maxHops + ']->(b) WHERE id(a) IN ' + nidParam + ' AND id(b) IN ' + nidParam + ' RETURN r;';
+                   console.log(neo4jQuery);
+                   var graphMetaInfo = {serverConfig:serverConfig, neo4jQuery:neo4jQuery, existGraph:graph};
+                   $scope.$emit('refreshGraph', graphMetaInfo);
+                 }
               }
             );
           }
 
         }
       }
+
 
       $scope.filterGraph = function(insert) {
         var searchQueries = [];

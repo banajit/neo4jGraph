@@ -4,6 +4,7 @@
   "slideConfig": {
     "slideInterval": 3000
   },
+  "maxHops": 5,
   "slideUrls": [
     {
       "url": "graphEditor"
