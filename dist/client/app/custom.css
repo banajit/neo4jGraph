@@ -1,0 +1,18 @@
+body.neo4j-custom, html  {
+  font-family: Open_Sans;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.125 em;
+  height: 100%;
+  color: rgba(0,0,0,.87);
+}
+
+
+body.neo4j-custom .page-title {
+  position: absolute;
+  right: 47%;
+  padding: 10px;
+  color: #000;
+  background: #FFF;
+}
+
