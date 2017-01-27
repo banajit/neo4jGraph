@@ -304,8 +304,14 @@ angular.module('neo4jApp')
             i++;
           });
           graph.edges.forEach(function(edge, key) {
-            edge.label = edge.neo4j_data[currentSchema['relationships'][edge.neo4j_type]['_default']['defaultLabel']];
-            edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
+            if(currentSchema['relationships'][edge.neo4j_type] != undefined) {
+              edge.label = edge.neo4j_data[currentSchema['relationships'][edge.neo4j_type]['_default']['defaultLabel']];
+              edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
+            }
+            else {
+               edge.label = edge.neo4j_data['Name'];
+               edge.color = '#000';
+            }
             edge.hover_color = '#000';
             edge.type = "arrow";
             sigmaInstance.graph.addEdge(edge);
@@ -339,6 +345,7 @@ angular.module('neo4jApp')
                     image_urls.push(value.neo4j_data.iconUrl);
                   }
               });
+              //sigmaInstance = createSigmaInstance(graph);
               if(image_urls.length == 0) {
                 sigmaInstance = createSigmaInstance(graph);
               }
@@ -420,8 +427,9 @@ angular.module('neo4jApp')
             if (!e.data.enter.nodes.length) {
               //on mouseout
               sigmaInstance.graph.edges().forEach(function (edge) {
-                  edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
-                  //edge.hidden = false;
+                if(currentSchema['relationships'][edge.neo4j_type] != undefined) {
+                   edge.color = currentSchema['relationships'][edge.neo4j_type]['_default']['defaultColor'];
+                }
               });
             }
             else {
